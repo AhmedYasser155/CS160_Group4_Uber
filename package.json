@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "run-script-os",
+    "start:win32": "explorer http://localhost:3000 & next start",
+    "start:default": "open http://localhost:3000 & next start",
     "lint": "next lint"
   },
   "dependencies": {
@@ -20,6 +22,7 @@
   "devDependencies": {
     "eslint": "8.10.0",
     "eslint-config-next": "12.1.0",
+    "run-script-os": "^1.1.6",
     "tailwind-styled-components": "^2.1.4"
   }
 }
