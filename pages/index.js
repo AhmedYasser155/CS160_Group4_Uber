@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import "tailwindcss/tailwind.css"
 import tw from "tailwind-styled-components"
-import Map from './components/Map'
+import Map from '../components/Map'
 import Link from 'next/Link'
 
 

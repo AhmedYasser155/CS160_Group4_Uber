@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import tw from "tailwind-styled-components"
 import Link from 'next/Link'
-import { BackButton } from './components/BackButton'
+import { BackButton } from '../components/BackButton'
 
 const Search = () => {
 
