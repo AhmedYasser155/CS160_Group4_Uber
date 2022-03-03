@@ -2,8 +2,9 @@ import React from 'react'
 import { useEffect } from 'react'
 import tw from "tailwind-styled-components"
 import mapboxgl from '!mapbox-gl'
+import { MAPBOX_ACCESS_TOKEN } from "../config/config.json"
 
-mapboxgl.accessToken = "pk.eyJ1IjoiaGFuZy1obyIsImEiOiJjbDA2M3F6bm4xcW05M2RvZHhpeDFsZTVvIn0.Ot8ZrqGcvLYWRLzyXtkUdA";
+mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
 
 const Map = (props) => {
