@@ -8,10 +8,12 @@
     "start": "run-script-os",
     "start:win32": "explorer http://localhost:3000 & next start",
     "start:default": "open http://localhost:3000 & next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "server": "node api/server.js"
   },
   "dependencies": {
     "autoprefixer": "^10.4.2",
+    "express": "^4.17.3",
     "mapbox-gl": "^2.7.0",
     "next": "12.1.0",
     "postcss": "^8.4.7",
