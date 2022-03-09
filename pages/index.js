@@ -5,8 +5,7 @@ import tw from "tailwind-styled-components"
 import Map from '../components/Map'
 import Link from 'next/Link'
 
-
-export default function Home() {
+export default function Home({ posts }) {
 
   return (
     <Wrapper>
@@ -27,7 +26,7 @@ export default function Home() {
                 Ride
             </ActionButton>
           </Link>
-          <Link href="">
+          <Link href="/api/test">
             <ActionButton>
               <ActionImg src="https://i.ibb.co/5RjchBg/uberschedule.png"/>
                 Schedule
