@@ -32,8 +32,7 @@ const Search = () => {
         setDropOffs(prevDropoffs => {
             return {
                 ...prevDropoffs, p1: false, p2: true
-                //TODO:this should be changed later
-                , p3: true, p4: true, p5: true
+
             }
         })
     }
@@ -63,15 +62,14 @@ const Search = () => {
         }
 
     }
-    const addLocationBox = (e) => {
+    function addLocationBox (key,id) {
     
-        console.log("addLocation have been called");
-        if(e.key === 'Enter'){
+        if(key === 'Enter'){
             // if p1 = true  || (it is p5 a)
             //      confirm button
             // else 
             //      switch case 
-            console.log("I am enter");
+            console.log("I am enter with id" , id);
             if(p1 ===true || p5===true )
             {
                 console.log("p1 or p5 are true");
@@ -79,7 +77,7 @@ const Search = () => {
             }
             else 
             {
-                switch (e.target.id) {
+                switch (id) {
                     case 'stopBox2':
                         setDropOffs(prevDropoffs => {
                             return {
@@ -101,10 +99,11 @@ const Search = () => {
 
           }
     }
- 
+
     return (
         <Wrapper>
-            <BackButton />
+            {/* FIXME: back button should take link as props */}
+            <BackButton  />
 
             <InputContainer>
                 <FromToIcon>
@@ -122,16 +121,16 @@ const Search = () => {
                     {p5 ? (<Square id='square4' src="https://img.icons8.com/windows/50/000000/square-full.png" />) : null}
 
                 </FromToIcon>
-
+                
                 <InputBoxes>
-                    {/* FIXME: onChange and onKeyPress function doesn't work  */}
-                    <InputLocation id='pickupBox' text='Pickup Location' onChange={(e) => {setPickup(e.target.value)}} />
-                    <InputLocation id='stopBox1' onChange={(e) => {setDropoff(e.target.value)}} />
+                    
+                    <InputLocation id='pickupBox' text='Pickup Location'  onChange={(e) => {setPickup(e.target.value)}} />
+                    <InputLocation id='stopBox1' oneEnter = {(e)=>{addLocationBox(e.key  , e.target.id)}} onChange={(e) => {setDropoff(e.target.value)}} />
                     {/* The locaitons that would be toggled */}
-                    {p2 ? (<InputLocation id='stopBox2' onKeyPress={(e) =>addLocationBox(e)}/>) : null}
-                    {p3 ? (<InputLocation id='stopBox3' onKeyPress={(e) =>addLocationBox(e)}/>) : null}
-                    {p4 ? (<InputLocation id='stopBox4' onKeyPress={(e) =>addLocationBox(e)}/>) : null}
-                    {p5 ? (<InputLocation id='stopBox5' onKeyPress={(e) =>addLocationBox(e)}/>) : null}
+                    {p2 ? (<InputLocation id='stopBox2' oneEnter = {(e)=>{addLocationBox(e.key  , e.target.id)}}/>) : null}
+                    {p3 ? (<InputLocation id='stopBox3' oneEnter = {(e)=>{addLocationBox(e.key  , e.target.id)}}/>) : null}
+                    {p4 ? (<InputLocation id='stopBox4' oneEnter = {(e)=>{addLocationBox(e.key  , e.target.id)}}/>) : null}
+                    {p5 ? (<InputLocation id='stopBox5' oneEnter = {(e)=>{addLocationBox(e.key  , e.target.id)}}/>) : null}
 
                 </InputBoxes>
 
