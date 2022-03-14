@@ -12,6 +12,7 @@
     "server": "node api/server.js"
   },
   "dependencies": {
+    "@material-tailwind/react": "0.3.4",
     "autoprefixer": "^10.4.2",
     "express": "^4.17.3",
     "mapbox-gl": "^2.7.0",
