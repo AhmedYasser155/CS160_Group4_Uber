@@ -10,21 +10,22 @@ import { FaTimes } from 'react-icons/fa'
 
 const Search = () => {
 
-    const [pickup, setPickup] = useState('cairo')
-    const [dropoff, setDropoff1] = useState('alex')
-    const [dropoffs, setDropOffs] = useState({ p1: true, p2: false, p3: false, p4: false, p5: false })
-    const p1 = dropoffs.p1
-    const p2 = dropoffs.p2
-    const p3 = dropoffs.p3
-    const p4 = dropoffs.p4
-    const p5 = dropoffs.p5
-    //TODO:set pickup and dropoffs (onchange)
-     
-    // const [dropoff2, setDropoff2] = useState()
-    // const [dropoff3, setDropoff3] = useState()
-    // const [dropoff4, setDropoff4] = useState()
-    // const [dropoff5, setDropoff5] = useState()
+    const [pickup, setPickup] = useState()
+    const [dropoff, setDropoff1] = useState()
+    const [dropoff2, setDropoff2] = useState()
+    const [dropoff3, setDropoff3] = useState()
+    const [dropoff4, setDropoff4] = useState()
+    const [dropoff5, setDropoff5] = useState()
     const [startView, setStartView] = useState(false);
+    const [dropoffs, setDropOffs] = useState({ p1: true, p2: false, p3: false, p4: false, p5: false })
+    const p1 = dropoffs.p1;
+    const p2 = dropoffs.p2;
+    const p3 = dropoffs.p3;
+    const p4 = dropoffs.p4;
+    const p5 = dropoffs.p5;
+    //TODO:set pickup and dropoffs (onchange)
+
+
 
 
     const addStop = (e) => {
@@ -42,68 +43,81 @@ const Search = () => {
                 setDropOffs(prevDropoffs => {
                     return {
                         //TODO: try to handle removing p2 before the other boxes
-                        ...prevDropoffs, p2: false ,p1:true}})
-                    break;
+                        ...prevDropoffs, p2: false, p1: true
+                    }
+                })
+                break;
             case 'delete3':
                 setDropOffs(prevDropoffs => {
                     return {
-                        ...prevDropoffs, p3: false}})
-                    break;
+                        ...prevDropoffs, p3: false
+                    }
+                })
+                break;
             case 'delete4':
                 setDropOffs(prevDropoffs => {
                     return {
-                        ...prevDropoffs, p4: false}})
-                    break;
+                        ...prevDropoffs, p4: false
+                    }
+                })
+                break;
             case 'delete5':
                 setDropOffs(prevDropoffs => {
                     return {
-                        ...prevDropoffs, p5: false}})
-                    break;
+                        ...prevDropoffs, p5: false
+                    }
+                })
+                break;
         }
 
     }
-    function addLocationBox (key,id) {
-    
-        if(key === 'Enter'){
+    function addLocationBox(key, id) {
+
+        if (key === 'Enter') {
             // if p1 = true  || (it is p5 a)
             //      confirm button
             // else 
             //      switch case 
-            console.log("I am enter with id" , id);
-            if(p1 ===true || p5===true )
-            {
+            //console.log("I am enter with id" , id);
+            if (p1 === true || p5 === true) {
                 console.log("p1 or p5 are true");
                 //confirm button
+
             }
-            else 
-            {
+            else {
                 switch (id) {
                     case 'stopBox2':
                         setDropOffs(prevDropoffs => {
                             return {
-                                ...prevDropoffs, p3: true}})
-                            break;
+                                ...prevDropoffs, p3: true
+                            }
+                        })
+                        break;
                     case 'stopBox3':
                         setDropOffs(prevDropoffs => {
                             return {
-                                ...prevDropoffs, p4: true}})
-                            break;
+                                ...prevDropoffs, p4: true
+                            }
+                        })
+                        break;
                     case 'stopBox4':
                         setDropOffs(prevDropoffs => {
                             return {
-                                ...prevDropoffs, p5: true}})
-                            break;
- 
+                                ...prevDropoffs, p5: true
+                            }
+                        })
+                        break;
+
                 }
             }
 
-          }
+        }
     }
 
     return (
         <Wrapper>
             {/* FIXME: back button should take link as props */}
-            <BackButton  />
+            <BackButton prevPage={"/"}/>
 
             <InputContainer>
                 <FromToIcon>
@@ -121,16 +135,17 @@ const Search = () => {
                     {p5 ? (<Square id='square4' src="https://img.icons8.com/windows/50/000000/square-full.png" />) : null}
 
                 </FromToIcon>
-                
+
                 <InputBoxes>
-                    
-                    <InputLocation id='pickupBox' text='Pickup Location'  onChange={(e) => {setPickup(e.target.value)}} />
-                    <InputLocation id='stopBox1' oneEnter = {(e)=>{addLocationBox(e.key  , e.target.id)}} onChange={(e) => {setDropoff(e.target.value)}} />
+
+                    <InputLocation id='pickupBox' text='Pickup Location' update={(e) => { setPickup(e.target.value) }} />
+                    <InputLocation id='stopBox1' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff1(e.target.value) }} />
                     {/* The locaitons that would be toggled */}
-                    {p2 ? (<InputLocation id='stopBox2' oneEnter = {(e)=>{addLocationBox(e.key  , e.target.id)}}/>) : null}
-                    {p3 ? (<InputLocation id='stopBox3' oneEnter = {(e)=>{addLocationBox(e.key  , e.target.id)}}/>) : null}
-                    {p4 ? (<InputLocation id='stopBox4' oneEnter = {(e)=>{addLocationBox(e.key  , e.target.id)}}/>) : null}
-                    {p5 ? (<InputLocation id='stopBox5' oneEnter = {(e)=>{addLocationBox(e.key  , e.target.id)}}/>) : null}
+
+                    {p2 ? (<InputLocation id='stopBox2' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }}  update={(e) => { setDropoff2(e.target.value) }} />) : null}
+                    {p3 ? (<InputLocation id='stopBox3' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }}  update={(e) => { setDropoff3(e.target.value) }} />) : null}
+                    {p4 ? (<InputLocation id='stopBox4' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }}  update={(e) => { setDropoff4(e.target.value) }} />) : null}
+                    {p5 ? (<InputLocation id='stopBox5' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff5(e.target.value) }} />) : null}
 
                 </InputBoxes>
 
@@ -150,19 +165,21 @@ const Search = () => {
                 Saved Places
             </SavePlace>
 
-           {/* FIXME: check  the following before confirm { (pickup && (p1||p2||p3||p4||p5))?( */}
-           <Link href={{
-                pathname: "/confirm",
-                query: {
-                    pickup: pickup,
-                    dropoff: dropoff
-                }
+            {/* FIXME: check  the following before confirm { (pickup && (p1||p2||p3||p4||p5))?( */}
+            {(pickup && (dropoff || dropoff2 || dropoff3 || dropoff4 || dropoff5)) ?
+                (<Link href={{
+                    pathname: "/confirm",
+                    query: {
+                        pickup: pickup,
+                        dropoff: dropoff
+                    }
                 }}>
-                <ConfirmContainer>
+                    <ConfirmContainer>
+                        Confirm Location
+                    </ConfirmContainer>
+                </Link>) : <ConfirmContainer>
                     Confirm Location
-                </ConfirmContainer>
-            </Link>
-            {/* ): null} */}
+                </ConfirmContainer>}
 
         </Wrapper>
     )

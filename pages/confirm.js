@@ -47,7 +47,7 @@ const Confirm = () => {
 
     return (
         <Wrapper>
-            <BackButton/>
+            <BackButton  prevPage={"/search"}/>
             <Map
                 pickupCoordinates = {pickupCoordinates}
                 dropoffCoordinates = {dropoffCoordinates}
