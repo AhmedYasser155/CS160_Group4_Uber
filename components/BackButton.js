@@ -2,10 +2,10 @@ import React from 'react'
 import tw from "tailwind-styled-components"
 import Link from 'next/Link'
 
-export const BackButton = () => {
+export const BackButton = ({prevPage}) => {
     return (
         <ButtonContainer>
-                <Link href="/">
+                <Link href={prevPage}>
                     <Button src="https://img.icons8.com/ios-filled/50/000000/left.png"/>
                 </Link>
             </ButtonContainer>
