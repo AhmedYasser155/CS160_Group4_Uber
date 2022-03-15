@@ -3,6 +3,7 @@ import { useState } from 'react'
 import tw from "tailwind-styled-components"
 import Link from 'next/Link'
 import { BackButton } from '../components/BackButton'
+import {InputLocation} from '../components/InputLocation'
 
 const Search = () => {
 
@@ -21,19 +22,21 @@ const Search = () => {
                 </FromToIcon>
 
                 <InputBoxes>
-                    <Input
+                    {/* <Input
                         placeholder="Enter pickup location"
                         value={pickup}
                         onChange={(e) => {setPickup(e.target.value)}}
-                    />
-                    <Input
+                    /> */}
+                    <InputLocation text='Your pickup location?'/>
+
+                    {/* <Input
                         placeholder="Where to?"
                         value={dropoff}
                         onChange={(e) => {setDropoff(e.target.value)}}
-                    />
+                    /> */}
                 </InputBoxes>
 
-                <PlusIcon src="https://img.icons8.com/windows/50/000000/plus-math.png"/>
+                //<PlusIcon src="https://img.icons8.com/windows/50/000000/plus-math.png"/>
             </InputContainer>
 
             <SavePlace>
