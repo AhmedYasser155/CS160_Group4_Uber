@@ -1640,10 +1640,10 @@
   optionalDependencies:
     "saslprep" "^1.0.3"
 
-"mongoose@^6.2.4":
-  "integrity" "sha512-3hA3IGxBzZdlp1+/I9qn53NjEAd01qvKAH2WUCPahjVO8+uAmR0B4m+1bC3x9a4r0ExY8QYQ2ryG3E/v5Tj+jA=="
-  "resolved" "https://registry.npmjs.org/mongoose/-/mongoose-6.2.4.tgz"
-  "version" "6.2.4"
+"mongoose@^6.2.6":
+  "integrity" "sha512-OkPM1y7Ed9+Pa2/18mxegcD0OOe/aCXTQvOEyEn/MzVdaRsVSc+zE6myOS4LkWWi30c2tl4fpdJJvgC/MgXiww=="
+  "resolved" "https://registry.npmjs.org/mongoose/-/mongoose-6.2.6.tgz"
+  "version" "6.2.6"
   dependencies:
     "bson" "^4.2.2"
     "kareem" "2.3.4"
@@ -1700,7 +1700,7 @@
   "resolved" "https://registry.npmjs.org/natural-compare/-/natural-compare-1.4.0.tgz"
   "version" "1.4.0"
 
-"next@>=10.2.0", "next@12.1.0":
+"next@^12.1.0", "next@>=10.2.0":
   "integrity" "sha512-s885kWvnIlxsUFHq9UGyIyLiuD0G3BUC/xrH0CEnH5lHEWkwQcHOORgbDF0hbrW9vr/7am4ETfX4A7M6DjrE7Q=="
   "resolved" "https://registry.npmjs.org/next/-/next-12.1.0.tgz"
   "version" "12.1.0"
