@@ -5,7 +5,7 @@ import Link from 'next/Link'
 export const BackHomeButton = () => {
     return (
         <ButtonContainer>
-                <Link href="/home">
+                <Link href="/">
                     <Button src="https://img.icons8.com/ios-filled/50/000000/left.png"/>
                 </Link>
             </ButtonContainer>

@@ -71,7 +71,7 @@ const SignUp = () => {
 
 
 
-                <Link href="/">
+                <Link href="/home">
                     <ActionButton>
                      Sign up
                     </ActionButton>

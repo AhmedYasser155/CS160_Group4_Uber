@@ -36,7 +36,7 @@ const SignIn = () => {
 
                 </InputContainer>
         
-                <Link href="/">
+                <Link href="/home">
                     <ActionButton>
                      Sign In
                     </ActionButton>

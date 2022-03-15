@@ -18,7 +18,7 @@ const Map = (props) => {
         center: [-99.29011, 39.39172],
         zoom: 3,
       })
-      map.addControl(nav)
+     // map.addControl(nav)
       
       if (props.pickupCoordinates) {
         addToMap(map, props.pickupCoordinates)
@@ -74,7 +74,7 @@ const Map = (props) => {
       .addTo(map)
   }
   
-  const nav = new mapboxgl.NavigationControl()
+ // const nav = new mapboxgl.NavigationControl()
 
   return (
     <Wrapper id="map"></Wrapper>
