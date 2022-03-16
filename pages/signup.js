@@ -5,16 +5,28 @@ import { BackHomeButton } from '../components/BackHomeButton'
 import Link from 'next/Link'
 import { DriverSignUp } from '../components/DriverSignUp'
 import { RiderSignUp } from '../components/RiderSignUp'
-
-
-
+import { useRouter } from 'next/router'
+import { verifyEmail } from '../APIFunctions/EmailVerification.js'
 
 const SignUp = () => {
     
 
     const [select, setSelect] = useState("rider")
     const [isToggled, setIsToggled] = useState(false);
+    const router = useRouter();
+
+    this.state = {
+        value: "empty"
+    };
     
+    const handleClick = () => {
+        const res = await verifyEmail("poopy");
+        if(res.status && res.status === 200) {
+            router.push('/home');
+        }
+        else
+            console.log("Missing email or incorrect format");
+    };
 
     return(
 
@@ -67,15 +79,9 @@ const SignUp = () => {
                     {isToggled ? <DriverSignUp/> : <RiderSignUp/>}
 
 
-
-
-
-
-                <Link href="/home">
-                    <ActionButton>
-                     Sign up
-                    </ActionButton>
-                </Link>
+                <ActionButton onClick={handleClick}>
+                    Sign up
+                </ActionButton>
    
             </ActionItems>
 
