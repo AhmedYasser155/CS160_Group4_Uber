@@ -7,34 +7,31 @@ import { MAPBOX_ACCESS_TOKEN } from "../config/config.json"
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
 
-const Map = (props) => {
+const Map = ({locationCoordinates}) => {
 
   const [coordinates, setCoordinates] = useState()
 
-  useEffect( () => {
-      const map = new mapboxgl.Map({
-        container: "map",
-        style: 'mapbox://styles/drakosi/ckvcwq3rwdw4314o3i2ho8tph',
-        center: [-99.29011, 39.39172],
-        zoom: 3,
+  const showLocation = () => {
+    const map = new mapboxgl.Map({
+      container: "map",
+      style: 'mapbox://styles/drakosi/ckvcwq3rwdw4314o3i2ho8tph',
+      center: [-99.29011, 39.39172],
+      zoom: 3,
+    })
+    map.addControl(new mapboxgl.NavigationControl())
+    if (locationCoordinates != undefined) {
+      console.log("Map.js ",locationCoordinates)
+      let locationURL = ""
+
+      locationCoordinates.map( (location) => {
+        console.log("Map.js ",location)
+        addToMap(map, location)
+        locationURL = locationURL + location[0] + "," + location[1] + ";"
       })
+      locationURL = locationURL.slice(0, -1)
+      console.log("Map URL", locationURL)
 
-      //const nav = new mapboxgl.NavigationControl()
-      //map.addControl(nav)
-      
-      if (props.pickupCoordinates) {
-        addToMap(map, props.pickupCoordinates)
-      }
-      if (props.dropoffCoordinates) {
-        addToMap(map, props.dropoffCoordinates)
-      }
-      if (props.pickupCoordinates && props.dropoffCoordinates) {
-        map.fitBounds([
-          props.pickupCoordinates,
-          props.dropoffCoordinates
-        ], {padding: 60})
-
-        fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${props.pickupCoordinates[0]},${props.pickupCoordinates[1]};${props.dropoffCoordinates[0]},${props.dropoffCoordinates[1]}?geometries=geojson&steps=true&access_token=pk.eyJ1IjoiaGFuZy1obyIsImEiOiJjbDA2M3F6bm4xcW05M2RvZHhpeDFsZTVvIn0.Ot8ZrqGcvLYWRLzyXtkUdA`)
+      fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${locationURL}?geometries=geojson&steps=true&access_token=pk.eyJ1IjoiaGFuZy1obyIsImEiOiJjbDA2M3F6bm4xcW05M2RvZHhpeDFsZTVvIn0.Ot8ZrqGcvLYWRLzyXtkUdA`)
         .then(res => res.json())
         .then(data => {
           setCoordinates(data.routes[0].geometry.coordinates)
@@ -67,11 +64,20 @@ const Map = (props) => {
             });
           });
         }).catch((e) => console.log(e))
-      }
-  }, [props.pickupCoordinates, props.dropoffCoordinates])
+      map.fitBounds([
+        locationCoordinates[0],
+        locationCoordinates[locationCoordinates.length-1]
+      ], {padding:60})
+    }
+    
+  }
+
+  useEffect( () => {
+      showLocation()
+  }, locationCoordinates)
 
   const addToMap = (map, coordinates) => {
-    const marker1 = new mapboxgl.Marker()
+    const marker = new mapboxgl.Marker()
       .setLngLat(coordinates)
       .addTo(map)
   }

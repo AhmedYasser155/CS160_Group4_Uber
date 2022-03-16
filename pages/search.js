@@ -171,7 +171,11 @@ const Search = () => {
                     pathname: "/confirm",
                     query: {
                         pickup: pickup,
-                        dropoff: dropoff
+                        dropoff: dropoff,
+                        dropoff2: dropoff2,
+                        dropoff3: dropoff3,
+                        dropoff4: dropoff4,
+                        dropoff5: dropoff5
                     }
                 }}>
                     <ConfirmContainer>

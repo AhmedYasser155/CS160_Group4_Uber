@@ -10,55 +10,45 @@ import { MAPBOX_ACCESS_TOKEN } from "../config/config.json"
 const Confirm = () => {
 
     const router = useRouter()
-    const {pickup, dropoff} = router.query
-
-    const [ pickupCoordinates, setPickupCoordinates] = useState([0,0])
-    const [ dropoffCoordinates, setDropoffCoordinates] = useState([0,0])
-
-    const getPickupCoordinates = (pickup) => {
-        fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${pickup}.json?` + 
-            new URLSearchParams({
-                access_token: MAPBOX_ACCESS_TOKEN,
-                limit: 1
-            })
-        )
-        .then(res => res.json())
-        .then(data => {
-            setPickupCoordinates(data.features[0].center)
-        })
-    }
+    const {pickup, dropoff, dropoff2, dropoff3, dropoff4, dropoff5} = router.query
     
-    const getDropoffCoodinates = (dropoff) => {
-        fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${dropoff}.json?` + 
-            new URLSearchParams({
-                access_token: MAPBOX_ACCESS_TOKEN,
-                limit: 1
-            })
-        )
-        .then(res => res.json())
-        .then(data => {
-            setDropoffCoordinates(data.features[0].center)
+    const locations = [pickup, dropoff, dropoff2, dropoff3, dropoff4, dropoff5]
+    const locationCoor = []
+
+    const getLocationCoordinates = (locationList) => {
+        locationList.map( (location) => {
+            if (location !== "") {
+                fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${location}.json?` + 
+                new URLSearchParams({
+                    access_token: MAPBOX_ACCESS_TOKEN,
+                    limit: 1
+                })
+            )
+            .then(res => res.json())
+            .then(data => {
+                locationCoor.push(data.features[0].center)
+            }).catch((e)=>console.log(e))
+            }
         })
     }
+
+    const [locationCoordinates, setLocationCoordinates] = useState(locationCoor)
 
     useEffect( () => {
-        getPickupCoordinates(pickup)
-        getDropoffCoodinates(dropoff)
-    }, [pickup, dropoff])
+        getLocationCoordinates(locations)
+    }, [pickup, dropoff, dropoff2, dropoff3, dropoff4, dropoff5])
 
     return (
         <Wrapper>
             <BackButton  prevPage={"/search"}/>
             <Map
-                pickupCoordinates = {pickupCoordinates}
-                dropoffCoordinates = {dropoffCoordinates}
+                locationCoordinates={locationCoordinates}
             />
 
             <RideContainer>
-                <RideSelector
-                    pickupCoordinates = {pickupCoordinates}
-                    dropoffCoordinates = {dropoffCoordinates}
-                />
+                {/* <RideSelector
+                    locationCoordinates={locationCoordinates}
+                /> */}
 
                 <ConfirmButtonContainer>
                     <ConfirmButton>Confirm</ConfirmButton>
