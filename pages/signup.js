@@ -2,7 +2,6 @@ import React from 'react'
 import { useState } from 'react'
 import tw from "tailwind-styled-components"
 import { BackHomeButton } from '../components/BackHomeButton'
-import Link from 'next/Link'
 import { DriverSignUp } from '../components/DriverSignUp'
 import { RiderSignUp } from '../components/RiderSignUp'
 import { useRouter } from 'next/router'
@@ -14,14 +13,11 @@ const SignUp = () => {
     const [select, setSelect] = useState("rider")
     const [isToggled, setIsToggled] = useState(false);
     const router = useRouter();
-
-    this.state = {
-        value: "empty"
-    };
     
-    const handleClick = () => {
-        const res = await verifyEmail("poopy");
-        if(res.status && res.status === 200) {
+    async function handleClick() {
+        const res = await verifyEmail("andrew.tedijanto@gmail.com");
+        if(res.statusCode && res.statusCode === 200) {
+            console.log(res.responseData);
             router.push('/home');
         }
         else
@@ -29,7 +25,6 @@ const SignUp = () => {
     };
 
     return(
-
         <Wrapper>
             <BackHomeButton/>
 
