@@ -33,6 +33,7 @@ export const RiderSignUp = () => {
         <Input
             placeholder = "Password"
             value = {password}
+            type = "password"
             onChange={(e) => {setPassword(e.target.value)}}
         />
         <Input
