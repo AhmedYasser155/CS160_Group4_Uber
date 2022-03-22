@@ -11,38 +11,41 @@ const Confirm = () => {
 
     const router = useRouter()
     const {pickup, dropoff, dropoff2, dropoff3, dropoff4, dropoff5} = router.query
-    
+    // user input (address) from search.js
     const locations = [pickup, dropoff, dropoff2, dropoff3, dropoff4, dropoff5]
-    const locationCoor = []
 
-    const getLocationCoordinates = (locationList) => {
-        locationList.map( (location) => {
+    const [locationCoor, setLocationCoor] = useState([])
+    useEffect( () => {
+        // get longitude and latitude (coordinate) of each address and add them to locationCoor (2D array)
+        locations.map( (location) => {
             if (location !== "") {
                 fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${location}.json?` + 
-                new URLSearchParams({
-                    access_token: MAPBOX_ACCESS_TOKEN,
-                    limit: 1
-                })
-            )
-            .then(res => res.json())
-            .then(data => {
-                locationCoor.push(data.features[0].center)
-            }).catch((e)=>console.log(e))
+                    new URLSearchParams({
+                        access_token: MAPBOX_ACCESS_TOKEN,
+                        limit: 1
+                    })
+                )
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data.features[0].center)
+                    setLocationCoor([...locationCoor, data.features[0].center])
+                }).catch((e)=>console.log(e))
             }
         })
+    }, [])
+
+
+    if (locationCoor.length < 2) {
+        console.log("length < 2 in confirm", locationCoor)
+        return null
     }
 
-    const [locationCoordinates, setLocationCoordinates] = useState(locationCoor)
-
-    useEffect( () => {
-        getLocationCoordinates(locations)
-    }, [pickup, dropoff, dropoff2, dropoff3, dropoff4, dropoff5])
-
+    console.log("Hello in confirm", locationCoor)
     return (
         <Wrapper>
             <BackButton  prevPage={"/search"}/>
             <Map
-                locationCoordinates={locationCoordinates}
+                locationCoordinates={locationCoor}
             />
 
             <RideContainer>
