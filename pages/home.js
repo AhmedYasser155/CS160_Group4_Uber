@@ -35,10 +35,11 @@ export default function Home() {
           </Link>
           
         </ActionButtons>
-
+        <Link href="/search">
         <InputButton>
           Where to?
         </InputButton>
+        </Link>
       </ActionItems>
     </Wrapper>
   )

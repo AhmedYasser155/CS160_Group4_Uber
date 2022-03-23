@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import tw from "tailwind-styled-components"
 import Link from 'next/Link'
 import { BackButton } from '../components/BackButton'
@@ -10,6 +10,7 @@ import { FaTimes } from 'react-icons/fa'
 
 const Search = () => {
 
+    const [currentCoor,setCurrentCoor] = useState()
     const [pickup, setPickup] = useState()
     const [dropoff, setDropoff1] = useState()
     const [dropoff2, setDropoff2] = useState()
@@ -25,8 +26,12 @@ const Search = () => {
     const p5 = dropoffs.p5;
     //TODO:set pickup and dropoffs (onchange)
 
-
-
+    //TODO: convert coordinates to position name
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition((position) => {
+            setCurrentCoor([position.coords.latitude,position.coords.longitude]);
+        })
+    }, [])
 
     const addStop = (e) => {
         setStartView(true);
@@ -138,7 +143,7 @@ const Search = () => {
 
                 <InputBoxes>
 
-                    <InputLocation id='pickupBox' text='Pickup Location' update={(e) => { setPickup(e.target.value) }} />
+                    <InputLocation id='pickupBox' text='Current Location' update={(e) => { setPickup(e.target.value) }} />
                     <InputLocation id='stopBox1' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff1(e.target.value) }} />
                     {/* The locaitons that would be toggled */}
 
