@@ -6,9 +6,6 @@ import Link from 'next/Link'
 
 const SignIn = () => {
 
-    // const [email, setEmail] = useState()
-    // const [password, setPassword] = useState()
-
     const initialValues = {email:"", password:""} 
     const[formValues, setFormValues] = useState(initialValues)
     const[formErrors, setFormErrors] = useState({})
