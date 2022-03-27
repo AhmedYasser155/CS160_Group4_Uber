@@ -54,5 +54,5 @@ const InputBoxes = tw.div`
     flex flex-col flex-1
 `
 const Input = tw.input`
-    h-10 bg-gray-200 my-2 rounded-2 p-2 outline-none border-none
+    h-10 bg-gray-200 my-2 rounded-2 p-2 outline-none border-none 
 `
