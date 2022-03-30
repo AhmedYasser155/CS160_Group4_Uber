@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import tw from "tailwind-styled-components"
+import Router from 'next/router'
 
 
 export const RiderSignUp = () => {
@@ -23,9 +24,8 @@ export const RiderSignUp = () => {
     }
 
     useEffect(() => {
-        console.log(formErrors)
         if(Object.keys(formErrors).length == 0 && isSubmit){
-            console.log(formValues)
+            Router.push('/home')
         }
 
     },[formErrors])
@@ -54,10 +54,6 @@ export const RiderSignUp = () => {
     return (
         <Wrapper>
 
-            {Object.keys(formErrors).length === 0 && isSubmit ? (
-                 <SuccessMessage>Signed in successfully!</SuccessMessage>
-            ) : <SuccessMessage> </SuccessMessage>}
-
         <Form onSubmit = {handleSubmit}>
 
                 <InputContainer>
@@ -73,7 +69,7 @@ export const RiderSignUp = () => {
                         onChange= {handleChange}
                     />
                     <ErrorMessage> {formErrors.firstName} </ErrorMessage>
-                    <InputLabel> last Name </InputLabel>
+                    <InputLabel> Last Name </InputLabel>
                     <Input
                         placeholder = "Enter Last Name"
                         value = {formValues.lastName}

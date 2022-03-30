@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
+import Router from 'next/router'
 import tw from "tailwind-styled-components"
 import { BackHomeButton } from '../components/BackHomeButton'
 import Link from 'next/Link'
@@ -24,9 +25,8 @@ const SignIn = () => {
     }
 
     useEffect(() => {
-        console.log(formErrors)
         if(Object.keys(formErrors).length == 0 && isSubmit){
-            console.log(formValues)
+            Router.push('/home')
         }
 
     },[formErrors])
@@ -44,9 +44,6 @@ const SignIn = () => {
 
     }
 
-    
- 
-
     return(
         <Wrapper>
             <BackHomeButton/>
@@ -55,17 +52,13 @@ const SignIn = () => {
                      <UberLogo src="https://download.logo.wine/logo/Uber/Uber-Logo.wine.png"/> 
             </Header>
 
-            {Object.keys(formErrors).length === 0 && isSubmit ? (
-                 <SuccessMessage>Signed in successfully!</SuccessMessage>
-            ) : <SuccessMessage> </SuccessMessage>}
-
             
             <Form onSubmit = {handleSubmit}>
                
 
                 <InputContainer>
                     <InputBoxes>
-                    <InputLabel> Username </InputLabel>
+                    <InputLabel> Email </InputLabel>
                      <Input
                         placeholder = "Enter Email"
                         value = {formValues.email}
@@ -88,10 +81,9 @@ const SignIn = () => {
 
                 </InputContainer>
         
-                     <ActionButton>
-                         Sign In
+                    <ActionButton >
+                     Sign In
                     </ActionButton>
-            
          
             </Form>
 
