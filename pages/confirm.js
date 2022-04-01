@@ -8,18 +8,18 @@ import { BackButton } from '../components/BackButton'
 import { MAPBOX_ACCESS_TOKEN } from "../config/config.json"
 
 const Confirm = () => {
-
+ 
     const router = useRouter()
     const {pickup, dropoff, dropoff2, dropoff3, dropoff4, dropoff5} = router.query
-    // user input (address) from search.js
+    // user input (addresses) from search.js
     const locations = [pickup, dropoff, dropoff2, dropoff3, dropoff4, dropoff5]
 
     const [locationCoor, setLocationCoor] = useState([])
+    const [index, setIndex] = useState(0);
+
     useEffect( () => {
-        // get longitude and latitude (coordinate) of each address and add them to locationCoor (2D array)
-        locations.map( (location) => {
-            if (location !== "") {
-                fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${location}.json?` + 
+            if (locations[index] !== "") {
+                fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${locations[index]}.json?` + 
                     new URLSearchParams({
                         access_token: MAPBOX_ACCESS_TOKEN,
                         limit: 1
@@ -27,20 +27,15 @@ const Confirm = () => {
                 )
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data.features[0].center)
                     setLocationCoor([...locationCoor, data.features[0].center])
                 }).catch((e)=>console.log(e))
+                setIndex(index+1);
             }
-        })
-    }, [])
-
+    }, [locationCoor])
 
     if (locationCoor.length < 2) {
-        console.log("length < 2 in confirm", locationCoor)
         return null
-    }
-
-    console.log("Hello in confirm", locationCoor)
+    } 
     return (
         <Wrapper>
             <BackButton  prevPage={"/search"}/>
@@ -49,9 +44,9 @@ const Confirm = () => {
             />
 
             <RideContainer>
-                {/* <RideSelector
-                    locationCoordinates={locationCoordinates}
-                /> */}
+                <RideSelector
+                    locationCoordinates={locationCoor}
+                />
 
                 <ConfirmButtonContainer>
                     <ConfirmButton>Confirm</ConfirmButton>
