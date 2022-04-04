@@ -5,7 +5,6 @@ import Router from 'next/router'
 import { verifyEmail } from '../APIFunctions/EmailVerification.js'
 
 
-
 export const DriverSignUp = () => {
 
     const initialValues = {firstName:"", lastName:"", email:"", password:"", phoneNumber:"", lisenceNumber:""}
@@ -16,12 +15,37 @@ export const DriverSignUp = () => {
     const handleChange = (e) => {
         const{name, value} = e.target
         setFormValues({...formValues, [name]: value})
-        console.log(formValues)
     }
 
-    const handleSubmit = (e) => {
+    async function handleSubmit(e) {
         e.preventDefault()
-        setFormErrors(validate(formValues))
+        setFormErrors({})
+        const errors = {}
+        if(!formValues.firstName){
+            errors.firstName = "First Name is required!"
+        }
+        if(!formValues.lastName){
+            errors.lastName = "Last Name is required!"
+        }
+        if(!formValues.email){
+            errors.email = "Email is required!"
+        }
+        else {
+            const res = await verifyEmail(formValues.email)
+            if(res.error) {
+                errors.email = "Email is not valid"
+            }
+        }
+        if(!formValues.password){
+            errors.password = "Password is required!"
+        }
+        if(!formValues.phoneNumber){
+            errors.phoneNumber = "Phone Number is required!"
+        }
+        if(!formValues.lisenceNumber){
+            errors.lisenceNumber = "Drivers Lisence Number is required!"
+        }
+        setFormErrors(errors)
         setIsSubmit(true)
     }
 
@@ -31,40 +55,6 @@ export const DriverSignUp = () => {
         }
 
     },[formErrors])
-
-    async function validate(values) {
-        const errors = {}
-        if(!values.firstName){
-            errors.firstName = "First Name is required!"
-        }
-        if(!values.lastName){
-            errors.lastName = "Last Name is required!"
-        }
-        if(!values.email){
-            errors.email = "Email is required!"
-        }
-        else {
-            const res = await verifyEmail(values.email);
-            if(!res.status) {
-                errors.email = "Error encountered when validating email!"
-            }
-            else if(res.status !== 200) {
-                errors.email = "Email is not valid!"
-            }
-        }
-        if(!values.password){
-            errors.password = "Password is required!"
-        }
-        if(!values.phoneNumber){
-            errors.phoneNumber = "Phone Number is required!"
-        }
-        if(!values.lisenceNumber){
-            errors.lisenceNumber = "Drivers Lisence Number is required!"
-        }
-
-        return errors
-
-    }
 
     return (
         <Wrapper>
