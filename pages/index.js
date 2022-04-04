@@ -10,11 +10,11 @@ const Login = () => {
             <Title>Sign up or sign in to access your account</Title>
 
             <ActionButtons>
-            <Link href = "/signin">
+            <Link href = "/signin" passHref>
             <SignInButton>Sign in</SignInButton>
             </Link>
 
-            <Link href = "/signup">
+            <Link href = "/signup" passHref>
             <SignUpButton>Sign up</SignUpButton>
             </Link>
 

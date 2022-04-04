@@ -12,7 +12,6 @@ const SignUp = () => {
     const [isToggled, setIsToggled] = useState(false);
 
     return(
-
         <Wrapper>
             <BackHomeButton/>
 
