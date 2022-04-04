@@ -20,7 +20,6 @@
     "express": "^4.17.3",
     "mapbox-gl": "^2.7.0",
     "mongoose": "^6.2.6",
-<<<<<<< HEAD
     "next": "^12.1.1",
     "node-fetch": "^3.2.3",
     "postcss": "^8.4.7",
