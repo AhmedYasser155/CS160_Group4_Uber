@@ -2,6 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import tw from "tailwind-styled-components"
 import Router from 'next/router'
+import { verifyEmail } from '../APIFunctions/EmailVerification.js'
 
 
 
@@ -31,7 +32,7 @@ export const DriverSignUp = () => {
 
     },[formErrors])
 
-    const validate = (values) => {
+    async function validate(values) {
         const errors = {}
         if(!values.firstName){
             errors.firstName = "First Name is required!"
@@ -41,6 +42,15 @@ export const DriverSignUp = () => {
         }
         if(!values.email){
             errors.email = "Email is required!"
+        }
+        else {
+            const res = await verifyEmail(values.email);
+            if(!res.status) {
+                errors.email = "Error encountered when validating email!"
+            }
+            else if(res.status !== 200) {
+                errors.email = "Email is not valid!"
+            }
         }
         if(!values.password){
             errors.password = "Password is required!"
