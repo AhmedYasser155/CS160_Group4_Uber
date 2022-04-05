@@ -2,6 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import tw from "tailwind-styled-components"
 import Router from 'next/router'
+import { verifyEmail } from '../APIFunctions/EmailVerification.js'
 
 
 export const RiderSignUp = () => {
@@ -14,12 +15,33 @@ export const RiderSignUp = () => {
     const handleChange = (e) => {
         const{name, value} = e.target
         setFormValues({...formValues, [name]: value})
-        console.log(formValues)
     }
 
-    const handleSubmit = (e) => {
+    async function handleSubmit(e) {
         e.preventDefault()
-        setFormErrors(validate(formValues))
+        const errors = {}
+        if(!formValues.firstName){
+            errors.firstName = "First Name is required!"
+        }
+        if(!formValues.lastName){
+            errors.lastName = "Last Name is required!"
+        }
+        if(!formValues.email){
+            errors.email = "Email is required!"
+        }
+        else {
+            const res = await verifyEmail(formValues.email)
+            if(res.error) {
+                errors.email = "Email is not valid!"
+            }
+        }
+        if(!formValues.password){
+            errors.password = "Password is required!"
+        }
+        if(!formValues.phoneNumber){
+            errors.phoneNumber = "Phone Number is required!"
+        }
+        setFormErrors(errors)
         setIsSubmit(true)
     }
 
@@ -29,27 +51,6 @@ export const RiderSignUp = () => {
         }
 
     },[formErrors])
-
-    const validate = (values) => {
-        const errors = {}
-        if(!values.firstName){
-            errors.firstName = "First Name is required!"
-        }
-        if(!values.lastName){
-            errors.lastName = "Last Name is required!"
-        }
-        if(!values.email){
-            errors.email = "Email is required!"
-        }
-        if(!values.password){
-            errors.password = "Password is required!"
-        }
-        if(!values.phoneNumber){
-            errors.phoneNumber = "Phone Number is required!"
-        }
-        return errors
-
-    }
 
     return (
         <Wrapper>

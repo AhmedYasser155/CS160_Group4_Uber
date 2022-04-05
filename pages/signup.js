@@ -2,22 +2,16 @@ import React from 'react'
 import { useState } from 'react'
 import tw from "tailwind-styled-components"
 import { BackHomeButton } from '../components/BackHomeButton'
-import Link from 'next/Link'
 import { DriverSignUp } from '../components/DriverSignUp'
 import { RiderSignUp } from '../components/RiderSignUp'
-
-
-
 
 const SignUp = () => {
     
 
     const [select, setSelect] = useState("rider")
     const [isToggled, setIsToggled] = useState(false);
-    
 
     return(
-
         <Wrapper>
             <BackHomeButton/>
 
