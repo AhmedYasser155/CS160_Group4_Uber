@@ -41,6 +41,10 @@ export const RiderSignUp = () => {
         if(!formValues.phoneNumber){
             errors.phoneNumber = "Phone Number is required!"
         }
+        else {
+            if(!/^(1\s|1|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/.test(formValues.phoneNumber))
+                errors.phoneNumber = "Invalid phone number!"
+        }
         setFormErrors(errors)
         setIsSubmit(true)
     }
