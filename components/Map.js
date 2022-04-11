@@ -17,7 +17,18 @@ const Map = ({locationCoordinates}) => {
       center: [-99.29011, 39.39172],
       zoom: 3,
     })
+  
     map.addControl(new mapboxgl.NavigationControl())
+
+    map.addControl(
+      new mapboxgl.GeolocateControl({
+        positionOptions: {
+        enableHighAccuracy: true
+        },
+        trackUserLocation: true,
+        showUserHeading: true
+        })
+    );
 
     if (locationCoordinates) {
       const locationURL = "";
