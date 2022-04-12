@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import {useRouter} from 'next/router'
 import RideSelector from '../components/RideSelector'
 import { BackButton } from '../components/BackButton'
-import { MAPBOX_ACCESS_TOKEN } from "../config/config.json"
+import  APIinfo  from "../config/config.json"
 
 const Confirm = () => {
 
@@ -18,7 +18,7 @@ const Confirm = () => {
     const getPickupCoordinates = (pickup) => {
         fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${pickup}.json?` + 
             new URLSearchParams({
-                access_token: MAPBOX_ACCESS_TOKEN,
+                access_token: APIinfo.MAPBOX_ACCESS_TOKEN,
                 limit: 1
             })
         )
@@ -31,7 +31,7 @@ const Confirm = () => {
     const getDropoffCoodinates = (dropoff) => {
         fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${dropoff}.json?` + 
             new URLSearchParams({
-                access_token: MAPBOX_ACCESS_TOKEN,
+                access_token: APIinfo.MAPBOX_ACCESS_TOKEN,
                 limit: 1
             })
         )

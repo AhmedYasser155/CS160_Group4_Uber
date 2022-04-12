@@ -5,12 +5,12 @@ import Link from 'next/Link'
 import { BackButton } from '../components/BackButton'
 import { InputLocation } from '../components/InputLocation'
 import { FaTimes } from 'react-icons/fa'
-
+import  APIinfo  from "../config/config.json"
 
 
 const Search = () => {
 
-    const [currentCoor,setCurrentCoor] = useState()
+    const [currentCoor, setCurrentCoor] = useState()
     const [pickup, setPickup] = useState()
     const [dropoff, setDropoff1] = useState()
     const [dropoff2, setDropoff2] = useState()
@@ -24,21 +24,36 @@ const Search = () => {
     const p3 = dropoffs.p3;
     const p4 = dropoffs.p4;
     const p5 = dropoffs.p5;
-    //TODO:set pickup and dropoffs (onchange)
+
 
     //TODO: convert coordinates to position name
     useEffect(() => {
         navigator.geolocation.getCurrentPosition((position) => {
-            setCurrentCoor([position.coords.latitude,position.coords.longitude]);
+            setCurrentCoor([position.coords.latitude, position.coords.longitude]);
         })
+        getCurrentPickUp(currentCoor);
     }, [])
 
+    const getCurrentPickUp = (currentCoor) => {
+        fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${currentCoor}.json?` +
+            new URLSearchParams({
+                access_token: APIinfo.MAPBOX_ACCESS_TOKEN,
+                limit: 1
+            })
+        )
+            .then(res => res.json())
+            .then(data => {
+                setPickup(data.features[0].place_name);
+                ///TODO: try another locaton if the current location is not available
+                console.log(data);
+            }
+            )
+    }
     const addStop = (e) => {
         setStartView(true);
         setDropOffs(prevDropoffs => {
             return {
                 ...prevDropoffs, p1: false, p2: true
-
             }
         })
     }
@@ -122,7 +137,7 @@ const Search = () => {
     return (
         <Wrapper>
             {/* FIXME: back button should take link as props */}
-            <BackButton prevPage={"/"}/>
+            <BackButton prevPage={"/"} />
 
             <InputContainer>
                 <FromToIcon>
@@ -142,14 +157,14 @@ const Search = () => {
                 </FromToIcon>
 
                 <InputBoxes>
-
-                    <InputLocation id='pickupBox' text='Current Location' update={(e) => { setPickup(e.target.value) }} />
+                    {/* ///TODO: change currentCoor to pickup */}
+                    <InputLocation id='pickupBox' text={currentCoor} update={(e) => { setPickup(e.target.value) }} />
                     <InputLocation id='stopBox1' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff1(e.target.value) }} />
                     {/* The locaitons that would be toggled */}
 
-                    {p2 ? (<InputLocation id='stopBox2' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }}  update={(e) => { setDropoff2(e.target.value) }} />) : null}
-                    {p3 ? (<InputLocation id='stopBox3' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }}  update={(e) => { setDropoff3(e.target.value) }} />) : null}
-                    {p4 ? (<InputLocation id='stopBox4' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }}  update={(e) => { setDropoff4(e.target.value) }} />) : null}
+                    {p2 ? (<InputLocation id='stopBox2' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff2(e.target.value) }} />) : null}
+                    {p3 ? (<InputLocation id='stopBox3' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff3(e.target.value) }} />) : null}
+                    {p4 ? (<InputLocation id='stopBox4' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff4(e.target.value) }} />) : null}
                     {p5 ? (<InputLocation id='stopBox5' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff5(e.target.value) }} />) : null}
 
                 </InputBoxes>
