@@ -19,7 +19,7 @@ export const DriverSignUp = () => {
 
     async function handleSubmit(e) {
         e.preventDefault()
-        setFormErrors({})
+        setIsSubmit(true)
         const errors = {}
         if(!formValues.firstName){
             errors.firstName = "First Name is required!"
@@ -50,7 +50,6 @@ export const DriverSignUp = () => {
             errors.lisenceNumber = "Drivers Lisence Number is required!"
         }
         setFormErrors(errors)
-        setIsSubmit(true)
     }
 
     useEffect(() => {

@@ -19,6 +19,7 @@ export const RiderSignUp = () => {
 
     async function handleSubmit(e) {
         e.preventDefault()
+        setIsSubmit(true)
         const errors = {}
         if(!formValues.firstName){
             errors.firstName = "First Name is required!"
@@ -46,7 +47,6 @@ export const RiderSignUp = () => {
                 errors.phoneNumber = "Invalid phone number!"
         }
         setFormErrors(errors)
-        setIsSubmit(true)
     }
 
     useEffect(() => {
