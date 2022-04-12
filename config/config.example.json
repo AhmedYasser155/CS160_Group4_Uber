@@ -1,5 +1,6 @@
 {
   "MAPBOX_ACCESS_TOKEN":"xxxxxxxxxx",
+  "DATABASE_URL":"xxxxxxxxxx",
   "EMAIL_ACCESS_KEY":"xxxxxxxxxx",
   "SERVER_URL":"http://localhost:3001"
 }

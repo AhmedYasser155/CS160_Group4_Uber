@@ -2,12 +2,11 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import tw from "tailwind-styled-components"
 import Router from 'next/router'
-import { verifyEmail } from '../APIFunctions/EmailVerification.js'
 
 
 export const RiderSignUp = () => {
 
-    const initialValues = {firstName:"", lastName:"", email:"", password:"", phoneNumber:""}
+    const initialValues = {firstName:"", lastName:"", email:"", password:"", phoneNumber:"", driver: false}
     const[formValues, setFormValues] = useState(initialValues)
     const[formErrors, setFormErrors] = useState({})
     const[isSubmit, setIsSubmit] = useState(false)
@@ -17,40 +16,56 @@ export const RiderSignUp = () => {
         setFormValues({...formValues, [name]: value})
     }
 
-    async function handleSubmit(e) {
+    const handleSubmit = (e) => {
         e.preventDefault()
-        const errors = {}
-        if(!formValues.firstName){
-            errors.firstName = "First Name is required!"
-        }
-        if(!formValues.lastName){
-            errors.lastName = "Last Name is required!"
-        }
-        if(!formValues.email){
-            errors.email = "Email is required!"
-        }
-        else {
-            const res = await verifyEmail(formValues.email)
-            if(res.error) {
-                errors.email = "Email is not valid!"
-            }
-        }
-        if(!formValues.password){
-            errors.password = "Password is required!"
-        }
-        if(!formValues.phoneNumber){
-            errors.phoneNumber = "Phone Number is required!"
-        }
-        setFormErrors(errors)
+        setFormErrors(validate(formValues))
         setIsSubmit(true)
-    }
+    };
 
     useEffect(() => {
-        if(Object.keys(formErrors).length == 0 && isSubmit){
-            Router.push('/home')
+        if(Object.keys(formErrors).length === 0 && isSubmit) {
+            createUser();
+        } else {
+            setIsSubmit(false)
         }
+    }, [formErrors])
 
-    },[formErrors])
+    const createUser = async () => {
+        try {
+            const res = await fetch('http://localhost:3000/api/data', {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formValues)
+            })
+            Router.push('/home')
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const validate = (values) => {
+        const errors = {}
+        if(!values.firstName){
+            errors.firstName = "First Name is required!"
+        }
+        if(!values.lastName){
+            errors.lastName = "Last Name is required!"
+        }
+        if(!values.email){
+            errors.email = "Email is required!"
+        }
+        if(!values.password){
+            errors.password = "Password is required!"
+        }
+        if(!values.phoneNumber){
+            errors.phoneNumber = "Phone Number is required!"
+        }
+        return errors
+
+    }
 
     return (
         <Wrapper>
