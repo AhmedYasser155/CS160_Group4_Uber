@@ -1,15 +1,57 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import tw from "tailwind-styled-components"
-import Router from 'next/router'
+import { useRouter } from "next/router";
+import {useRef} from 'react'
 
 
 export const RiderSignUp = () => {
 
     const initialValues = {firstName:"", lastName:"", email:"", password:"", phoneNumber:""}
     const[formValues, setFormValues] = useState(initialValues)
+    const contentType = "application/json";
     const[formErrors, setFormErrors] = useState({})
     const[isSubmit, setIsSubmit] = useState(false)
+    const userFirstNameInputRef = useRef()
+    const userLastNameInputRef = useRef()
+    const userEmailInputRef = useRef()
+    const userPasswordInputRef=useRef()
+    const userPhoneInputRef = useRef()
+    const router = useRouter()
+
+    async function postData() {
+        try {
+            const userData={
+                firstName:userFirstNameInputRef.current.value,
+                lastName:userLastNameInputRef.current.value,
+                email:userEmailInputRef.current.value,
+                phone:userPhoneInputRef.current.value,
+                password:userPasswordInputRef.current.value,
+                userType:0,
+            }
+          const res = await fetch("/api/users", {
+            method: "POST",
+            headers: {
+              Accept: contentType,
+              "Content-Type": contentType,
+            },
+            body: JSON.stringify(userData)            
+            
+          });
+          console.log(res)
+    
+          if (!res.ok) {
+            throw new Error(res.status);
+          }
+          router.push("/home");
+    
+        } catch (error) {
+            const errors={}
+            errors.addUserFailed="Failed to add user!"
+            setFormErrors(errors)
+        }
+      }
+
 
     const handleChange = (e) => {
         const{name, value} = e.target
@@ -17,15 +59,15 @@ export const RiderSignUp = () => {
         console.log(formValues)
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault()
         setFormErrors(validate(formValues))
         setIsSubmit(true)
-    }
-
+        }
+    
     useEffect(() => {
         if(Object.keys(formErrors).length == 0 && isSubmit){
-            Router.push('/home')
+            postData()
         }
 
     },[formErrors])
@@ -54,7 +96,7 @@ export const RiderSignUp = () => {
     return (
         <Wrapper>
 
-        <Form onSubmit = {handleSubmit}>
+        <Form  onSubmit = {handleSubmit}>
 
                 <InputContainer>
                     <InputBoxes>
@@ -66,6 +108,7 @@ export const RiderSignUp = () => {
                         value = {formValues.firstName}
                         name = "firstName"
                         type = "text"
+                        ref={userFirstNameInputRef}
                         onChange= {handleChange}
                     />
                     <ErrorMessage> {formErrors.firstName} </ErrorMessage>
@@ -75,6 +118,7 @@ export const RiderSignUp = () => {
                         value = {formValues.lastName}
                         name = "lastName"
                         type = "text"
+                        ref={userLastNameInputRef}
                         onChange={handleChange}
                     />
                     <ErrorMessage> {formErrors.lastName} </ErrorMessage>
@@ -85,6 +129,7 @@ export const RiderSignUp = () => {
                         value = {formValues.email}
                         name = "email"
                         type = "text"
+                        ref={userEmailInputRef}
                         onChange={handleChange}
                     />
                     <ErrorMessage> {formErrors.email} </ErrorMessage>
@@ -93,7 +138,8 @@ export const RiderSignUp = () => {
                         placeholder = "Enter Password"
                         value = {formValues.password}
                         name = "password"
-                        type = "password"
+                        type = "text"
+                        ref={userPasswordInputRef}
                         onChange={handleChange}
                     />
                     <ErrorMessage> {formErrors.password} </ErrorMessage>
@@ -104,6 +150,7 @@ export const RiderSignUp = () => {
                         value = {formValues.phoneNumber}
                         name = "phoneNumber"
                         type = "text"
+                        ref={userPhoneInputRef}
                         onChange= {handleChange}
                     />
                     <ErrorMessage> {formErrors.phoneNumber} </ErrorMessage>
@@ -117,6 +164,7 @@ export const RiderSignUp = () => {
                 <ActionButton>
                     Sign up
                 </ActionButton>
+                <ErrorMessage> {formErrors.addUserFailed} </ErrorMessage>
 
             </Form>
 
