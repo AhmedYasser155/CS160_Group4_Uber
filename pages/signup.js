@@ -2,22 +2,16 @@ import React from 'react'
 import { useState } from 'react'
 import tw from "tailwind-styled-components"
 import { BackHomeButton } from '../components/BackHomeButton'
-import Link from 'next/Link'
 import { DriverSignUp } from '../components/DriverSignUp'
 import { RiderSignUp } from '../components/RiderSignUp'
-
-
-
 
 const SignUp = () => {
     
 
     const [select, setSelect] = useState("rider")
     const [isToggled, setIsToggled] = useState(false);
-    
 
     return(
-
         <Wrapper>
             <BackHomeButton/>
 
@@ -62,20 +56,10 @@ const SignUp = () => {
     
                         
     
-                    </RadioButtons>
+                </RadioButtons>
 
                     {isToggled ? <DriverSignUp/> : <RiderSignUp/>}
 
-
-
-
-
-
-                <Link href="/home">
-                    <ActionButton>
-                     Sign up
-                    </ActionButton>
-                </Link>
    
             </ActionItems>
 
@@ -102,16 +86,11 @@ const Input = tw.input`
     h-10 bg-gray-200 my-2 rounded-2 p-2 outline-none border-none
 `
 
-const ActionButton = tw.div`
-    flex bg-white flex-2 m-1 h-25 items-left justify-center transform
-hover:scale-105 transition text-xl
-
-`
 const RadioButtons = tw.div`
-    bg-white flex flex-row px-4
+    flex px-4 
 `
 const RadioButtonLabel = tw.label`
-    flex flex-row items-center ml-1 mr-4
+    flex flex-row items-center ml-1 mr-4 text-gray-700 font-bold 
 `
 
 

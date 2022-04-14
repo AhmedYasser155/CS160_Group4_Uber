@@ -1,22 +1,24 @@
 import React from 'react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import tw from "tailwind-styled-components"
 import Link from 'next/Link'
 import { BackButton } from '../components/BackButton'
 import { InputLocation } from '../components/InputLocation'
 import { FaTimes } from 'react-icons/fa'
-import  APIinfo  from "../config/config.json"
+
 
 
 const Search = () => {
 
-    const [currentCoor, setCurrentCoor] = useState()
     const [pickup, setPickup] = useState()
     const [dropoff, setDropoff1] = useState()
     const [dropoff2, setDropoff2] = useState()
     const [dropoff3, setDropoff3] = useState()
     const [dropoff4, setDropoff4] = useState()
     const [dropoff5, setDropoff5] = useState()
+
+    const [dropoffArr, setDropoffArr] = useState([]) // the first element is the pickup location and follwing are dropoff locations
+    //the following parameters are for showing the dropff boxes
     const [startView, setStartView] = useState(false);
     const [dropoffs, setDropOffs] = useState({ p1: true, p2: false, p3: false, p4: false, p5: false })
     const p1 = dropoffs.p1;
@@ -26,34 +28,12 @@ const Search = () => {
     const p5 = dropoffs.p5;
 
 
-    //TODO: convert coordinates to position name
-    useEffect(() => {
-        navigator.geolocation.getCurrentPosition((position) => {
-            setCurrentCoor([position.coords.latitude, position.coords.longitude]);
-        })
-        getCurrentPickUp(currentCoor);
-    }, [])
-
-    const getCurrentPickUp = (currentCoor) => {
-        fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${currentCoor}.json?` +
-            new URLSearchParams({
-                access_token: APIinfo.MAPBOX_ACCESS_TOKEN,
-                limit: 1
-            })
-        )
-            .then(res => res.json())
-            .then(data => {
-                setPickup(data.features[0].place_name);
-                ///TODO: try another locaton if the current location is not available
-                console.log(data);
-            }
-            )
-    }
     const addStop = (e) => {
         setStartView(true);
         setDropOffs(prevDropoffs => {
             return {
                 ...prevDropoffs, p1: false, p2: true
+
             }
         })
     }
@@ -133,6 +113,30 @@ const Search = () => {
 
         }
     }
+    function updateLocationArr() {
+        //FIXME: last call before confirm is not updated
+        let newLoc = [...dropoffArr];
+        if (newLoc.length === 0) {
+            newLoc.push(pickup);
+        }
+        if (newLoc.length === 1) {
+            dropoff ? newLoc.push(dropoff) : newLoc[0] = pickup;
+        }
+        if (newLoc.length === 2) {
+            dropoff2 ? newLoc.push(dropoff2) : newLoc[1] = dropoff;
+        }
+        if (newLoc.length === 3) {
+            dropoff3 ? newLoc.push(dropoff3) : newLoc[2] = dropoff2;
+        }
+        if (newLoc.length === 4) {
+            dropoff4 ? newLoc.push(dropoff4) : newLoc[3] = dropoff3;
+        }
+        if (newLoc.length === 5) {
+            dropoff5 ? newLoc.push(dropoff5) : newLoc[4] = dropoff4;
+        }
+        setDropoffArr(newLoc);
+        console.log(dropoffArr);
+    }
 
     return (
         <Wrapper>
@@ -157,15 +161,15 @@ const Search = () => {
                 </FromToIcon>
 
                 <InputBoxes>
-                    {/* ///TODO: change currentCoor to pickup */}
-                    <InputLocation id='pickupBox' text={currentCoor} update={(e) => { setPickup(e.target.value) }} />
-                    <InputLocation id='stopBox1' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff1(e.target.value) }} />
+
+                    <InputLocation id='pickupBox' text='Pickup Location' update={(e) => { setPickup(e.target.value); updateLocationArr() }} />
+                    <InputLocation id='stopBox1' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff1(e.target.value); updateLocationArr() }} />
                     {/* The locaitons that would be toggled */}
 
-                    {p2 ? (<InputLocation id='stopBox2' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff2(e.target.value) }} />) : null}
-                    {p3 ? (<InputLocation id='stopBox3' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff3(e.target.value) }} />) : null}
-                    {p4 ? (<InputLocation id='stopBox4' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff4(e.target.value) }} />) : null}
-                    {p5 ? (<InputLocation id='stopBox5' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff5(e.target.value) }} />) : null}
+                    {p2 ? (<InputLocation id='stopBox2' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff2(e.target.value); updateLocationArr() }} />) : null}
+                    {p3 ? (<InputLocation id='stopBox3' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff3(e.target.value); updateLocationArr() }} />) : null}
+                    {p4 ? (<InputLocation id='stopBox4' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff4(e.target.value); updateLocationArr() }} />) : null}
+                    {p5 ? (<InputLocation id='stopBox5' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff5(e.target.value); updateLocationArr() }} />) : null}
 
                 </InputBoxes>
 
@@ -185,21 +189,21 @@ const Search = () => {
                 Saved Places
             </SavePlace>
 
-            {/* FIXME: check  the following before confirm { (pickup && (p1||p2||p3||p4||p5))?( */}
             {(pickup && (dropoff || dropoff2 || dropoff3 || dropoff4 || dropoff5)) ?
                 (<Link href={{
                     pathname: "/confirm",
                     query: {
-                        pickup: pickup,
-                        dropoff: dropoff
+                        //  pickup: pickup,
+                        dropoff: dropoffArr
                     }
                 }}>
-                    <ConfirmContainer>
+                    <ConfirmContainer onClick={() => updateLocationArr()}>
                         Confirm Location
                     </ConfirmContainer>
                 </Link>) : <ConfirmContainer>
                     Confirm Location
-                </ConfirmContainer>}
+                </ConfirmContainer>
+            }
 
         </Wrapper>
     )

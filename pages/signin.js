@@ -1,48 +1,91 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import Router from 'next/router'
 import tw from "tailwind-styled-components"
 import { BackHomeButton } from '../components/BackHomeButton'
 import Link from 'next/Link'
 
 const SignIn = () => {
 
-    const [email, setEmail] = useState()
-    const [password, setPassword] = useState()
- 
+    const initialValues = {email:"", password:""} 
+    const[formValues, setFormValues] = useState(initialValues)
+    const[formErrors, setFormErrors] = useState({})
+    const[isSubmit, setIsSubmit] = useState(false)
+
+    const handleChange = (e) => {
+        const{name, value} = e.target
+        setFormValues({...formValues, [name]: value})
+        console.log(formValues)
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        setFormErrors(validate(formValues))
+        setIsSubmit(true)
+    }
+
+    useEffect(() => {
+        if(Object.keys(formErrors).length == 0 && isSubmit){
+            Router.push('/home')
+        }
+
+    },[formErrors])
+
+    const validate = (values) => {
+        const errors = {}
+        if(!values.email){
+            errors.email = "Email is required!"
+        }
+        if(!values.password){
+            errors.password = "Password is required!"
+        }
+
+        return errors
+
+    }
 
     return(
         <Wrapper>
             <BackHomeButton/>
 
-            
-            <ActionItems>
-                <Header> 
+            <Header> 
                      <UberLogo src="https://download.logo.wine/logo/Uber/Uber-Logo.wine.png"/> 
-                </Header>
+            </Header>
+
+            
+            <Form onSubmit = {handleSubmit}>
+               
 
                 <InputContainer>
                     <InputBoxes>
+                    <InputLabel> Email </InputLabel>
                      <Input
-                        placeholder = "Email"
-                        value = {email}
-                        onChange={(e) => {setEmail(e.target.value)}}
+                        placeholder = "Enter Email"
+                        value = {formValues.email}
+                        name = "email"
+                        type = "text"
+                        onChange={handleChange}
                     />
+
+                    <ErrorMessage> {formErrors.email} </ErrorMessage>
+                    <InputLabel> Password </InputLabel>
                     <Input
-                        placeholder = "Password"
-                        value = {password}
-                        onChange={(e) => {setPassword(e.target.value)}}
+                        placeholder = "Enter Password"
+                        name = "password"
+                        value = {formValues.password}
+                        type = "password"
+                        onChange={handleChange}
                     />
+                    <ErrorMessage>{formErrors.password}</ErrorMessage>
                     </InputBoxes>
 
                 </InputContainer>
         
-                <Link href="/home">
-                    <ActionButton>
+                    <ActionButton >
                      Sign In
                     </ActionButton>
-                </Link>
-   
-            </ActionItems>
+         
+            </Form>
 
         </Wrapper>
     )
@@ -52,21 +95,34 @@ const SignIn = () => {
 
 export default SignIn
 
+
+const SuccessMessage = tw.p`
+    text-center pb-4
+`
+
+const ErrorMessage = tw.div`
+    text-red-600 text-sm
+`
+
+const InputLabel = tw.label`
+    text-gray-700 font-bold
+`
+
 const Wrapper = tw.div`
     flex flex-col h-screen bg-gray-200 p-4
 `
-const ActionItems = tw.div`
+const Form = tw.form`
     flex-1
 `
 const Header = tw.div`
     flex justify-between    
 `
 const UberLogo = tw.img`
-    h-28 w-auto object-contain self-start
+    h-28 w-auto object-contain self-start 
 `
 
 const InputContainer = tw.div`
-    bg-white flex items-center px-4 mb-2
+    bg-white flex items-center px-4 mb-2 py-4
 `
 const InputBoxes = tw.div`
     flex flex-col flex-1
@@ -75,8 +131,7 @@ const Input = tw.input`
     h-10 bg-gray-200 my-2 rounded-2 p-2 outline-none border-none
 `
 
-const ActionButton = tw.div`
-    flex bg-white flex-2 m-1 h-25 items-left justify-center transform
-hover:scale-105 transition text-xl
+const ActionButton = tw.button`
+    flex bg-white justify-center transform hover:scale-105 transition text-xl w-full
 
 `

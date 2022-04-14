@@ -5,59 +5,47 @@ import { useEffect, useState } from 'react'
 import {useRouter} from 'next/router'
 import RideSelector from '../components/RideSelector'
 import { BackButton } from '../components/BackButton'
-import  APIinfo  from "../config/config.json"
+import { MAPBOX_ACCESS_TOKEN } from "../config/config.json"
 
 const Confirm = () => {
-
+ 
     const router = useRouter()
-    const {pickup, dropoff} = router.query
+    const {pickup, dropoff, dropoff2, dropoff3, dropoff4, dropoff5} = router.query
+    // user input (addresses) from search.js
+    const locations = [pickup, dropoff, dropoff2, dropoff3, dropoff4, dropoff5]
 
-    const [ pickupCoordinates, setPickupCoordinates] = useState([0,0])
-    const [ dropoffCoordinates, setDropoffCoordinates] = useState([0,0])
-
-    const getPickupCoordinates = (pickup) => {
-        fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${pickup}.json?` + 
-            new URLSearchParams({
-                access_token: APIinfo.MAPBOX_ACCESS_TOKEN,
-                limit: 1
-            })
-        )
-        .then(res => res.json())
-        .then(data => {
-            setPickupCoordinates(data.features[0].center)
-        })
-    }
-    
-    const getDropoffCoodinates = (dropoff) => {
-        fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${dropoff}.json?` + 
-            new URLSearchParams({
-                access_token: APIinfo.MAPBOX_ACCESS_TOKEN,
-                limit: 1
-            })
-        )
-        .then(res => res.json())
-        .then(data => {
-            setDropoffCoordinates(data.features[0].center)
-        })
-    }
+    const [locationCoor, setLocationCoor] = useState([])
+    const [index, setIndex] = useState(0);
 
     useEffect( () => {
-        getPickupCoordinates(pickup)
-        getDropoffCoodinates(dropoff)
-    }, [pickup, dropoff])
+            if (locations[index] !== "") {
+                fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${locations[index]}.json?` + 
+                    new URLSearchParams({
+                        access_token: MAPBOX_ACCESS_TOKEN,
+                        limit: 1
+                    })
+                )
+                .then(res => res.json())
+                .then(data => {
+                    setLocationCoor([...locationCoor, data.features[0].center])
+                }).catch((e)=>console.log(e))
+                setIndex(index+1);
+            }
+    }, [locationCoor])
 
+    if (locationCoor.length < 2) {
+        return null
+    } 
     return (
         <Wrapper>
             <BackButton  prevPage={"/search"}/>
             <Map
-                pickupCoordinates = {pickupCoordinates}
-                dropoffCoordinates = {dropoffCoordinates}
+                locationCoordinates={locationCoor}
             />
 
             <RideContainer>
                 <RideSelector
-                    pickupCoordinates = {pickupCoordinates}
-                    dropoffCoordinates = {dropoffCoordinates}
+                    locationCoordinates={locationCoor}
                 />
 
                 <ConfirmButtonContainer>
