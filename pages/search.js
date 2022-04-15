@@ -1,15 +1,17 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import tw from "tailwind-styled-components"
 import Link from 'next/Link'
 import { BackButton } from '../components/BackButton'
 import { InputLocation } from '../components/InputLocation'
 import { FaTimes } from 'react-icons/fa'
+import APIinfo from "../config/config.json"
 
 
 
 const Search = () => {
 
+    const [currentCoor, setCurrentCoor] = useState()
     const [pickup, setPickup] = useState()
     const [dropoff, setDropoff1] = useState()
     const [dropoff2, setDropoff2] = useState()
@@ -26,6 +28,28 @@ const Search = () => {
     const p3 = dropoffs.p3;
     const p4 = dropoffs.p4;
     const p5 = dropoffs.p5;
+
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition((position) => {
+            setCurrentCoor([position.coords.longitude, position.coords.latitude]);
+        })
+     
+        //TODO: pass the coordinates to the next page 
+        // fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${currentCoor}.json?` +
+        //         new URLSearchParams({
+        //             access_token: APIinfo.MAPBOX_ACCESS_TOKEN,
+        //             limit: 1
+        //         })
+        //     ) 
+        //     .then(res => res.json())
+        //     .then(data => {
+        //         console.log(data);
+        //         setPickup(data.features[0].place_name);
+        //     }
+        //     )
+
+    }, [])
+
 
 
     const addStop = (e) => {
@@ -46,6 +70,7 @@ const Search = () => {
                         ...prevDropoffs, p2: false, p1: true
                     }
                 })
+                setDropoff2('');
                 break;
             case 'delete3':
                 setDropOffs(prevDropoffs => {
@@ -53,6 +78,7 @@ const Search = () => {
                         ...prevDropoffs, p3: false
                     }
                 })
+                setDropoff3('');
                 break;
             case 'delete4':
                 setDropOffs(prevDropoffs => {
@@ -60,6 +86,7 @@ const Search = () => {
                         ...prevDropoffs, p4: false
                     }
                 })
+                setDropoff4('');
                 break;
             case 'delete5':
                 setDropOffs(prevDropoffs => {
@@ -67,6 +94,7 @@ const Search = () => {
                         ...prevDropoffs, p5: false
                     }
                 })
+                setDropoff5('');
                 break;
         }
 
@@ -74,15 +102,10 @@ const Search = () => {
     function addLocationBox(key, id) {
 
         if (key === 'Enter') {
-            // if p1 = true  || (it is p5 a)
-            //      confirm button
-            // else 
-            //      switch case 
-            //console.log("I am enter with id" , id);
+
             if (p1 === true || p5 === true) {
                 console.log("p1 or p5 are true");
                 //confirm button
-
             }
             else {
                 switch (id) {
@@ -113,29 +136,18 @@ const Search = () => {
 
         }
     }
+
     function updateLocationArr() {
-        //FIXME: last call before confirm is not updated
-        let newLoc = [...dropoffArr];
-        if (newLoc.length === 0) {
-            newLoc.push(pickup);
-        }
-        if (newLoc.length === 1) {
-            dropoff ? newLoc.push(dropoff) : newLoc[0] = pickup;
-        }
-        if (newLoc.length === 2) {
-            dropoff2 ? newLoc.push(dropoff2) : newLoc[1] = dropoff;
-        }
-        if (newLoc.length === 3) {
-            dropoff3 ? newLoc.push(dropoff3) : newLoc[2] = dropoff2;
-        }
-        if (newLoc.length === 4) {
-            dropoff4 ? newLoc.push(dropoff4) : newLoc[3] = dropoff3;
-        }
-        if (newLoc.length === 5) {
-            dropoff5 ? newLoc.push(dropoff5) : newLoc[4] = dropoff4;
-        }
-        setDropoffArr(newLoc);
+        console.log("test");
+        console.log(pickup);
+        pickup ? dropoffArr.push(pickup) : null;
+        dropoff ? dropoffArr.push(dropoff) : null;
+        dropoff2 ? dropoffArr.push(dropoff2) : null;
+        dropoff3 ? dropoffArr.push(dropoff3) : null;
+        dropoff4 ? dropoffArr.push(dropoff4) : null;
+        dropoff5 ? dropoffArr.push(dropoff5) : null;
         console.log(dropoffArr);
+        //TODO: add the link here
     }
 
     return (
@@ -162,14 +174,14 @@ const Search = () => {
 
                 <InputBoxes>
 
-                    <InputLocation id='pickupBox' text='Pickup Location' update={(e) => { setPickup(e.target.value); updateLocationArr() }} />
-                    <InputLocation id='stopBox1' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff1(e.target.value); updateLocationArr() }} />
+                    <InputLocation id='pickupBox' text='Current Location'  update={(e) => { setPickup(e.target.value) }} />
+                    <InputLocation id='stopBox1' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff1(e.target.value) }} />
                     {/* The locaitons that would be toggled */}
 
-                    {p2 ? (<InputLocation id='stopBox2' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff2(e.target.value); updateLocationArr() }} />) : null}
-                    {p3 ? (<InputLocation id='stopBox3' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff3(e.target.value); updateLocationArr() }} />) : null}
-                    {p4 ? (<InputLocation id='stopBox4' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff4(e.target.value); updateLocationArr() }} />) : null}
-                    {p5 ? (<InputLocation id='stopBox5' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff5(e.target.value); updateLocationArr() }} />) : null}
+                    {p2 ? (<InputLocation id='stopBox2' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff2(e.target.value) }} />) : null}
+                    {p3 ? (<InputLocation id='stopBox3' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff3(e.target.value) }} />) : null}
+                    {p4 ? (<InputLocation id='stopBox4' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff4(e.target.value) }} />) : null}
+                    {p5 ? (<InputLocation id='stopBox5' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff5(e.target.value) }} />) : null}
 
                 </InputBoxes>
 
@@ -193,7 +205,6 @@ const Search = () => {
                 (<Link href={{
                     pathname: "/confirm",
                     query: {
-                        //  pickup: pickup,
                         dropoff: dropoffArr
                     }
                 }}>
