@@ -1,9 +1,6 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
+import {React, useState, useEffect,useRef } from "react"
 import tw from "tailwind-styled-components"
-import { useRouter } from "next/router";
-import {useRef} from 'react'
-
+import { useRouter } from "next/router"
 
 export const DriverSignUp = () => {
 
@@ -27,6 +24,7 @@ export const DriverSignUp = () => {
 
     async function postData() {
         try {
+            
             const userData={
                 firstName:userFirstNameInputRef.current.value,
                 lastName:userLastNameInputRef.current.value,

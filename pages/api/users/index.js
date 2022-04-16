@@ -43,4 +43,4 @@ async function handleUser(req, res) {
   }
 }
 
-export default handleUser;
+export default handleUser

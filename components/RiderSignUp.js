@@ -1,8 +1,6 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
+import {React, useState, useEffect,useRef } from "react"
 import tw from "tailwind-styled-components"
 import { useRouter } from "next/router";
-import {useRef} from 'react'
 
 
 export const RiderSignUp = () => {

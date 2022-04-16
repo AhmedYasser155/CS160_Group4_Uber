@@ -29,6 +29,7 @@ async function handleUsersById(req, res) {
       }
       break;
 
+    
     case "PUT":
       try {
         const user = await User.findByIdAndUpdate(id, req.body, {

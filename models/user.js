@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
 
-const UserSchema = new mongoose.Schema({
+const DriverSchema = new mongoose.Schema({
     firstName:{
         type:String
     },
@@ -9,16 +9,16 @@ const UserSchema = new mongoose.Schema({
     },
     email:{
         type:String, 
-        unique: true,
+        index: {unique:true}
     },
     phone:{
         type:Number,
-        unique: true,
+        index: {unique:true}
         
     },
     license:{
         type:String,
-        unique: true,
+        index: {unique:true}
         
     },
     password:{
@@ -27,7 +27,15 @@ const UserSchema = new mongoose.Schema({
     userType:{
         type:Number
     },
-});
+    ride: [
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'Ride'
+        }
+    ]
+},{
+    timestamps: true
+})
 
 const RiderSchema = new mongoose.Schema({
     firstName:{
@@ -38,12 +46,11 @@ const RiderSchema = new mongoose.Schema({
     },
     email:{
         type:String, 
-        unique: true,
+        index: {unique:true}
     },
     phone:{
         type:Number,
-        unique: true,
-        
+        index: {unique:true}
     },
     password:{
         type:String
@@ -51,8 +58,14 @@ const RiderSchema = new mongoose.Schema({
     userType:{
         type:Number
     },
-});
+    ride: [
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'Ride'
+        }
+    ]
+},{
+    timestamps: true
+})
 
-export default mongoose.models.usertest || mongoose.model("usertest", UserSchema)||mongoose.model("usertest", RiderSchema);
-
-
+export default mongoose.models.usertest ||mongoose.model("usertest",RiderSchema)|| mongoose.model("usertest", DriverSchema)
