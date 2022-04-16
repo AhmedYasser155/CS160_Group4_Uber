@@ -27,7 +27,7 @@ export default function Home() {
                 Ride
             </ActionButton>
           </Link>
-          <Link href="">
+          <Link href="/scheduling">
             <ActionButton>
               <ActionImg src="https://i.ibb.co/5RjchBg/uberschedule.png"/>
                 Schedule
