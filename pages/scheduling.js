@@ -201,7 +201,7 @@ const Schedule = () => {
             </SavePlace>
 
             {/* FIXME: check  the following before confirm { (pickup && (p1||p2||p3||p4||p5))?( */}
-            {(pickup && (dropoff || dropoff2 || dropoff3 || dropoff4 || dropoff5)) ?
+            {((startDate) && pickup && (dropoff || dropoff2 || dropoff3 || dropoff4 || dropoff5)) ?
                 (<Link href={{
                     pathname: "/confirmscheduling",
                     query: {
