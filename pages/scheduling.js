@@ -206,7 +206,11 @@ const Schedule = () => {
                     pathname: "/confirmscheduling",
                     query: {
                         pickup: pickup,
-                        dropoff: dropoff
+                        dropoff: dropoff,
+                        dropoff2: dropoff2,
+                        dropoff3: dropoff3,
+                        dropoff4: dropoff4,
+                        dropoff5: dropoff5
                     }
                 }}>
                     <ConfirmContainer>
@@ -215,6 +219,7 @@ const Schedule = () => {
                 </Link>) : <ConfirmContainer>
                     Confirm Location and Set Pickup
                 </ConfirmContainer>}
+
             
 
         </Wrapper>
