@@ -8,8 +8,8 @@ import { FaTimes } from 'react-icons/fa'
 import APIinfo from "../config/config.json"
 
 import { useSelector, useDispatch } from 'react-redux'
-import { ADD_Dropoff1, ADD_PICKUP, ADD_Dropoff2, ADD_Dropoff3, ADD_Dropoff4, ADD_Dropoff5, APPEND_LOCATION ,ADD_CURR_LOCATION } from '../store/actions'
-
+import { ADD_Dropoff1, ADD_PICKUP, ADD_Dropoff2, ADD_Dropoff3, ADD_Dropoff4, ADD_Dropoff5, APPEND_LOCATION ,ADD_CURR_LOCATION, DELETE_Dropoff1 } from '../store/actions'
+import { DELETE_Dropoff2 ,DELETE_Dropoff3,DELETE_Dropoff4,DELETE_Dropoff5 } from '../store/actions'
 
 
 const Search = () => {
@@ -65,37 +65,37 @@ const Search = () => {
     const deleteStop = (e) => {
         switch (e.target.id) {
             case 'delete2':
+                dispatch(DELETE_Dropoff2());
                 setDropOffs(prevDropoffs => {
                     return {
                         //TODO: try to handle removing p2 before the other boxes
                         ...prevDropoffs, p2: false, p1: true
                     }
                 })
-                setDropoff2('');
                 break;
             case 'delete3':
+                dispatch(DELETE_Dropoff3());
                 setDropOffs(prevDropoffs => {
                     return {
                         ...prevDropoffs, p3: false
                     }
                 })
-                setDropoff3('');
                 break;
             case 'delete4':
+                dispatch(DELETE_Dropoff4());
                 setDropOffs(prevDropoffs => {
                     return {
                         ...prevDropoffs, p4: false
                     }
                 })
-                setDropoff4('');
                 break;
             case 'delete5':
+                dispatch(DELETE_Dropoff5());
                 setDropOffs(prevDropoffs => {
                     return {
                         ...prevDropoffs, p5: false
                     }
                 })
-                setDropoff5('');
                 break;
         }
 
