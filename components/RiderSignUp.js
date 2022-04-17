@@ -1,6 +1,7 @@
 import {React, useState, useEffect,useRef } from "react"
 import tw from "tailwind-styled-components"
-import { useRouter } from "next/router";
+import {Router, useRouter } from "next/router";
+import { verifyEmail } from '../APIFunctions/EmailVerification.js'
 
 
 export const RiderSignUp = () => {
@@ -41,7 +42,7 @@ export const RiderSignUp = () => {
           if (!res.ok) {
             throw new Error(res.status);
           }
-          router.push("/home");
+          router.push("/rider");
     
         } catch (error) {
             const errors={}
@@ -54,13 +55,19 @@ export const RiderSignUp = () => {
     const handleChange = (e) => {
         const{name, value} = e.target
         setFormValues({...formValues, [name]: value})
-        console.log(formValues)
     }
 
     const handleSubmit = async(e) => {
         e.preventDefault()
-        setFormErrors(validate(formValues))
         setIsSubmit(true)
+        setFormErrors(validate(formValues))
+        const errors ={}
+        const res = await verifyEmail(formValues.email)
+            if(res.error) {
+                errors.email = "Email is not valid"
+            }   
+            setFormErrors(errors)
+
         }
     
     useEffect(() => {
@@ -87,9 +94,14 @@ export const RiderSignUp = () => {
         if(!values.phoneNumber){
             errors.phoneNumber = "Phone Number is required!"
         }
+        else {
+            if(!/^(1\s|1|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/.test(values.phoneNumber))
+                errors.phoneNumber = "Invalid phone number!"
+        }
         return errors
 
     }
+    
 
     return (
         <Wrapper>
@@ -136,7 +148,7 @@ export const RiderSignUp = () => {
                         placeholder = "Enter Password"
                         value = {formValues.password}
                         name = "password"
-                        type = "text"
+                        type = "password"
                         ref={userPasswordInputRef}
                         onChange={handleChange}
                     />

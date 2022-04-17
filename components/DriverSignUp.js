@@ -1,6 +1,8 @@
 import {React, useState, useEffect,useRef } from "react"
 import tw from "tailwind-styled-components"
-import { useRouter } from "next/router"
+import { Router,useRouter } from "next/router"
+import { verifyEmail } from '../APIFunctions/EmailVerification.js'
+
 
 export const DriverSignUp = () => {
 
@@ -48,7 +50,7 @@ export const DriverSignUp = () => {
           if (!res.ok) {
             throw new Error(res.status);
           }
-          router.push("/home");
+          router.push("/driver");
     
         } catch (error) {
             const errors={}
@@ -60,13 +62,17 @@ export const DriverSignUp = () => {
     const handleChange = (e) => {
         const{name, value} = e.target
         setFormValues({...formValues, [name]: value})
-        console.log(formValues)
     }
 
     const handleSubmit = async(e) => {
         e.preventDefault()
         setFormErrors(validate(formValues))
+        const res = await verifyEmail(formValues.email)
+            if(res.error) {
+                errors.email = "Email is not valid"
+            }   
         setIsSubmit(true)
+        
        
     
     }
@@ -78,7 +84,7 @@ export const DriverSignUp = () => {
 
     },[formErrors])
 
-
+    
     const validate = (values) => {
         const errors = {}
         if(!values.firstName){
@@ -96,6 +102,10 @@ export const DriverSignUp = () => {
         if(!values.phoneNumber){
             errors.phoneNumber = "Phone Number is required!"
         }
+        else {
+            if(!/^(1\s|1|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/.test(values.phoneNumber))
+                errors.phoneNumber = "Invalid phone number!"
+        }
         if(!values.license){
             errors.license = "Drivers License Number is required!"
         }
@@ -103,10 +113,6 @@ export const DriverSignUp = () => {
         return errors
 
     }
-
-    
-
-
 
   
     return (
@@ -155,7 +161,7 @@ export const DriverSignUp = () => {
                         placeholder = "Enter Password"
                         value = {formValues.password}
                         name = "password"
-                        type = "text"
+                        type = "password"
                         ref={userPasswordInputRef}
                         onChange={handleChange}
                     />

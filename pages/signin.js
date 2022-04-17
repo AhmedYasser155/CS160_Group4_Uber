@@ -26,7 +26,7 @@ const SignIn = () => {
 
     useEffect(() => {
         if(Object.keys(formErrors).length == 0 && isSubmit){
-            Router.push('/home')
+            Router.push('/rider')
         }
 
     },[formErrors])
