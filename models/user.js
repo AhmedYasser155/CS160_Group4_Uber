@@ -1,5 +1,17 @@
 import mongoose from "mongoose"
 
+const RideSchema = new mongoose.Schema({
+    pickup:{
+        type:String
+    },
+    dropoff:{
+        type:String
+    }
+
+},{
+    timestamps: true
+})
+
 const DriverSchema = new mongoose.Schema({
     firstName:{
         type:String
@@ -27,12 +39,7 @@ const DriverSchema = new mongoose.Schema({
     userType:{
         type:Number
     },
-    ride: [
-        {
-            type:mongoose.Schema.Types.ObjectId,
-            ref:'Ride'
-        }
-    ]
+    ride: [RideSchema]
 },{
     timestamps: true
 })
@@ -58,12 +65,7 @@ const RiderSchema = new mongoose.Schema({
     userType:{
         type:Number
     },
-    ride: [
-        {
-            type:mongoose.Schema.Types.ObjectId,
-            ref:'Ride'
-        }
-    ]
+    ride: [RideSchema]
 },{
     timestamps: true
 })

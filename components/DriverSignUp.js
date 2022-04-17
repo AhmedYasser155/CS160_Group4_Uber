@@ -4,7 +4,7 @@ import { useRouter } from "next/router"
 
 export const DriverSignUp = () => {
 
-    const initialValues = {firstName:"", lastName:"", email:"", password:"", phoneNumber:"", licenseNumber:""}
+    const initialValues = {firstName:"", lastName:"", email:"", password:"", phoneNumber:"", license:""}
 
     const[formValues, setFormValues] = useState(initialValues)
     const contentType = "application/json";
@@ -96,8 +96,8 @@ export const DriverSignUp = () => {
         if(!values.phoneNumber){
             errors.phoneNumber = "Phone Number is required!"
         }
-        if(!values.licenseNumber){
-            errors.licenseNumber = "Drivers License Number is required!"
+        if(!values.license){
+            errors.license = "Drivers License Number is required!"
         }
 
         return errors
@@ -174,13 +174,13 @@ export const DriverSignUp = () => {
                     <InputLabel> Drivers License Number </InputLabel>
                     <Input
                         placeholder = "Enter Drivers License Number"
-                        value = {formValues.licenseNumber}
-                        name = "licenseNumber"
+                        value = {formValues.license}
+                        name = "license"
                         type="text"
                         ref={userLicenseInputRef}
                         onChange= {handleChange}
                     />
-                    <ErrorMessage> {formErrors.licenseNumber} </ErrorMessage>
+                    <ErrorMessage> {formErrors.license} </ErrorMessage>
 
 
                     </InputBoxes>
