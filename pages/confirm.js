@@ -7,8 +7,14 @@ import RideSelector from '../components/RideSelector'
 import { BackButton } from '../components/BackButton'
 import { MAPBOX_ACCESS_TOKEN } from "../config/config.json"
 
+import { useSelector , useDispatch } from 'react-redux'
+
+
 const Confirm = () => {
  
+    const locationsArr =useSelector(state=> state.locationArr); //to access the locations to be printed on the map
+
+
     const router = useRouter()
     const {pickup, dropoff, dropoff2, dropoff3, dropoff4, dropoff5} = router.query
     // user input (addresses) from search.js
@@ -16,8 +22,8 @@ const Confirm = () => {
 
     const [locationCoor, setLocationCoor] = useState([])
     const [index, setIndex] = useState(0);
-
-    useEffect( () => {
+    
+    useEffect( () => {    
             if (locations[index] !== "") {
                 fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${locations[index]}.json?` + 
                     new URLSearchParams({
@@ -49,7 +55,7 @@ const Confirm = () => {
                 />
 
                 <ConfirmButtonContainer>
-                    <ConfirmButton>Confirm</ConfirmButton>
+                    <ConfirmButton>Confirm </ConfirmButton>
                 </ConfirmButtonContainer>
 
             </RideContainer>
