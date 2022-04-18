@@ -1,21 +1,43 @@
-import mongoose from 'mongoose';
+// /lib/dbConnect.js
+import mongoose from 'mongoose'
 
-// connection object
-const connection = {};
 
-// check if we have connection to database, otherwise connect
-async function dbConnect() {
-    if (connection.isConnected) {
-        return;
-    }
 
-    const db = await mongoose.connect(process.env.MONGO_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
+const MONGODB_URI = 'mongodb+srv://cs160:sjsucs160@cluster0.arpcf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 
-    connection.isConnected = db.connections[0].readyState;
-    console.log(connection.isConnected);
+if (!MONGODB_URI) {
+  throw new Error(
+    'Please define the MONGODB_URI environment variable inside .env.local'
+  )
 }
 
-export default dbConnect;
+
+let cached = global.mongoose
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null }
+}
+
+async function dbConnect () {
+  if (cached.conn) {
+    return cached.conn
+  }
+
+  if (!cached.promise) {
+    const opts = {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      bufferCommands: false,
+      autoIndex: true, 
+
+
+    }
+
+    cached.promise = mongoose.connect(MONGODB_URI, opts).then(mongoose => {
+      return mongoose
+    })
+  }
+  cached.conn = await cached.promise
+  return cached.conn
+}
+export default dbConnect

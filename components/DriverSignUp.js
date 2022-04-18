@@ -1,23 +1,70 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
+import {React, useState, useEffect,useRef } from "react"
 import tw from "tailwind-styled-components"
-import Router from 'next/router'
+import { Router,useRouter } from "next/router"
 import { verifyEmail } from '../APIFunctions/EmailVerification.js'
 
 
 export const DriverSignUp = () => {
 
-    const initialValues = {firstName:"", lastName:"", email:"", password:"", phoneNumber:"", lisenceNumber:""}
+    const initialValues = {firstName:"", lastName:"", email:"", password:"", phoneNumber:"", license:""}
+
     const[formValues, setFormValues] = useState(initialValues)
+    const contentType = "application/json";
     const[formErrors, setFormErrors] = useState({})
     const[isSubmit, setIsSubmit] = useState(false)
+    const userFirstNameInputRef = useRef()
+    const userLastNameInputRef = useRef()
+    const userEmailInputRef = useRef()
+    const userPhoneInputRef = useRef()
+    const userPasswordInputRef=useRef()
+    const userLicenseInputRef=useRef()
+    const router = useRouter()
+
+
+  
+
+
+    async function postData() {
+        try {
+            
+            const userData={
+                firstName:userFirstNameInputRef.current.value,
+                lastName:userLastNameInputRef.current.value,
+                email:userEmailInputRef.current.value,
+                phone:userPhoneInputRef.current.value,
+                license: userLicenseInputRef.current.value,
+                password:userPasswordInputRef.current.value,
+                userType:1,
+            }
+          const res = await fetch("/api/users", {
+            method: "POST",
+            headers: {
+              Accept: contentType,
+              "Content-Type": contentType,
+            },
+            body: JSON.stringify(userData)            
+            
+          });
+          console.log(res)
+    
+          if (!res.ok) {
+            throw new Error(res.status);
+          }
+          router.push("/driver");
+    
+        } catch (error) {
+            const errors={}
+            errors.addUserFailed="Failed to add user!"
+            setFormErrors(errors)
+        }
+      }
 
     const handleChange = (e) => {
         const{name, value} = e.target
         setFormValues({...formValues, [name]: value})
     }
 
-    async function handleSubmit(e) {
+    const handleSubmit = async(e) => {
         e.preventDefault()
         setIsSubmit(true)
         const errors = {}
@@ -33,7 +80,7 @@ export const DriverSignUp = () => {
         else {
             const res = await verifyEmail(formValues.email)
             if(res.error) {
-                errors.email = "Email is not valid"
+                errors.email = "Email is not valid!"
             }
         }
         if(!formValues.password){
@@ -46,19 +93,26 @@ export const DriverSignUp = () => {
             if(!/^(1\s|1|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/.test(formValues.phoneNumber))
                 errors.phoneNumber = "Invalid phone number!"
         }
-        if(!formValues.lisenceNumber){
-            errors.lisenceNumber = "Drivers Lisence Number is required!"
+        if(!formValues.license){
+            errors.license = "Drivers License Number is required!"
         }
         setFormErrors(errors)
+        
+       
+    
     }
 
     useEffect(() => {
         if(Object.keys(formErrors).length == 0 && isSubmit){
-            Router.push('/driver')
+            postData()
         }
 
     },[formErrors])
 
+    
+    
+
+  
     return (
         <Wrapper>
             
@@ -75,6 +129,7 @@ export const DriverSignUp = () => {
                         value = {formValues.firstName}
                         name = "firstName"
                         type = "text"
+                        ref={userFirstNameInputRef}
                         onChange= {handleChange}
                     />
                     <ErrorMessage> {formErrors.firstName} </ErrorMessage>
@@ -84,6 +139,7 @@ export const DriverSignUp = () => {
                         value = {formValues.lastName}
                         name = "lastName"
                         type = "text"
+                        ref={userLastNameInputRef}
                         onChange={handleChange}
                     />
                     <ErrorMessage> {formErrors.lastName} </ErrorMessage>
@@ -94,6 +150,7 @@ export const DriverSignUp = () => {
                         value = {formValues.email}
                         name = "email"
                         type = "text"
+                        ref={userEmailInputRef}
                         onChange={handleChange}
                     />
                     <ErrorMessage> {formErrors.email} </ErrorMessage>
@@ -103,6 +160,7 @@ export const DriverSignUp = () => {
                         value = {formValues.password}
                         name = "password"
                         type = "password"
+                        ref={userPasswordInputRef}
                         onChange={handleChange}
                     />
                     <ErrorMessage> {formErrors.password} </ErrorMessage>
@@ -113,17 +171,20 @@ export const DriverSignUp = () => {
                         value = {formValues.phoneNumber}
                         name = "phoneNumber"
                         type = "text"
+                        ref={userPhoneInputRef}
                         onChange= {handleChange}
                     />
                     <ErrorMessage> {formErrors.phoneNumber} </ErrorMessage>
-                    <InputLabel> Drivers Lisence Number </InputLabel>
+                    <InputLabel> Drivers License Number </InputLabel>
                     <Input
-                        placeholder = "Enter Drivers Lisence Number"
-                        value = {formValues.lisenceNumber}
-                        name = "lisenceNumber"
+                        placeholder = "Enter Drivers License Number"
+                        value = {formValues.license}
+                        name = "license"
+                        type="text"
+                        ref={userLicenseInputRef}
                         onChange= {handleChange}
                     />
-                    <ErrorMessage> {formErrors.lisenceNumber} </ErrorMessage>
+                    <ErrorMessage> {formErrors.license} </ErrorMessage>
 
 
                     </InputBoxes>
@@ -135,6 +196,7 @@ export const DriverSignUp = () => {
                 <ActionButton>
                     Sign up
                 </ActionButton>
+                <ErrorMessage> {formErrors.addUserFailed} </ErrorMessage>
 
             </Form>
 
