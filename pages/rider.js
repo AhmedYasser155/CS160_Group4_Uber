@@ -4,10 +4,20 @@ import "tailwindcss/tailwind.css"
 import tw from "tailwind-styled-components"
 import Map from '../components/Map'
 import Link from 'next/Link'
-
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { ADD_CURR_LOCATION } from '../store/actions'
 
 export default function Home() {
 
+  const dispatch = useDispatch();
+
+useEffect(() => {
+  navigator.geolocation.getCurrentPosition((position) => {
+    dispatch((ADD_CURR_LOCATION([position.coords.longitude, position.coords.latitude])));
+
+})
+}, [])
   return (
     <Wrapper>
       <Map/>
@@ -35,10 +45,11 @@ export default function Home() {
           </Link>
           
         </ActionButtons>
-
+        <Link href="/search">
         <InputButton>
           Where to?
         </InputButton>
+        </Link>
       </ActionItems>
     </Wrapper>
   )

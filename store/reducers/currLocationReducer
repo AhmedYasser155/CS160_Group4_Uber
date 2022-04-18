@@ -1,0 +1,9 @@
+const currLocationReducer = (state = [], action) => {
+    switch (action.type) {
+        case 'ADD_CURR_LOCATION':
+            return action.payload;
+        default:
+            return state;
+    }
+}
+export default currLocationReducer;
