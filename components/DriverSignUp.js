@@ -2,6 +2,7 @@ import {React, useState, useEffect,useRef } from "react"
 import tw from "tailwind-styled-components"
 import { Router,useRouter } from "next/router"
 import { verifyEmail } from '../APIFunctions/EmailVerification.js'
+import { addUser } from '../APIFunctions/DbFunctions'
 
 
 export const DriverSignUp = () => {
@@ -21,43 +22,25 @@ export const DriverSignUp = () => {
     const router = useRouter()
 
 
-  
-
-
     async function postData() {
-        try {
-            
-            const userData={
-                firstName:userFirstNameInputRef.current.value,
-                lastName:userLastNameInputRef.current.value,
-                email:userEmailInputRef.current.value,
-                phone:userPhoneInputRef.current.value,
-                license: userLicenseInputRef.current.value,
-                password:userPasswordInputRef.current.value,
-                userType:1,
-            }
-          const res = await fetch("/api/users", {
-            method: "POST",
-            headers: {
-              Accept: contentType,
-              "Content-Type": contentType,
-            },
-            body: JSON.stringify(userData)            
-            
-          });
-          console.log(res)
-    
-          if (!res.ok) {
-            throw new Error(res.status);
-          }
-          router.push("/driver");
-    
-        } catch (error) {
-            const errors={}
-            errors.addUserFailed="Failed to add user!"
-            setFormErrors(errors)
+        const userData = {
+            firstName:userFirstNameInputRef.current.value,
+            lastName:userLastNameInputRef.current.value,
+            email:userEmailInputRef.current.value,
+            phone:userPhoneInputRef.current.value,
+            license: userLicenseInputRef.current.value,
+            password:userPasswordInputRef.current.value,
+            userType:1,
         }
-      }
+        const res = await addUser(userData);
+        if(res.error) {
+            console.log("Error when adding user!");
+        }
+        else {
+            console.log(res.responseData);
+            router.push("/driver");
+        }
+    }
 
     const handleChange = (e) => {
         const{name, value} = e.target
