@@ -66,12 +66,37 @@ export const DriverSignUp = () => {
 
     const handleSubmit = async(e) => {
         e.preventDefault()
-        setFormErrors(validate(formValues))
-        const res = await verifyEmail(formValues.email)
-            if(res.error) {
-                errors.email = "Email is not valid"
-            }   
         setIsSubmit(true)
+        const errors = {}
+        if(!formValues.firstName){
+            errors.firstName = "First Name is required!"
+        }
+        if(!formValues.lastName){
+            errors.lastName = "Last Name is required!"
+        }
+        if(!formValues.email){
+            errors.email = "Email is required!"
+        }
+        else {
+            const res = await verifyEmail(formValues.email)
+            if(res.error) {
+                errors.email = "Email is not valid!"
+            }
+        }
+        if(!formValues.password){
+            errors.password = "Password is required!"
+        }
+        if(!formValues.phoneNumber){
+            errors.phoneNumber = "Phone Number is required!"
+        }
+        else {
+            if(!/^(1\s|1|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/.test(formValues.phoneNumber))
+                errors.phoneNumber = "Invalid phone number!"
+        }
+        if(!formValues.license){
+            errors.license = "Drivers License Number is required!"
+        }
+        setFormErrors(errors)
         
        
     
@@ -85,34 +110,7 @@ export const DriverSignUp = () => {
     },[formErrors])
 
     
-    const validate = (values) => {
-        const errors = {}
-        if(!values.firstName){
-            errors.firstName = "First Name is required!"
-        }
-        if(!values.lastName){
-            errors.lastName = "Last Name is required!"
-        }
-        if(!values.email){
-            errors.email = "Email is required!"
-        }
-        if(!values.password){
-            errors.password = "Password is required!"
-        }
-        if(!values.phoneNumber){
-            errors.phoneNumber = "Phone Number is required!"
-        }
-        else {
-            if(!/^(1\s|1|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/.test(values.phoneNumber))
-                errors.phoneNumber = "Invalid phone number!"
-        }
-        if(!values.license){
-            errors.license = "Drivers License Number is required!"
-        }
-
-        return errors
-
-    }
+    
 
   
     return (
