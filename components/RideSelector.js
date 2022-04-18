@@ -5,45 +5,47 @@ import { useState, useEffect } from "react";
 
 const RideSelector = ({ locationCoordinates }) => {
   const [rideDuration, setRideDuration] = useState(0);
+  const [rideDistance, setRideDistance] = useState(0);
 
   const showServices = () => {
     let locationURL = "";
 
     locationCoordinates.map((location) => {
-        
-      console.log("Rider.js ",location)
       locationURL = locationURL + location[0] + "," + location[1] + ";";
     });
     locationURL = locationURL.slice(0, -1);
-    console.log("RideSelector URL ", locationURL)
 
     fetch(
       `https://api.mapbox.com/directions/v5/mapbox/driving/${locationURL}?access_token=pk.eyJ1IjoiaGFuZy1obyIsImEiOiJjbDA2M3F6bm4xcW05M2RvZHhpeDFsZTVvIn0.Ot8ZrqGcvLYWRLzyXtkUdA`
     )
       .then((res) => res.json())
       .then((data) => {
-        setRideDuration(data.routes[0].duration / 100);
+        setRideDuration(data.routes[0].duration);
+        setRideDistance(data.routes[0].distance);
       })
       .catch((e) => console.log(e));
   }
 
   useEffect(() => {
-    console.log("riderselector.js ",locationCoordinates)
     showServices()
-  }, locationCoordinates);
+  },);
 
   return (
     <Wrapper>
-      <Title>Choose a ride, or swipe up for more</Title>
+      <TripInfo>
+        <InfoItem>Trip distance {(rideDistance/1750).toFixed(1)} Miles</InfoItem>
+        <InfoItem>Trip duration {Math.round(rideDuration/70)} Mins</InfoItem>
+      </TripInfo>
+      <Title>Choose a ride</Title>
       <CarList>
         {carList.map((car, index) => (
           <Car key={index}>
             <CarImg src={car.imgURL} />
             <CarDetails>
               <Service>{car.service}</Service>
-              <Time>5 mins away</Time>
+              <InfoItem>{car.description}</InfoItem>
             </CarDetails>
-            <Price>{"$" + (rideDuration * car.multiplier).toFixed(2)}</Price>
+            <Price>{"$" + (rideDuration/60 * car.multiplier).toFixed(2)}</Price>
           </Car>
         ))}
       </CarList>
@@ -53,20 +55,24 @@ const RideSelector = ({ locationCoordinates }) => {
 
 export default RideSelector;
 
+const TripInfo = tw.div`
+  flex text-center
+  `
+
+const InfoItem = tw.div`
+  text-xs flex-1
+`
+
 const CarDetails = tw.div`
     flex-1
 `;
 
 const Service = tw.div`
-    font-medium
-`;
-
-const Time = tw.div`
-    text-xs text-blue-500
+    font-medium text-xl
 `;
 
 const Price = tw.div`
-    text-sm
+    text-xl
 `;
 
 const Wrapper = tw.div`

@@ -18,8 +18,8 @@ const Map = ({locationCoordinates}) => {
       zoom: 3,
     })
   
+    // Add control tool on map
     map.addControl(new mapboxgl.NavigationControl())
-
     map.addControl(
       new mapboxgl.GeolocateControl({
         positionOptions: {
@@ -30,30 +30,31 @@ const Map = ({locationCoordinates}) => {
         })
     );
 
+    // If there is prop passed down from parent
     if (locationCoordinates) {
+      // Get the string value of all location to find all corresponding longitude and latitude
       const locationURL = "";
         locationCoordinates.map( (location) => {
           addToMap(map, location)
           locationURL = locationURL + location[0] + "," + location[1] + ";"
         })
         locationURL = locationURL.slice(0, -1)
-        console.log("Map URL", locationURL)
 
-        if (locationURL != "") {
-          fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${locationURL}?geometries=geojson&steps=true&access_token=pk.eyJ1IjoiaGFuZy1obyIsImEiOiJjbDA2M3F6bm4xcW05M2RvZHhpeDFsZTVvIn0.Ot8ZrqGcvLYWRLzyXtkUdA`)
-          .then(res=>res.json())
-          .then(data=>{
+        fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${locationURL}?geometries=geojson&steps=true&access_token=pk.eyJ1IjoiaGFuZy1obyIsImEiOiJjbDA2M3F6bm4xcW05M2RvZHhpeDFsZTVvIn0.Ot8ZrqGcvLYWRLzyXtkUdA`)
+        .then(res=>res.json())
+        .then(data=>{
             // this return 2D array of all the road coordinates
-            setCoordinates(data.routes[0].geometry.coordinates)
-            // console.log("Map.js coordinates useState",coordinates)
-          })
+          setCoordinates(data.routes[0].geometry.coordinates)
+        })
 
-      
+        // Zoom out on map
         map.fitBounds([
           locationCoordinates[0],
           locationCoordinates[locationCoordinates.length-1]
-        ], {padding: 60})
+        ], {padding: 200})
 
+        console.log(coordinates)
+        // Draw path line on map
         map.on('load', () => {
           map.addSource('route', {
             'type': 'geojson',
@@ -79,18 +80,17 @@ const Map = ({locationCoordinates}) => {
             'line-width': 8
           }
           });
-        });
-      } 
-      
+        });  
     }
-  }, [locationCoordinates])
+  }, [])
 
+
+  // Add marker on map
   const addToMap = (map, coordinates) => {
     const marker = new mapboxgl.Marker()
       .setLngLat(coordinates)
       .addTo(map)
   }
-
 
   return (
     <Wrapper id="map"></Wrapper>

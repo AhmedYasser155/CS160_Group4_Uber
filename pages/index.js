@@ -3,6 +3,7 @@ import tw from "tailwind-styled-components"
 import Link from 'next/link'
 
 const Login = () => {
+    
     return (
         <Wrapper>
             <UberLogo src="https://download.logo.wine/logo/Uber/Uber-Logo.wine.png"/>
