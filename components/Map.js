@@ -57,17 +57,18 @@ const Map = ({ locationCoordinates }) => {
         });
     }
   }, [coordinates, mainMap]);
-  console.log(coordinates);
+  
   // This useEffect for drawing path line
   useEffect(() => {
     if (coordinates.length !== 0) {
+      console.log(coordinates);
       // Zoom out on map
       mainMap.fitBounds(
         [
           locationCoordinates[0],
           locationCoordinates[locationCoordinates.length - 1],
         ],
-        { padding: 200 }
+        { padding: 150 }
       );
       // Draw path line on map
       mainMap.on("load", () => {
@@ -97,7 +98,8 @@ const Map = ({ locationCoordinates }) => {
         });
       });
     }
-  }, [coordinates]);
+
+  }, [coordinates, mainMap]);
 
   // Add marker on map
   const addToMap = (map, coordinates) => {
