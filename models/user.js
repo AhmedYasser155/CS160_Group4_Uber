@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+const mongoose = require('mongoose');
 
 const RideSchema = new mongoose.Schema({
     pickup:{
@@ -70,4 +70,4 @@ const RiderSchema = new mongoose.Schema({
     timestamps: true
 })
 
-export default mongoose.models.usertest ||mongoose.model("usertest",RiderSchema)|| mongoose.model("usertest", DriverSchema)
+module.exports =  mongoose.models.usertest || mongoose.model("usertest",RiderSchema)|| mongoose.model("usertest", DriverSchema)
