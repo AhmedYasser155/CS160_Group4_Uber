@@ -1,4 +1,4 @@
-const pickupReducer = (state =[], action) => {
+const pickupReducer = (state ='', action) => {
   
     switch (action.type) {
         case 'ADD_PICKUP':

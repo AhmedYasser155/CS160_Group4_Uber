@@ -37,7 +37,7 @@ const Search = () => {
     //TODO: get the current coor from the previous page
 
     useEffect(() => {
-
+currentCoor.length>0 ? (
         fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${currentCoor}.json?` +
             new URLSearchParams({
                 access_token: APIinfo.MAPBOX_ACCESS_TOKEN,
@@ -49,6 +49,7 @@ const Search = () => {
                 dispatch(ADD_PICKUP((data.features[0].place_name)));
             }
         )
+) : null;
     }, [])
 
 
