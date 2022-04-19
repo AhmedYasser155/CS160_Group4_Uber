@@ -15,7 +15,6 @@ const SignIn = () => {
     const handleChange = (e) => {
         const{name, value} = e.target
         setFormValues({...formValues, [name]: value})
-        console.log(formValues)
     }
 
     const handleSubmit = (e) => {
@@ -26,7 +25,7 @@ const SignIn = () => {
 
     useEffect(() => {
         if(Object.keys(formErrors).length == 0 && isSubmit){
-            Router.push('/home')
+            Router.push('/rider')
         }
 
     },[formErrors])

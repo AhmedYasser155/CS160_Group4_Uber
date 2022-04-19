@@ -1,30 +1,23 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import tw from "tailwind-styled-components"
+import { BackHomeButton } from '../components/BackHomeButton'
 import Link from 'next/Link'
-import { BackButton } from '../components/BackButton'
-import { InputLocation } from '../components/InputLocation'
-import { FaTimes } from 'react-icons/fa'
-import APIinfo from "../config/config.json"
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
+import setHours from "date-fns/setHours";
+import setMinutes from "date-fns/setMinutes";
+import addMonths from "date-fns/addMonths"
+import InputLocation from '../components/InputLocation'
 
-import { useSelector, useDispatch } from 'react-redux'
-import { ADD_Dropoff1, ADD_PICKUP, ADD_Dropoff2, ADD_Dropoff3, ADD_Dropoff4, ADD_Dropoff5, APPEND_LOCATION ,ADD_CURR_LOCATION, 
-    DELETE_Dropoff2, DELETE_Dropoff3, DELETE_Dropoff4, DELETE_Dropoff5} from '../store/actions'
+const Schedule = () => {
 
-
-
-const Search = () => {
-    const pickup = useSelector(state => state.pickup);
-    const dropoff1 = useSelector(state => state.dropoff1);
-    const dropoff2 = useSelector(state => state.dropoff2);
-    const dropoff3 = useSelector(state => state.dropoff3);
-    const dropoff4 = useSelector(state => state.dropoff4);
-    const dropoff5 = useSelector(state => state.dropoff5);
-    const currentCoor = useSelector(state => state.currLocation);
-    const dispatch = useDispatch();
-
-    const [dropoffArr, setDropoffArr] = useState([]) // the first element is the pickup location and follwing are dropoff locations
-    //the following parameters are for showing the dropff boxes
+    const [pickup, setPickup] = useState()
+    const [dropoff, setDropoff1] = useState()
+    const [dropoff2, setDropoff2] = useState()
+    const [dropoff3, setDropoff3] = useState()
+    const [dropoff4, setDropoff4] = useState()
+    const [dropoff5, setDropoff5] = useState()
     const [startView, setStartView] = useState(false);
     const [dropoffs, setDropOffs] = useState({ p1: true, p2: false, p3: false, p4: false, p5: false })
     const p1 = dropoffs.p1;
@@ -32,24 +25,6 @@ const Search = () => {
     const p3 = dropoffs.p3;
     const p4 = dropoffs.p4;
     const p5 = dropoffs.p5;
-
-    //TODO: get the current coor from the previous page
-
-    useEffect(() => {
-
-        currentCoor.length > 0 ? (fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${currentCoor}.json?` +
-        new URLSearchParams({
-            access_token: APIinfo.MAPBOX_ACCESS_TOKEN,
-            limit: 1
-        })
-    )
-        .then(res => res.json())
-        .then(data => {
-            dispatch(ADD_PICKUP((data.features[0].place_name)));
-        }
-    )) : null
-        
-    }, [])
 
     const addStop = (e) => {
         setStartView(true);
@@ -63,7 +38,6 @@ const Search = () => {
     const deleteStop = (e) => {
         switch (e.target.id) {
             case 'delete2':
-                dispatch(DELETE_Dropoff2());
                 setDropOffs(prevDropoffs => {
                     return {
                         //TODO: try to handle removing p2 before the other boxes
@@ -72,7 +46,6 @@ const Search = () => {
                 })
                 break;
             case 'delete3':
-                dispatch(DELETE_Dropoff3());
                 setDropOffs(prevDropoffs => {
                     return {
                         ...prevDropoffs, p3: false
@@ -80,7 +53,6 @@ const Search = () => {
                 })
                 break;
             case 'delete4':
-                dispatch(DELETE_Dropoff4());
                 setDropOffs(prevDropoffs => {
                     return {
                         ...prevDropoffs, p4: false
@@ -88,7 +60,6 @@ const Search = () => {
                 })
                 break;
             case 'delete5':
-                dispatch(DELETE_Dropoff5());
                 setDropOffs(prevDropoffs => {
                     return {
                         ...prevDropoffs, p5: false
@@ -101,10 +72,15 @@ const Search = () => {
     function addLocationBox(key, id) {
 
         if (key === 'Enter') {
-
+            // if p1 = true  || (it is p5 a)
+            //      confirm button
+            // else 
+            //      switch case 
+            //console.log("I am enter with id" , id);
             if (p1 === true || p5 === true) {
-                // console.log("p1 or p5 are true");
+                console.log("p1 or p5 are true");
                 //confirm button
+
             }
             else {
                 switch (id) {
@@ -136,21 +112,48 @@ const Search = () => {
         }
     }
 
-    function updateLocationArr() {
-             
-        pickup ? dispatch(APPEND_LOCATION(pickup)) : null;
-        dropoff1 ? dispatch(APPEND_LOCATION(dropoff1)) : null;
-        dropoff2 ? dispatch(APPEND_LOCATION(dropoff2)) : null;
-        dropoff3 ? dispatch(APPEND_LOCATION(dropoff3)) : null;
-        dropoff4 ? dispatch(APPEND_LOCATION(dropoff4)) : null;
-        dropoff5 ? dispatch(APPEND_LOCATION(dropoff5)) : null;
-    }
+    const [startDate, setStartDate] = useState(
+        null
+      );
 
-    return (
+    const filterPassedTime = (time) => {
+        const currentDate = new Date();
+        const selectedDate = new Date(time);
+    
+        return currentDate.getTime() < selectedDate.getTime();
+    };
+      return (
         <Wrapper>
-            {/* FIXME: back button should take link as props */}
-            <BackButton prevPage={"/rider"} />
+            <BackHomeButton/>
+            <Header> 
+                <UberLogo src="https://download.logo.wine/logo/Uber/Uber-Logo.wine.png"/> 
+            </Header>
 
+            <PickDate>
+                <HeaderText>
+                    Schedule a Ride 
+                </HeaderText>
+                <ScheduleText>
+                    Select a date and time below: 
+                </ScheduleText>
+                <Picker>
+                    <DatePicker
+                    selected={startDate}
+                    onChange={(date) => setStartDate(date)}
+                    showTimeSelect
+                    filterTime={filterPassedTime}
+                    dateFormat="MMMM d, yy h:mm aa"
+                    minDate={new Date()}
+                    maxDate={addMonths(new Date(), 5)}
+                    placeholderText="Click here to pick a date"
+                    className={`
+                                inline-flex p-1 text-sm font-medium bg-white border border-gray-300 rounded shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-blue-500
+                              `}
+                    
+                    />
+                </Picker>
+            </PickDate>
+            
             <InputContainer>
                 <FromToIcon>
                     <Circle src="https://img.icons8.com/ios-filled/50/9CA3AF/filled-circle.png" />
@@ -170,14 +173,14 @@ const Search = () => {
 
                 <InputBoxes>
 
-                    <InputLocation id='pickupBox' text='Current Location' update={(e) => { dispatch(ADD_PICKUP(e.target.value)) }} />
-                    <InputLocation id='stopBox1'  oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff1(e.target.value)) }} />
+                    <InputLocation id='pickupBox' text='Pickup Location' update={(e) => { setPickup(e.target.value) }} />
+                    <InputLocation id='stopBox1' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff1(e.target.value) }} />
                     {/* The locaitons that would be toggled */}
 
-                    {p2 ? (<InputLocation id='stopBox2' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff2(e.target.value)) }} />) : null}
-                    {p3 ? (<InputLocation id='stopBox3' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff3(e.target.value)) }} />) : null}
-                    {p4 ? (<InputLocation id='stopBox4' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff4(e.target.value)) }} />) : null}
-                    {p5 ? (<InputLocation id='stopBox5' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff5(e.target.value)) }} />) : null}
+                    {p2 ? (<InputLocation id='stopBox2' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }}  update={(e) => { setDropoff2(e.target.value) }} />) : null}
+                    {p3 ? (<InputLocation id='stopBox3' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }}  update={(e) => { setDropoff3(e.target.value) }} />) : null}
+                    {p4 ? (<InputLocation id='stopBox4' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }}  update={(e) => { setDropoff4(e.target.value) }} />) : null}
+                    {p5 ? (<InputLocation id='stopBox5' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff5(e.target.value) }} />) : null}
 
                 </InputBoxes>
 
@@ -197,28 +200,61 @@ const Search = () => {
                 Saved Places
             </SavePlace>
 
-            {(pickup && (dropoff1 || dropoff2 || dropoff3 || dropoff4 || dropoff5)) ?
+            {/* FIXME: check  the following before confirm { (pickup && (p1||p2||p3||p4||p5))?( */}
+            {((startDate) && pickup && (dropoff || dropoff2 || dropoff3 || dropoff4 || dropoff5)) ?
                 (<Link href={{
-                    pathname: "/confirm",
+                    pathname: "/confirmscheduling",
+                    query: {
+                        pickup: pickup,
+                        dropoff: dropoff,
+                        dropoff2: dropoff2,
+                        dropoff3: dropoff3,
+                        dropoff4: dropoff4,
+                        dropoff5: dropoff5
+                    }
                 }}>
-                    <ConfirmContainer onClick={() => updateLocationArr()}>
-                        Confirm Location
+                    <ConfirmContainer>
+                        Confirm Location and Set Pickup
                     </ConfirmContainer>
                 </Link>) : <ConfirmContainer>
-                    Confirm Location
+                    Confirm Location and Set Pickup
                 </ConfirmContainer>}
 
+            
 
         </Wrapper>
-    )
+        
+      )
+    
 }
 
-export default Search
+export default Schedule
 
-const Wrapper = tw.div`
-    bg-gray-200 h-screen
+const HeaderText = tw.p`
+    font-bold text-2xl text-center
+    
+`
+const ScheduleText = tw.p`
+    text-base text-center text-gray-700
+    
+`
+const Picker = tw.p`
+    text-center
 `
 
+const Wrapper = tw.div`
+    flex flex-col h-screen bg-gray-200 p-4
+`
+const PickDate = tw.div`
+    bg-white flex-col items-center px-4 mb-2 py-2
+`
+const Header = tw.div`
+    flex justify-between    
+`
+const UberLogo = tw.img`
+    h-28 w-auto object-contain self-start
+`
+//START OF SEARCH
 const FromToIcon = tw.div`
     w-10 flex flex-col mr-1 items-center 
 `
@@ -237,7 +273,7 @@ const InputContainer = tw.div`
     bg-white flex items-center px-4 mb-2 
 `
 const InputBoxes = tw.div`
-    flex flex-col flex-1 space-y-2 mb-2
+    flex flex-col flex-1 space-y-2 my-4
 `
 
 const PlusIcon = tw.img`
@@ -264,5 +300,8 @@ const StarIcon = tw.img`
 `
 
 const ConfirmContainer = tw.div`
-    bg-black text-white text-center mt-2 mx-4 p-4 text-2xl cursor-pointer
+    bg-black text-white text-center mt-2 mx-4 p-4 text-2xl cursor-pointer transform
+    hover:scale-105 transition text-xl
 `
+
+
