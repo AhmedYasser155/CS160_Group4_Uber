@@ -4,7 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const axios = require("axios");
 const { EMAIL_ACCESS_KEY } = require("../config/config.json");
-const dbConnect = require("../utils/dbConnect");
+const { dbConnect } = require("../utils/dbConnect");
 const User = require("../models/user");
 
 const PORT = process.env.PORT || 3001;
