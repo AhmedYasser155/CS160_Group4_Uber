@@ -35,6 +35,9 @@ export const DriverSignUp = () => {
         const res = await addUser(userData);
         if(res.error) {
             console.log("Error when adding user!");
+            const error={}
+            error.addUserFailed="Failed to add user!"
+            setFormErrors(error)
         }
         else {
             console.log(res.responseData);
