@@ -10,4 +10,4 @@ const RideSchema = new mongoose.Schema({
     timestamps:true
 })
 
-export default mongoose.models.usertest ||mongoose.model("usertest", RideSchema)
+module.exports = mongoose.models.usertest ||mongoose.model("usertest", RideSchema)

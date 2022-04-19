@@ -1,7 +1,5 @@
 // /lib/dbConnect.js
-import mongoose from 'mongoose'
-
-
+const mongoose = require('mongoose');
 
 const MONGODB_URI = 'mongodb+srv://cs160:sjsucs160@cluster0.arpcf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 
@@ -40,4 +38,4 @@ async function dbConnect () {
   cached.conn = await cached.promise
   return cached.conn
 }
-export default dbConnect
+module.exports = { dbConnect }
