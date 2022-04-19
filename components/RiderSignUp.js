@@ -2,7 +2,7 @@ import {React, useState, useEffect,useRef } from "react"
 import tw from "tailwind-styled-components"
 import {Router, useRouter } from "next/router";
 import { verifyEmail } from '../APIFunctions/EmailVerification.js'
-
+import { addUser } from '../APIFunctions/DbFunctions'
 
 export const RiderSignUp = () => {
 
