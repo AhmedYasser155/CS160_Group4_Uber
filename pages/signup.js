@@ -70,7 +70,7 @@ const SignUp = () => {
 export default SignUp
 
 const Wrapper = tw.div`
-    flex flex-col h-screen bg-gray-200 p-4
+    flex flex-col h-screen bg-gray-200 
 `
 const ActionItems = tw.div`
     flex-1

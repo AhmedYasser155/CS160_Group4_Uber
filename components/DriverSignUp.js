@@ -7,7 +7,7 @@ import { addUser } from '../APIFunctions/DbFunctions'
 
 export const DriverSignUp = () => {
 
-    const initialValues = {firstName:"", lastName:"", email:"", password:"", phoneNumber:"", license:""}
+    const initialValues = {firstName:"", lastName:"", email:"", password:"", phoneNumber:"", license:"", carMake:"", carModel:"", licensePlate:""}
 
     const[formValues, setFormValues] = useState(initialValues)
     const contentType = "application/json";
@@ -17,8 +17,11 @@ export const DriverSignUp = () => {
     const userLastNameInputRef = useRef()
     const userEmailInputRef = useRef()
     const userPhoneInputRef = useRef()
-    const userPasswordInputRef=useRef()
-    const userLicenseInputRef=useRef()
+    const userPasswordInputRef = useRef()
+    const userLicenseInputRef = useRef()
+    const userMakeInputRef = useRef()
+    const userModelInput = useRef()
+    const userLicensePlateInput = useRef()
     const router = useRouter()
 
 
@@ -82,9 +85,16 @@ export const DriverSignUp = () => {
         if(!formValues.license){
             errors.license = "Drivers License Number is required!"
         }
+        if(!formValues.carMake){
+            errors.carMake = "Car Make is required!"
+        }
+        if(!formValues.carModel){
+            errors.carModel = "Car Model is required!"
+        }
+        if(!formValues.licensePlate){
+            errors.licensePlate = "License Plate Number is required!"
+        }
         setFormErrors(errors)
-        
-       
     
     }
 
@@ -119,7 +129,7 @@ export const DriverSignUp = () => {
                         onChange= {handleChange}
                     />
                     <ErrorMessage> {formErrors.firstName} </ErrorMessage>
-                    <InputLabel> last Name </InputLabel>
+                    <InputLabel> Last Name </InputLabel>
                     <Input
                         placeholder = "Enter Last Name"
                         value = {formValues.lastName}
@@ -172,12 +182,45 @@ export const DriverSignUp = () => {
                     />
                     <ErrorMessage> {formErrors.license} </ErrorMessage>
 
+                    <InputLabel> Car Make </InputLabel>
+                    <Input
+                        placeholder = "Enter You Car Make"
+                        value = {formValues.carMake}
+                        name = "carMake"
+                        type="text"
+                        ref={userMakeInputRef}
+                        onChange= {handleChange}
+                    />
+                    <ErrorMessage> {formErrors.carMake} </ErrorMessage>
+
+                    <InputLabel> Car Model </InputLabel>
+                    <Input
+                        placeholder = "Enter You Car Model"
+                        value = {formValues.carModel}
+                        name = "carModel"
+                        type="text"
+                        ref={userModelInput}
+                        onChange= {handleChange}
+                    />
+                    <ErrorMessage> {formErrors.carModel} </ErrorMessage>
+
+                    <InputLabel> License Plate Number </InputLabel>
+                    <Input
+                        placeholder = "Enter You License Plate Number"
+                        value = {formValues.licensePlate}
+                        name = "licensePlate"
+                        type="text"
+                        ref={userLicensePlateInput}
+                        onChange= {handleChange}
+                    />
+                    <ErrorMessage> {formErrors.licensePlate} </ErrorMessage>
+
+
 
                     </InputBoxes>
 
                 </InputContainer>
 
-                
 
                 <ActionButton>
                     Sign up
