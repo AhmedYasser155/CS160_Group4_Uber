@@ -36,7 +36,7 @@ export const RiderSignUp = () => {
         }
         else {
             console.log(res.responseData);
-            router.push("/driver");
+            router.push("/rider");
         }
     }
 
