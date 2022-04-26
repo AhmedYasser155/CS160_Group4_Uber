@@ -5,7 +5,7 @@ import { ApiResponse } from './ApiResponse';
 export async function addUser(user) {
 	let status = new ApiResponse();
 	await axios
-		.post(SERVER_URL + "/addUser", {
+		.post(SERVER_URL + "addUser", {
 			user
 		})
 		.then((response) => {
@@ -33,6 +33,30 @@ export async function getUser(id) {
         });
     return status;
 }
+
+
+
+
+export async function authenthicateUser(userEmail,userPassword)
+{
+	let status = new ApiResponse();
+	
+	
+	await axios
+	.post(SERVER_URL + "auth",{		
+			userEmail,
+		 	userPassword
+	})
+	.then((response) => {
+		status.responseData = response.data;
+		status.statusCode = response.status;
+	})
+	.catch(err => {
+		status.error = true;
+	});
+return status;
+}
+
 
 export async function updateUser(data) {
 	let status = new ApiResponse();

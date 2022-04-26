@@ -1,9 +1,10 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import Router from 'next/router'
+import { Router,useRouter } from "next/router"
 import tw from "tailwind-styled-components"
 import { BackHomeButton } from '../components/BackHomeButton'
 import Link from 'next/Link'
+import { authenthicateUser } from '../APIFunctions/DbFunctions'
 
 const SignIn = () => {
 
@@ -11,6 +12,7 @@ const SignIn = () => {
     const[formValues, setFormValues] = useState(initialValues)
     const[formErrors, setFormErrors] = useState({})
     const[isSubmit, setIsSubmit] = useState(false)
+    const router = useRouter()
 
     const handleChange = (e) => {
         const{name, value} = e.target
@@ -23,9 +25,33 @@ const SignIn = () => {
         setIsSubmit(true)
     }
 
+    async function login()
+    {
+        const accountDetails = { 
+            email:formValues.email,
+            password:formValues.password
+        }
+        const res = await authenthicateUser(accountDetails.email,accountDetails.password);
+        if(res.error) {
+            console.log("Could not find user!");
+            const error={}
+            error.failedAuth="Incorrect Username or Password"
+            setFormErrors(error)
+
+        }
+        else {
+            console.log(res.responseData);
+            router.push(`/Rider/${res.responseData.id}`)
+           
+
+        }
+
+    }
+    
+
     useEffect(() => {
         if(Object.keys(formErrors).length == 0 && isSubmit){
-            Router.push('/rider')
+            login();
         }
 
     },[formErrors])
@@ -83,6 +109,8 @@ const SignIn = () => {
                     <ActionButton >
                      Sign In
                     </ActionButton>
+                    <ErrorMessage>{formErrors.failedAuth}</ErrorMessage>
+
          
             </Form>
 

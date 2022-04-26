@@ -6,6 +6,9 @@ const axios = require("axios");
 const { EMAIL_ACCESS_KEY } = require("../config/config.json");
 const { dbConnect } = require("../utils/dbConnect");
 const User = require("../models/user");
+var bcrypt = require("bcryptjs");
+var jwt = require("jsonwebtoken");
+
 
 const PORT = process.env.PORT || 3001;
 
@@ -15,8 +18,7 @@ const cors=require("cors");
 const corsOptions ={
    origin:'*', 
    credentials:true,            //access-control-allow-credentials:true
-   optionSuccessStatus:200,
-}
+   optionSuccessStatus:200}
 
 app.use(cors(corsOptions)) // Use this after the variable declaration
 
@@ -53,6 +55,9 @@ app.post("/addUser", jsonParser, async (req, res) => {
 	return null;
 });
 
+
+
+
 app.post("/getUser", jsonParser, async (req, res) => {
 	await dbConnect();
 	await User.findOne(req.body.id)
@@ -79,6 +84,59 @@ app.post("/updateUser", jsonParser, async (req, res) => {
 		});
 	return null;
 });
+
+app.post("/auth", jsonParser, async(req,res)=> {
+	await dbConnect();
+
+	const user = await User.findOne({ email: req.body.userEmail });
+
+
+	if (user) {
+		// check user password with hashed password stored in the database
+		const validPassword = await bcrypt.compare(req.body.userPassword,user.password)
+		if (validPassword) {
+			res.status(200).send({
+				id: user._id,
+				email: user.email
+			})
+		} else {
+		  res.status(400).json({ error: "Invalid Password" });
+		}
+	}
+	 else {
+		res.status(401).json({ error: "User does not exist" });
+	  }
+	})
+
+// 	  User.findOne({
+// 		email:req.body.userEmail
+// 		//email:req.body.email
+// })
+// 		.exec((err, user) => {
+// 		  if (err) {
+// 			res.status(500).send({ message: err });
+// 			return;
+// 		  }
+// 		  if (!user) {
+// 			return res.status(404).send({ message: "User Not found." });
+// 		  }
+// 		  const validPassword = await bcrypt.compare(req.body.userPassword,user.password)
+// 		  //var passwordIsValid = req.body.userPassword===user.password
+// 		  if (!validPassword) {
+// 			return res.status(401).send({
+// 			  message: "Invalid Password!"
+// 			});
+// 		  }
+
+
+// 		  res.status(200).send({
+// 			id: user._id,
+// 			email: user.email,
+// 			passwordValue:validPassword
+
+// 		  });
+// 		});	
+
 
 app.post("/deleteUser", jsonParser, async (req, res) => {
 	await dbConnect();

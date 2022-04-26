@@ -3,6 +3,8 @@ import tw from "tailwind-styled-components"
 import { Router,useRouter } from "next/router"
 import { verifyEmail } from '../APIFunctions/EmailVerification.js'
 import { addUser } from '../APIFunctions/DbFunctions'
+var bcrypt = require("bcryptjs");
+
 
 
 export const DriverSignUp = () => {
@@ -23,6 +25,8 @@ export const DriverSignUp = () => {
 
 
     async function postData() {
+        const salt = await bcrypt.genSalt(10)
+
         const userData = {
             firstName:userFirstNameInputRef.current.value,
             lastName:userLastNameInputRef.current.value,
@@ -32,6 +36,9 @@ export const DriverSignUp = () => {
             password:userPasswordInputRef.current.value,
             userType:1,
         }
+        userData.password=await bcrypt.hash(userData.password,salt)
+        console.log(userData)
+
         const res = await addUser(userData);
         if(res.error) {
             console.log("Error when adding user!");
