@@ -2,7 +2,9 @@ import {React, useState, useEffect,useRef } from "react"
 import tw from "tailwind-styled-components"
 import {Router, useRouter } from "next/router";
 import { verifyEmail } from '../APIFunctions/EmailVerification.js'
-import { addUser } from '../APIFunctions/DbFunctions'
+import { addRider } from '../APIFunctions/DbFunctions'
+var bcrypt = require("bcryptjs");
+
 
 export const RiderSignUp = () => {
 
@@ -19,15 +21,21 @@ export const RiderSignUp = () => {
     const router = useRouter()
 
     async function postData() {
+        const salt = await bcrypt.genSalt(10)
         const userData={
             firstName:userFirstNameInputRef.current.value,
             lastName:userLastNameInputRef.current.value,
             email:userEmailInputRef.current.value,
             phone:userPhoneInputRef.current.value,
+            onlineStatus:false,
+            rideid:"N/A",
+            accountBalance:1000,
             password:userPasswordInputRef.current.value,
             userType:0,
         }
-        const res = await addUser(userData);
+        userData.password=await bcrypt.hash(userData.password,salt)
+
+        const res = await addRider(userData);
         if(res.error) {
             console.log("Error when adding user!");
             const error={}
@@ -35,8 +43,9 @@ export const RiderSignUp = () => {
             setFormErrors(error)
         }
         else {
+            const id = res.responseData.id
             console.log(res.responseData);
-            router.push("/rider");
+            router.push(`/Rider/${id}`);
         }
     }
 
@@ -58,12 +67,12 @@ export const RiderSignUp = () => {
         if(!formValues.email){
             errors.email = "Email is required!"
         }
-        else {
-            const res = await verifyEmail(formValues.email)
-            if(res.error) {
-                errors.email = "Email is not valid!"
-            }
-        }
+        // else {
+        //     const res = await verifyEmail(formValues.email)
+        //     if(res.error) {
+        //         errors.email = "Email is not valid!"
+        //     }
+        // }
         if(!formValues.password){
             errors.password = "Password is required!"
         }
@@ -75,8 +84,6 @@ export const RiderSignUp = () => {
                 errors.phoneNumber = "Invalid phone number!"
         }
         setFormErrors(errors)
-        
-
         }
     
     useEffect(() => {
@@ -92,7 +99,7 @@ export const RiderSignUp = () => {
 
         <Form  onSubmit = {handleSubmit}>
 
-                <InputContainer>
+        <InputContainer>
                     <InputBoxes>
 
                     <InputLabel> First Name </InputLabel>
@@ -153,6 +160,7 @@ export const RiderSignUp = () => {
 
                 </InputContainer>
 
+
                 
 
                 <ActionButton>
@@ -161,8 +169,6 @@ export const RiderSignUp = () => {
                 <ErrorMessage> {formErrors.addUserFailed} </ErrorMessage>
 
             </Form>
-
-    
     </Wrapper>
        
     

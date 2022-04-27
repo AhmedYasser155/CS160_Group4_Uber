@@ -5,7 +5,8 @@ const bodyParser = require("body-parser");
 const axios = require("axios");
 const { EMAIL_ACCESS_KEY } = require("../config/config.json");
 const { dbConnect } = require("../utils/dbConnect");
-const User = require("../models/user");
+const Driver = require("../models/driver");
+const Rider = require("../models/rider")
 var bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
 
@@ -43,19 +44,56 @@ app.post("/verify", jsonParser, (req, res) => {
 	return null;
 });
 
-app.post("/addUser", jsonParser, async (req, res) => {
+app.post("/user/driver", jsonParser, async (req, res) => {
 	await dbConnect();
-	await User.create(req.body.user)
-		.then((response) => {
-			return res.status(200).send({"message":"Success!"});
-		})
-		.catch((err) => {
-			return res.status(400).send({"message":"Error when adding user to database!"});
-		});
-	return null;
+	 const newDriver=await Driver.create(req.body.user)
+	 .catch(() => {
+		res.status(400).json({"message":"Error when adding user to database!"});
+	 })
+
+		if(newDriver) 
+		{
+			res.status(200).send({id:newDriver._id});
+		}
+
 });
 
+app.post("/user/rider", jsonParser, async (req, res) => {
+	await dbConnect();
+	 const newRider=await Rider.create(req.body.user)
+	 .catch(() => {
+		res.status(400).json({"message":"Error when adding user to database!"});
+	 })
 
+		if(newRider) 
+		{
+			res.status(200).send({id:newRider._id});
+		}
+
+});
+
+app.post("/auth", jsonParser, async(req,res)=> {
+	await dbConnect();
+
+	const user = await Driver.findOne({ email: req.body.userEmail });
+
+
+	if (user) {
+		// check user password with hashed password stored in the database
+		const validPassword = await bcrypt.compare(req.body.userPassword,user.password)
+		if (validPassword) {
+			res.status(200).send({
+				id: user._id,
+				email: user.email
+			})
+		} else {
+		  res.status(400).json({ error: "Invalid Password" });
+		}
+	}
+	 else {
+		res.status(401).json({ error: "User does not exist" });
+	  }
+	})
 
 
 app.post("/getUser", jsonParser, async (req, res) => {
@@ -84,58 +122,6 @@ app.post("/updateUser", jsonParser, async (req, res) => {
 		});
 	return null;
 });
-
-app.post("/auth", jsonParser, async(req,res)=> {
-	await dbConnect();
-
-	const user = await User.findOne({ email: req.body.userEmail });
-
-
-	if (user) {
-		// check user password with hashed password stored in the database
-		const validPassword = await bcrypt.compare(req.body.userPassword,user.password)
-		if (validPassword) {
-			res.status(200).send({
-				id: user._id,
-				email: user.email
-			})
-		} else {
-		  res.status(400).json({ error: "Invalid Password" });
-		}
-	}
-	 else {
-		res.status(401).json({ error: "User does not exist" });
-	  }
-	})
-
-// 	  User.findOne({
-// 		email:req.body.userEmail
-// 		//email:req.body.email
-// })
-// 		.exec((err, user) => {
-// 		  if (err) {
-// 			res.status(500).send({ message: err });
-// 			return;
-// 		  }
-// 		  if (!user) {
-// 			return res.status(404).send({ message: "User Not found." });
-// 		  }
-// 		  const validPassword = await bcrypt.compare(req.body.userPassword,user.password)
-// 		  //var passwordIsValid = req.body.userPassword===user.password
-// 		  if (!validPassword) {
-// 			return res.status(401).send({
-// 			  message: "Invalid Password!"
-// 			});
-// 		  }
-
-
-// 		  res.status(200).send({
-// 			id: user._id,
-// 			email: user.email,
-// 			passwordValue:validPassword
-
-// 		  });
-// 		});	
 
 
 app.post("/deleteUser", jsonParser, async (req, res) => {

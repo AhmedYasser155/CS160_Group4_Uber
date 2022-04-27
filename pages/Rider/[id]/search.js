@@ -12,7 +12,6 @@ import { ADD_Dropoff1, ADD_PICKUP, ADD_Dropoff2, ADD_Dropoff3, ADD_Dropoff4, ADD
     DELETE_Dropoff2, DELETE_Dropoff3, DELETE_Dropoff4, DELETE_Dropoff5} from '../../../store/actions'
 
 
-
 const Search = () => {
     const pickup = useSelector(state => state.pickup);
     const dropoff1 = useSelector(state => state.dropoff1);
@@ -36,6 +35,15 @@ const Search = () => {
     const id = router.query.id
 
     //TODO: get the current coor from the previous page
+
+
+    const addLocations= () => {
+
+        var data;
+
+        
+
+    }
 
     useEffect(() => {
         

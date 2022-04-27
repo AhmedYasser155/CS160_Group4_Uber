@@ -14,7 +14,6 @@ export default function Home() {
   const router = useRouter()
   const dispatch = useDispatch();
   const id = router.query.id
-  const path = router.pathname
 
 
 useEffect(() => {

@@ -2,10 +2,10 @@ import axios from 'axios';
 import { SERVER_URL } from "../config/config.json";
 import { ApiResponse } from './ApiResponse';
 
-export async function addUser(user) {
+export async function addDriver(user) {
 	let status = new ApiResponse();
 	await axios
-		.post(SERVER_URL + "addUser", {
+		.post(SERVER_URL + "user/driver", {
 			user
 		})
 		.then((response) => {
@@ -18,11 +18,11 @@ export async function addUser(user) {
     return status;
 }
 
-export async function getUser(id) {
+export async function addRider(user) {
 	let status = new ApiResponse();
 	await axios
-		.get(SERVER_URL + "/getUser", {
-			id
+		.post(SERVER_URL + "user/rider", {
+			user
 		})
 		.then((response) => {
 			status.responseData = response.data;
@@ -34,8 +34,22 @@ export async function getUser(id) {
     return status;
 }
 
-
-
+export async function addLocations(data)
+{
+	let status = new ApiResponse();
+	await axios
+		.post(SERVER_URL + "ride/addRide", {
+			data
+		})
+		.then((response) => {
+			status.responseData = response.data;
+			status.statusCode = response.status;
+		})
+		.catch(err => {
+            status.error = true;
+        });
+    return status;
+}
 
 export async function authenthicateUser(userEmail,userPassword)
 {
@@ -56,6 +70,25 @@ export async function authenthicateUser(userEmail,userPassword)
 	});
 return status;
 }
+
+
+export async function getUser(id) {
+	let status = new ApiResponse();
+	await axios
+		.get(SERVER_URL + "/getUser", {
+			id
+		})
+		.then((response) => {
+			status.responseData = response.data;
+			status.statusCode = response.status;
+		})
+		.catch(err => {
+            status.error = true;
+        });
+    return status;
+}
+
+
 
 
 export async function updateUser(data) {
