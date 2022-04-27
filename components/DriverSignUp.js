@@ -2,7 +2,7 @@ import {React, useState, useEffect,useRef } from "react"
 import tw from "tailwind-styled-components"
 import { Router,useRouter } from "next/router"
 import { verifyEmail } from '../APIFunctions/EmailVerification.js'
-import { addUser } from '../APIFunctions/DbFunctions'
+import { addDriver } from '../APIFunctions/DbFunctions'
 
 
 export const DriverSignUp = () => {
@@ -20,8 +20,8 @@ export const DriverSignUp = () => {
     const userPasswordInputRef = useRef()
     const userLicenseInputRef = useRef()
     const userMakeInputRef = useRef()
-    const userModelInput = useRef()
-    const userLicensePlateInput = useRef()
+    const userModelInputRef = useRef()
+    const userLicensePlateInputRef = useRef()
     const router = useRouter()
 
 
@@ -33,9 +33,17 @@ export const DriverSignUp = () => {
             phone:userPhoneInputRef.current.value,
             license: userLicenseInputRef.current.value,
             password:userPasswordInputRef.current.value,
+            onlineStatus:false,
+            rideid:"N/A",
+            driverLocation:"N/A",
+            car:{
+               carModel:userModelInputRef.current.value,
+               carMake: userMakeInputRef.current.value,
+               licensePlate:userLicensePlateInputRef.current.value 
+            },
             userType:1,
         }
-        const res = await addUser(userData);
+        const res = await addDriver(userData);
         if(res.error) {
             console.log("Error when adding user!");
             const error={}
@@ -199,7 +207,7 @@ export const DriverSignUp = () => {
                         value = {formValues.carModel}
                         name = "carModel"
                         type="text"
-                        ref={userModelInput}
+                        ref={userModelInputRef}
                         onChange= {handleChange}
                     />
                     <ErrorMessage> {formErrors.carModel} </ErrorMessage>
@@ -210,7 +218,7 @@ export const DriverSignUp = () => {
                         value = {formValues.licensePlate}
                         name = "licensePlate"
                         type="text"
-                        ref={userLicensePlateInput}
+                        ref={userLicensePlateInputRef}
                         onChange= {handleChange}
                     />
                     <ErrorMessage> {formErrors.licensePlate} </ErrorMessage>

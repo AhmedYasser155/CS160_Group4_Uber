@@ -5,7 +5,8 @@ const bodyParser = require("body-parser");
 const axios = require("axios");
 const { EMAIL_ACCESS_KEY } = require("../config/config.json");
 const { dbConnect } = require("../utils/dbConnect");
-const User = require("../models/user");
+const Driver = require("../models/driver");
+const Rider = require("../models/rider")
 
 const PORT = process.env.PORT || 3001;
 
@@ -41,9 +42,9 @@ app.post("/verify", jsonParser, (req, res) => {
 	return null;
 });
 
-app.post("/addUser", jsonParser, async (req, res) => {
+app.post("/user/driver", jsonParser, async (req, res) => {
 	await dbConnect();
-	await User.create(req.body.user)
+	await Driver.create(req.body.user)
 		.then((response) => {
 			return res.status(200).send({"message":"Success!"});
 		})
@@ -53,6 +54,17 @@ app.post("/addUser", jsonParser, async (req, res) => {
 	return null;
 });
 
+app.post("/user/rider", jsonParser, async (req, res) => {
+	await dbConnect();
+	await Rider.create(req.body.user)
+		.then((response) => {
+			return res.status(200).send({"message":"Success!"});
+		})
+		.catch((err) => {
+			return res.status(400).send({"message":"Error when adding user to database!"});
+		});
+	return null;
+});
 app.post("/getUser", jsonParser, async (req, res) => {
 	await dbConnect();
 	await User.findOne(req.body.id)

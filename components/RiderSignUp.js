@@ -2,7 +2,7 @@ import {React, useState, useEffect,useRef } from "react"
 import tw from "tailwind-styled-components"
 import {Router, useRouter } from "next/router";
 import { verifyEmail } from '../APIFunctions/EmailVerification.js'
-import { addUser } from '../APIFunctions/DbFunctions'
+import { addRider } from '../APIFunctions/DbFunctions'
 
 export const RiderSignUp = () => {
 
@@ -24,10 +24,13 @@ export const RiderSignUp = () => {
             lastName:userLastNameInputRef.current.value,
             email:userEmailInputRef.current.value,
             phone:userPhoneInputRef.current.value,
+            onlineStatus:false,
+            rideid:"N/A",
+            accountBalance:1000,
             password:userPasswordInputRef.current.value,
             userType:0,
         }
-        const res = await addUser(userData);
+        const res = await addRider(userData);
         if(res.error) {
             console.log("Error when adding user!");
             const error={}
@@ -36,7 +39,7 @@ export const RiderSignUp = () => {
         }
         else {
             console.log(res.responseData);
-            router.push("/driver");
+            router.push("/rider");
         }
     }
 
