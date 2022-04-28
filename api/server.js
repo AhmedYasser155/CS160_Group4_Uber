@@ -53,9 +53,11 @@ app.post("/addUser", jsonParser, async (req, res) => {
 	return null;
 });
 
-app.post("/getUser", jsonParser, async (req, res) => {
+app.get("/getUser", jsonParser, async (req, res) => {
 	await dbConnect();
-	await User.findOne(req.body.id)
+	await User.findOne({
+		_id: req.body.id
+		})
 		.then((response) => {
 			return res.status(200).send(response);
 		})
@@ -67,7 +69,11 @@ app.post("/getUser", jsonParser, async (req, res) => {
 
 app.post("/updateUser", jsonParser, async (req, res) => {
 	await dbConnect();
-	await User.findByIdAndUpdate(req.body.data.id, req.body.data, {
+	await User.findByIdAndUpdate({
+		_id: req.body.id
+		},
+		req.body.data, 
+		{
 			new: true,
 			runValidators: true,
 		})
