@@ -53,7 +53,7 @@ app.post("/addUser", jsonParser, async (req, res) => {
 	return null;
 });
 
-app.post("/getUser", jsonParser, async (req, res) => {
+app.get("/getUser", jsonParser, async (req, res) => {
 	await dbConnect();
 	await User.findOne({
 		_id: req.body.id
