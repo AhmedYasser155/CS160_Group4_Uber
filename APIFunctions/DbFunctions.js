@@ -5,7 +5,7 @@ import { ApiResponse } from './ApiResponse';
 export async function addUser(user) {
 	let status = new ApiResponse();
 	await axios
-		.post(SERVER_URL + "/addUser", {
+		.post(SERVER_URL + "user", {
 			user
 		})
 		.then((response) => {
@@ -18,10 +18,48 @@ export async function addUser(user) {
     return status;
 }
 
+export async function  addRide(data)
+{
+	let status = new ApiResponse();
+	await axios
+		.post(SERVER_URL + "ride/addRide", {
+			data
+		})
+		.then((response) => {
+			status.responseData = response.data;
+			status.statusCode = response.status;
+		})
+		.catch(err => {
+            status.error = true;
+        });
+    return status;
+}
+
+export async function authenthicateUser(userEmail,userPassword)
+{
+	let status = new ApiResponse();
+	
+	
+	await axios
+	.post(SERVER_URL + "auth",{		
+			userEmail,
+		 	userPassword
+	})
+	.then((response) => {
+		status.responseData = response.data;
+		status.statusCode = response.status;
+	})
+	.catch(err => {
+		status.error = true;
+	});
+return status;
+}
+
+
 export async function getUser(id) {
 	let status = new ApiResponse();
 	await axios
-		.get(SERVER_URL + "/getUser", {
+		.get(SERVER_URL + "user/id", {
 			id
 		})
 		.then((response) => {

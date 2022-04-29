@@ -1,11 +1,11 @@
 import React from 'react'
 import tw from "tailwind-styled-components"
-import Map from "../components/Map"
+import Map from "../../../components/Map"
 import { useEffect, useState } from 'react'
 import {useRouter} from 'next/router'
-import RideSelector from '../components/RideSelector'
-import { BackButton } from '../components/BackButton'
-import { MAPBOX_ACCESS_TOKEN } from "../config/config.json"
+import RideSelector from '../../../components/RideSelector'
+import { BackButton } from '../../../components/BackButton'
+import { MAPBOX_ACCESS_TOKEN } from "../../../config/config.json"
 
 import { useSelector , useDispatch } from 'react-redux'
 
