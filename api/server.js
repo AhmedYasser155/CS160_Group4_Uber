@@ -4,7 +4,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const axios = require("axios");
 const { EMAIL_ACCESS_KEY,db_url } = require("../config/config.json");
-const { dbConnect } = require("../utils/dbConnect");
 var bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
 const { MongoClient } = require("mongodb");
@@ -28,7 +27,6 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 
 const cors=require("cors");
-const mongodb = require("../utils/mongodb");
 const corsOptions ={
    origin:'*', 
    credentials:true,            //access-control-allow-credentials:true
