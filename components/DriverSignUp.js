@@ -9,7 +9,7 @@ var bcrypt = require("bcryptjs");
 
 export const DriverSignUp = () => {
 
-    const initialValues = {firstName:"", lastName:"", email:"", password:"", phoneNumber:"", license:""}
+    const initialValues = {firstName:"", lastName:"", email:"", password:"", phoneNumber:"", license:"", carMake:"", carModel:"", licensePlate:""}
 
     const[formValues, setFormValues] = useState(initialValues)
     const contentType = "application/json";

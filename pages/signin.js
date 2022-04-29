@@ -41,7 +41,18 @@ const SignIn = () => {
         }
         else {
             console.log(res.responseData);
-            router.push(`/Rider/${res.responseData.id}`)
+
+            const userType= res.responseData.userType
+            const id =res.responseData.id;
+
+            if(userType==1)
+            {
+                router.push(`/Driver/${id}`)
+
+            }
+            else{
+                router.push(`/Rider/${id}`)
+            }
            
 
         }

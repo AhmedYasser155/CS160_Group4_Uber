@@ -103,7 +103,7 @@ app.post("/auth", jsonParser, async(req,res)=> {
 		if (validPassword) {
 			res.status(200).send({
 				id: user._id,
-				email: user.email
+				userType: user.userType
 			})
 		} else {
 		  res.status(400).json({ error: "Invalid Password" });
