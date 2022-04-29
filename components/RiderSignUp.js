@@ -67,12 +67,12 @@ export const RiderSignUp = () => {
         if(!formValues.email){
             errors.email = "Email is required!"
         }
-        else {
-            const res = await verifyEmail(formValues.email)
-            if(res.error) {
-                errors.email = "Email is not valid!"
-            }
-        }
+        // else {
+        //     const res = await verifyEmail(formValues.email)
+        //     if(res.error) {
+        //         errors.email = "Email is not valid!"
+        //     }
+        // }
         if(!formValues.password){
             errors.password = "Password is required!"
         }
