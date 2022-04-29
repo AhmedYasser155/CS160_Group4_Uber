@@ -59,7 +59,7 @@ return status;
 export async function getUser(id) {
 	let status = new ApiResponse();
 	await axios
-		.get(SERVER_URL + "/getUser", {
+		.get(SERVER_URL + "user/id", {
 			id
 		})
 		.then((response) => {
