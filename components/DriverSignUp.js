@@ -2,7 +2,7 @@ import {React, useState, useEffect,useRef } from "react"
 import tw from "tailwind-styled-components"
 import { Router,useRouter } from "next/router"
 import { verifyEmail } from '../APIFunctions/EmailVerification.js'
-import { addDriver } from '../APIFunctions/DbFunctions'
+import { addUser } from '../APIFunctions/DbFunctions'
 var bcrypt = require("bcryptjs");
 
 
@@ -49,7 +49,7 @@ export const DriverSignUp = () => {
         }
         userData.password=await bcrypt.hash(userData.password,salt)
 
-        const res = await addDriver(userData);
+        const res = await addUser(userData);
         if(res.error) {
             console.log("Error when adding user!");
             const error={}
@@ -81,12 +81,12 @@ export const DriverSignUp = () => {
         if(!formValues.email){
             errors.email = "Email is required!"
         }
-        // else {
-        //     const res = await verifyEmail(formValues.email)
-        //     if(res.error) {
-        //         errors.email = "Email is not valid!"
-        //     }
-        // }
+        else {
+            const res = await verifyEmail(formValues.email)
+            if(res.error) {
+                errors.email = "Email is not valid!"
+            }
+        }
         if(!formValues.password){
             errors.password = "Password is required!"
         }

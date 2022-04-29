@@ -2,10 +2,10 @@ import axios from 'axios';
 import { SERVER_URL } from "../config/config.json";
 import { ApiResponse } from './ApiResponse';
 
-export async function addDriver(user) {
+export async function addUser(user) {
 	let status = new ApiResponse();
 	await axios
-		.post(SERVER_URL + "user/driver", {
+		.post(SERVER_URL + "user", {
 			user
 		})
 		.then((response) => {
@@ -18,23 +18,7 @@ export async function addDriver(user) {
     return status;
 }
 
-export async function addRider(user) {
-	let status = new ApiResponse();
-	await axios
-		.post(SERVER_URL + "user/rider", {
-			user
-		})
-		.then((response) => {
-			status.responseData = response.data;
-			status.statusCode = response.status;
-		})
-		.catch(err => {
-            status.error = true;
-        });
-    return status;
-}
-
-export async function addLocations(data)
+export async function  addRide(data)
 {
 	let status = new ApiResponse();
 	await axios

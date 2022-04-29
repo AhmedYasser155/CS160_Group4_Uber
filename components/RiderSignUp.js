@@ -2,7 +2,7 @@ import {React, useState, useEffect,useRef } from "react"
 import tw from "tailwind-styled-components"
 import {Router, useRouter } from "next/router";
 import { verifyEmail } from '../APIFunctions/EmailVerification.js'
-import { addRider } from '../APIFunctions/DbFunctions'
+import { addUser } from '../APIFunctions/DbFunctions'
 var bcrypt = require("bcryptjs");
 
 
@@ -35,7 +35,7 @@ export const RiderSignUp = () => {
         }
         userData.password=await bcrypt.hash(userData.password,salt)
 
-        const res = await addRider(userData);
+        const res = await addUser(userData);
         if(res.error) {
             console.log("Error when adding user!");
             const error={}
@@ -67,12 +67,12 @@ export const RiderSignUp = () => {
         if(!formValues.email){
             errors.email = "Email is required!"
         }
-        // else {
-        //     const res = await verifyEmail(formValues.email)
-        //     if(res.error) {
-        //         errors.email = "Email is not valid!"
-        //     }
-        // }
+        else {
+            const res = await verifyEmail(formValues.email)
+            if(res.error) {
+                errors.email = "Email is not valid!"
+            }
+        }
         if(!formValues.password){
             errors.password = "Password is required!"
         }

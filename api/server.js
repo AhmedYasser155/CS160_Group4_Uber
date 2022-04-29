@@ -3,12 +3,24 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const axios = require("axios");
-const { EMAIL_ACCESS_KEY } = require("../config/config.json");
+const { EMAIL_ACCESS_KEY,db_url } = require("../config/config.json");
 const { dbConnect } = require("../utils/dbConnect");
-const Driver = require("../models/driver");
-const Rider = require("../models/rider")
 var bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
+const { MongoClient } = require("mongodb");
+var ObjectId = require('mongodb').ObjectId;   
+
+var dbo;
+
+
+// Connects server to monogdb database
+MongoClient.connect(db_url, function(err, db) {
+  if(err) 
+  {
+	  throw err
+  }
+    dbo = db.db("myFirstDatabase");
+});
 
 
 const PORT = process.env.PORT || 3001;
@@ -16,6 +28,7 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 
 const cors=require("cors");
+const mongodb = require("../utils/mongodb");
 const corsOptions ={
    origin:'*', 
    credentials:true,            //access-control-allow-credentials:true
@@ -44,38 +57,46 @@ app.post("/verify", jsonParser, (req, res) => {
 	return null;
 });
 
-app.post("/user/driver", jsonParser, async (req, res) => {
-	await dbConnect();
-	 const newDriver=await Driver.create(req.body.user)
-	 .catch(() => {
-		res.status(400).json({"message":"Error when adding user to database!"});
+
+//get user by id
+app.get("/user/id", jsonParser, async (req, res) => { 
+
+
+	const user=await dbo.collection("users").findOne({_id: new ObjectId(req.body.id)})
+		.then((response) =>{
+		res.status(200).send(response)
+	})
+	.catch((err) => {
+		res.status(400).send({err:err.errmsg})
 	 })
 
-		if(newDriver) 
-		{
-			res.status(200).send({id:newDriver._id});
-		}
+	 
+
+
 
 });
 
-app.post("/user/rider", jsonParser, async (req, res) => {
-	await dbConnect();
-	 const newRider=await Rider.create(req.body.user)
-	 .catch(() => {
-		res.status(400).json({"message":"Error when adding user to database!"});
-	 })
+//add user
+app.post("/user", jsonParser, async (req, res) => { 
+	dbo.collection("users").createIndex( { "phone": 1 }, { "unique": true, "sparse":true } )
+	dbo.collection("users").createIndex( { "license": 1 }, { "unique": true, "sparse":true  } )
+	dbo.collection("users").createIndex( { "email": 1 }, { "unique": true, "sparse":true  } )
 
-		if(newRider) 
-		{
-			res.status(200).send({id:newRider._id});
-		}
+	const newUser=await dbo.collection("users").insertOne( req.body.user)
+	.then(result =>{
+		res.status(200).send({id:result.insertedId})
+	})
+	.catch((err) => {
+		res.status(400).send({err:err.errmsg})
+})
 
 });
 
+
+
+//authenticate user 
 app.post("/auth", jsonParser, async(req,res)=> {
-	await dbConnect();
-
-	const user = await Driver.findOne({ email: req.body.userEmail });
+	const user = await dbo.collection("users").findOne({ email: req.body.userEmail });
 
 
 	if (user) {
@@ -95,18 +116,6 @@ app.post("/auth", jsonParser, async(req,res)=> {
 	  }
 	})
 
-
-app.post("/getUser", jsonParser, async (req, res) => {
-	await dbConnect();
-	await User.findOne(req.body.id)
-		.then((response) => {
-			return res.status(200).send(response);
-		})
-		.catch((err) => {
-			return res.status(400).send({"message":"Error when finding user in database!"});
-		});
-	return null;
-});
 
 app.post("/updateUser", jsonParser, async (req, res) => {
 	await dbConnect();

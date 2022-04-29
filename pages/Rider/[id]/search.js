@@ -37,13 +37,6 @@ const Search = () => {
     //TODO: get the current coor from the previous page
 
 
-    const addLocations= () => {
-
-        var data;
-
-        
-
-    }
 
     useEffect(() => {
         
