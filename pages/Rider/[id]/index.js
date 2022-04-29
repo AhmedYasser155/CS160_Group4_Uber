@@ -16,18 +16,10 @@ export default function Home({name}) {
   const router = useRouter()
   const dispatch = useDispatch();
   const id = router.query.id
-  console.log(name)
 
-  async function test()
-  {
-    const user = await getUser(id);
-    console.log(user)
-
-  }
 
 
 useEffect(() => {
-  test()
   navigator.geolocation.getCurrentPosition((position) => {
     dispatch((ADD_CURR_LOCATION([position.coords.longitude, position.coords.latitude])));
 
@@ -52,7 +44,7 @@ useEffect(() => {
                 Ride
             </ActionButton>
           </Link>
-          <Link href="/scheduling">
+          <Link href={`/Rider/${id}/scheduling`}>
             <ActionButton>
               <ActionImg src="https://i.ibb.co/5RjchBg/uberschedule.png"/>
                 Schedule
