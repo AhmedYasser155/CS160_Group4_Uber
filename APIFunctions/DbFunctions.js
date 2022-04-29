@@ -72,13 +72,11 @@ export async function getUser(id) {
     return status;
 }
 
-
-
-
-export async function updateUser(data) {
+export async function updateUser(id, data) {
 	let status = new ApiResponse();
 	await axios
 		.post(SERVER_URL + "/updateUser", {
+			id,
 			data
 		})
 		.then((response) => {
