@@ -1,11 +1,10 @@
 import React from 'react'
 import tw from "tailwind-styled-components"
-import Map from "../components/Map"
+import Map from "../../../components/Map"
 import { useEffect, useState } from 'react'
-import {useRouter} from 'next/router'
-import RideSelector from '../components/RideSelector'
-import { BackButton } from '../components/BackButton'
-import { MAPBOX_ACCESS_TOKEN } from "../config/config.json"
+import RideSelector from '../../../components/RideSelector'
+import { BackButton } from '../../../components/BackButton'
+import { MAPBOX_ACCESS_TOKEN } from "../../../config/config.json"
 
 import { useSelector , useDispatch } from 'react-redux'
 
@@ -36,7 +35,7 @@ const Confirm = () => {
     if (locationCoor.length < locationsArr.length) {
         return null
     } 
-
+    
     return (
         <Wrapper>
             <BackButton  prevPage={"/search"}/>
@@ -48,10 +47,6 @@ const Confirm = () => {
                 <RideSelector
                     locationCoordinates={locationCoor}
                 />
-
-                <ConfirmButtonContainer>
-                    <ConfirmButton>Confirm </ConfirmButton>
-                </ConfirmButtonContainer>
 
             </RideContainer>
         </Wrapper>
@@ -69,10 +64,3 @@ const RideContainer = tw.div`
     flex-1 flex-col flex h-1/5
 `
 
-const ConfirmButtonContainer = tw.div`
-    border-t-2
-`
-
-const ConfirmButton = tw.div`
-    bg-black text-white my-4 mx-4 py-4 text-center text-xl
-`

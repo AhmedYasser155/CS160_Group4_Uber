@@ -2,18 +2,18 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import tw from "tailwind-styled-components"
 import Link from 'next/Link'
-import { BackButton } from '../components/BackButton'
-import { InputLocation } from '../components/InputLocation'
+import { BackButton } from '../../../components/BackButton'
+import { InputLocation } from '../../../components/InputLocation'
 import { FaTimes } from 'react-icons/fa'
-import APIinfo from "../config/config.json"
-
+import APIinfo from "../../../config/config.json"
+import  {useRouter} from 'next/router'
 import { useSelector, useDispatch } from 'react-redux'
 import { ADD_Dropoff1, ADD_PICKUP, ADD_Dropoff2, ADD_Dropoff3, ADD_Dropoff4, ADD_Dropoff5, APPEND_LOCATION ,ADD_CURR_LOCATION, 
-    DELETE_Dropoff2, DELETE_Dropoff3, DELETE_Dropoff4, DELETE_Dropoff5} from '../store/actions'
+    DELETE_Dropoff2, DELETE_Dropoff3, DELETE_Dropoff4, DELETE_Dropoff5} from '../../../store/actions'
+import { getUser } from '../../../APIFunctions/DbFunctions'
 
 
-
-const Search = () => {
+const Search = ({user}) => {
     const pickup = useSelector(state => state.pickup);
     const dropoff1 = useSelector(state => state.dropoff1);
     const dropoff2 = useSelector(state => state.dropoff2);
@@ -32,8 +32,12 @@ const Search = () => {
     const p3 = dropoffs.p3;
     const p4 = dropoffs.p4;
     const p5 = dropoffs.p5;
+    const router = useRouter()
+    const id = router.query.id
 
     //TODO: get the current coor from the previous page
+
+
 
     useEffect(() => {
 
@@ -149,7 +153,7 @@ const Search = () => {
     return (
         <Wrapper>
             {/* FIXME: back button should take link as props */}
-            <BackButton prevPage={"/rider"} />
+            <BackButton prevPage={`/Rider/${id}`} />
 
             <InputContainer>
                 <FromToIcon>
@@ -198,9 +202,7 @@ const Search = () => {
             </SavePlace>
 
             {(pickup && (dropoff1 || dropoff2 || dropoff3 || dropoff4 || dropoff5)) ?
-                (<Link href={{
-                    pathname: "/confirm",
-                }}>
+                (<Link href={`/Rider/${id}/confirm`}>
                     <ConfirmContainer onClick={() => updateLocationArr()}>
                         Confirm Location
                     </ConfirmContainer>
@@ -212,6 +214,20 @@ const Search = () => {
         </Wrapper>
     )
 }
+
+export async function getServerSideProps({params})
+{
+
+     const res = await getUser(params.id);
+     const user = res.responseData
+
+     return{
+         props:{
+            user,
+         },
+     };
+
+    }
 
 export default Search
 

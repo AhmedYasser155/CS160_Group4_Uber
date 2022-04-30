@@ -1,14 +1,14 @@
 import React from 'react'
 import { useState } from 'react'
 import tw from "tailwind-styled-components"
-import { BackHomeButton } from '../components/BackHomeButton'
+import { BackHomeButton } from '../../../components/BackHomeButton'
 import Link from 'next/Link'
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import setHours from "date-fns/setHours";
 import setMinutes from "date-fns/setMinutes";
 import addMonths from "date-fns/addMonths"
-import InputLocation from '../components/InputLocation'
+import InputLocation from '../../../components/InputLocation'
 
 const Schedule = () => {
 
