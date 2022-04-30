@@ -8,12 +8,15 @@ import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { ADD_CURR_LOCATION } from '../../../store/actions'
 import  {useRouter} from 'next/router'
+import {getUser} from '../../../APIFunctions/DbFunctions'
 
-export default function Home() {
+export default function Home({name}) {
+
 
   const router = useRouter()
   const dispatch = useDispatch();
   const id = router.query.id
+
 
 
 useEffect(() => {
@@ -29,7 +32,7 @@ useEffect(() => {
         <Header>
           <UberLogo src="https://download.logo.wine/logo/Uber/Uber-Logo.wine.png"></UberLogo>
           <Profile>
-            <Name>Name</Name>
+            <Name>{name}</Name>
             <UserImage src="https://png.pngtree.com/png-vector/20190909/ourmid/pngtree-outline-user-icon-png-image_1727916.jpg"/>
           </Profile>
         </Header>
@@ -41,7 +44,7 @@ useEffect(() => {
                 Ride
             </ActionButton>
           </Link>
-          <Link href="/scheduling">
+          <Link href={`/Rider/${id}/scheduling`}>
             <ActionButton>
               <ActionImg src="https://i.ibb.co/5RjchBg/uberschedule.png"/>
                 Schedule
@@ -58,6 +61,19 @@ useEffect(() => {
     </Wrapper>
   )
 }
+
+
+export async function getServerSideProps({params})
+{
+     const user = await getUser(params.id);
+    const name = params.id
+     return{
+         props:{
+            name,
+         },
+     };
+
+    }
 
 const Wrapper = tw.div`
   flex flex-col h-screen
