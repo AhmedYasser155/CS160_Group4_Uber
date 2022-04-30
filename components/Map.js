@@ -57,7 +57,7 @@ const Map = ({ locationCoordinates }) => {
         });
     }
   }, [coordinates, mainMap]);
-  
+
   // This useEffect for drawing path line
   useEffect(() => {
     if (coordinates.length !== 0) {
