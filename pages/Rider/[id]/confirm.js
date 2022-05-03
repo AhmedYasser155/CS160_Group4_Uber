@@ -36,10 +36,9 @@ const Confirm = () => {
     if (locationCoor.length < locationsArr.length) {
         return null
     } 
-
     return (
         <Wrapper>
-            <BackButton  prevPage={"/search"}/>
+            <BackButton  prevPage={"/signin"}/>
             <Map
                 locationCoordinates={locationCoor}
             />
@@ -48,11 +47,6 @@ const Confirm = () => {
                 <RideSelector
                     locationCoordinates={locationCoor}
                 />
-
-                <ConfirmButtonContainer>
-                    <ConfirmButton>Confirm </ConfirmButton>
-                </ConfirmButtonContainer>
-
             </RideContainer>
         </Wrapper>
     )
