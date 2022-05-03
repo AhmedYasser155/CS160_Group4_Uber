@@ -1,13 +1,15 @@
 import React from 'react'
 import tw from "tailwind-styled-components"
 import Link from 'next/Link'
-
-import { BackButton } from '../components/BackButton'
+import {useRouter} from 'next/router'
+import { BackButton } from '../../../components/BackButton'
 
 const Ride = () => {
+    const router = useRouter()
+    const id = router.query.id
     return (
         <Wrapper>
-            <BackButton  prevPage={"/signin"}/>
+            <BackButton  prevPage={`/Rider/${id}/confirm`}/>
             <Link href={`/signin`}>
             <Cancel>Cancel Ride</Cancel>
             </Link>

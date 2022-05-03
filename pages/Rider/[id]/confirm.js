@@ -11,7 +11,8 @@ import { useSelector , useDispatch } from 'react-redux'
 
 
 const Confirm = () => {
- 
+    const router = useRouter()
+    const id = router.query.id
     const locationsArr = useSelector(state=> state.locationArr); //to access the locations to be printed on the map
 
     const [locationCoor, setLocationCoor] = useState([])
@@ -38,7 +39,7 @@ const Confirm = () => {
     } 
     return (
         <Wrapper>
-            <BackButton  prevPage={"/signin"}/>
+            <BackButton  prevPage={`/Rider/${id}/search`}/>
             <Map
                 locationCoordinates={locationCoor}
             />
