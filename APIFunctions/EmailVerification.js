@@ -13,6 +13,7 @@ export async function verifyEmail(email) {
 			status.statusCode = response.status;
 		})
 		.catch(err => {
+			status.responseData = err;
             status.error = true;
         });
     return status;

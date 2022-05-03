@@ -5,7 +5,7 @@ import { ApiResponse } from './ApiResponse';
 export async function addUser(user) {
 	let status = new ApiResponse();
 	await axios
-		.post(SERVER_URL + "user", {
+		.post(SERVER_URL + "/user/addUser", {
 			user
 		})
 		.then((response) => {
@@ -18,11 +18,11 @@ export async function addUser(user) {
     return status;
 }
 
-export async function  addRide(data)
+export async function addRide(data)
 {
 	let status = new ApiResponse();
 	await axios
-		.post(SERVER_URL + "ride/addRide", {
+		.post(SERVER_URL + "/ride/addRide", {
 			data
 		})
 		.then((response) => {
@@ -35,31 +35,29 @@ export async function  addRide(data)
     return status;
 }
 
-export async function authenthicateUser(userEmail,userPassword)
+export async function authenthicateUser(userEmail, userPassword)
 {
 	let status = new ApiResponse();
-	
-	
 	await axios
-	.post(SERVER_URL + "auth",{		
+		.post(SERVER_URL + "/auth",{		
 			userEmail,
 		 	userPassword
-	})
-	.then((response) => {
-		status.responseData = response.data;
-		status.statusCode = response.status;
-	})
-	.catch(err => {
-		status.error = true;
-	});
-return status;
+		})
+		.then((response) => {
+			status.responseData = response.data;
+			status.statusCode = response.status;
+		})
+		.catch(err => {
+			status.error = true;
+		});
+	return status;
 }
 
 
 export async function getUser(id) {
 	let status = new ApiResponse();
 	await axios
-		.get(SERVER_URL + "user/id", {
+		.get(SERVER_URL + "/user/id", {
 			id
 		})
 		.then((response) => {
@@ -75,7 +73,7 @@ export async function getUser(id) {
 export async function updateUser(id, data) {
 	let status = new ApiResponse();
 	await axios
-		.post(SERVER_URL + "/updateUser", {
+		.post(SERVER_URL + "/user/updateUser", {
 			id,
 			data
 		})
@@ -92,7 +90,7 @@ export async function updateUser(id, data) {
 export async function deleteUser(id) {
 	let status = new ApiResponse();
 	await axios
-		.post(SERVER_URL + "/deleteUser", {
+		.post(SERVER_URL + "/user/deleteUser", {
 			id
 		})
 		.then((response) => {
