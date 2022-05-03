@@ -31,10 +31,12 @@ useEffect(() => {
       <ActionItems>
         <Header>
           <UberLogo src="https://download.logo.wine/logo/Uber/Uber-Logo.wine.png"></UberLogo>
+          <Link href={`/Rider/${id}/riderprofile`}> 
           <Profile>
             <Name>{name}</Name>
             <UserImage src="https://png.pngtree.com/png-vector/20190909/ourmid/pngtree-outline-user-icon-png-image_1727916.jpg"/>
           </Profile>
+          </Link>
         </Header>
 
         <ActionButtons>
