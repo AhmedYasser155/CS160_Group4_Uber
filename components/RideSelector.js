@@ -83,7 +83,7 @@ const RideSelector = ({ locationCoordinates }) => {
           </Car>
         ))}
       </CarList>
-      <Link href={`/ride`}>
+      <Link href={`/Rider/${id}/ride`}>
       <ConfirmButtonContainer
       onClick = {() => {handleSubmit()}}
       >
@@ -129,7 +129,7 @@ const CarList = tw.div`
 `;
 
 const Car = tw.div`
-    flex p-4 items-center
+    flex p-4 items-center hover:bg-gray-400 active:bg-gray-400
 `;
 
 const CarImg = tw.img`
@@ -141,5 +141,5 @@ const ConfirmButtonContainer = tw.div`
 `
 
 const ConfirmButton = tw.div`
-    bg-black text-white my-4 mx-4 py-4 text-center text-xl
+    bg-black text-white my-4 mx-4 py-4 text-center text-xl cursor-pointer
 `

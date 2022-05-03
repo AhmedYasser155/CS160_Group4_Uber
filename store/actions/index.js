@@ -84,3 +84,9 @@ export const ADD_CURR_LOCATION = (location) => {
         payload: location
     }
 }
+export const RESET_ARR = () => 
+{
+    return {
+        type: 'RESET_ARR'
+    }
+}
