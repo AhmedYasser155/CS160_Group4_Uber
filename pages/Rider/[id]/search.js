@@ -9,7 +9,7 @@ import APIinfo from "../../../config/config.json"
 import  {useRouter} from 'next/router'
 import { useSelector, useDispatch } from 'react-redux'
 import { ADD_Dropoff1, ADD_PICKUP, ADD_Dropoff2, ADD_Dropoff3, ADD_Dropoff4, ADD_Dropoff5, APPEND_LOCATION ,ADD_CURR_LOCATION, 
-    DELETE_Dropoff2, DELETE_Dropoff3, DELETE_Dropoff4, DELETE_Dropoff5} from '../../../store/actions'
+    DELETE_Dropoff2, DELETE_Dropoff3, DELETE_Dropoff4, DELETE_Dropoff5, RESET_ARR, DELETE_Dropoff1} from '../../../store/actions'
 import { getUser } from '../../../APIFunctions/DbFunctions'
 
 
@@ -40,19 +40,24 @@ const Search = ({user}) => {
 
 
     useEffect(() => {
-        
+        dispatch(DELETE_Dropoff1());
+        dispatch(DELETE_Dropoff2());
+        dispatch(DELETE_Dropoff3());
+        dispatch(DELETE_Dropoff4());
+        dispatch(DELETE_Dropoff5());
+        dispatch(RESET_ARR());
         console.log(id)
         currentCoor.length > 0 ? (fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${currentCoor}.json?` +
         new URLSearchParams({
             access_token: APIinfo.MAPBOX_ACCESS_TOKEN,
             limit: 1
         })
-    )
+        )
         .then(res => res.json())
         .then(data => {
             dispatch(ADD_PICKUP((data.features[0].place_name)));
         }
-    )) : null
+         )) : null
         
     }, [])
 
@@ -281,5 +286,5 @@ const StarIcon = tw.img`
 `
 
 const ConfirmContainer = tw.div`
-    bg-black text-white text-center mt-2 mx-4 p-4 text-2xl cursor-pointer
+    bg-black text-white text-center mt-2 mx-4 p-4 text-2xl cursor-pointer 
 `
