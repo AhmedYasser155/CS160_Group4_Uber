@@ -6,11 +6,10 @@ import {useRouter} from 'next/router'
 import RideSelector from '../../../components/RideSelector'
 import { BackButton } from '../../../components/BackButton'
 import { MAPBOX_ACCESS_TOKEN } from "../../../config/config.json"
-
 import { useSelector , useDispatch } from 'react-redux'
 
-
 const Confirm = () => {
+ 
     const router = useRouter()
     const id = router.query.id
     const locationsArr = useSelector(state=> state.locationArr); //to access the locations to be printed on the map
@@ -39,7 +38,7 @@ const Confirm = () => {
     } 
     return (
         <Wrapper>
-            <BackButton  prevPage={`/Rider/${id}/search`}/>
+            <BackButton  prevPage={`/Rider/${id}/scheduling`}/>
             <Map
                 locationCoordinates={locationCoor}
             />
@@ -47,8 +46,9 @@ const Confirm = () => {
             <RideContainer>
                 <RideSelector
                     locationCoordinates={locationCoor}
-                    schedule={false}
+                    schedule={true}
                 />
+
             </RideContainer>
         </Wrapper>
     )
