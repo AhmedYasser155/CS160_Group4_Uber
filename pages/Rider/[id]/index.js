@@ -10,15 +10,18 @@ import { ADD_CURR_LOCATION } from '../../../store/actions'
 import  {useRouter} from 'next/router'
 import {getUser} from '../../../APIFunctions/DbFunctions'
 
-export default function Home({name}) {
+
+// home takes the pre rendered user docuemnt as a parameter
+export default function Home({userData}) {
 
 
   const router = useRouter()
   const dispatch = useDispatch();
   const id = router.query.id
-
-
-
+  //prints the whole document
+  console.log(userData)
+  //if you want to use a particular field in the front end you need to create a new var/const and choose a field   --- LIKE BELOW 
+  const name = userData.firstName
 useEffect(() => {
   navigator.geolocation.getCurrentPosition((position) => {
     dispatch((ADD_CURR_LOCATION([position.coords.longitude, position.coords.latitude])));
@@ -66,10 +69,13 @@ useEffect(() => {
 export async function getServerSideProps({params})
 {
      const user = await getUser(params.id);
-    const name = params.id
+  //returns the status object 
+  //user data extracts the responseDate field from the status object
+     const userData= user.responseData
      return{
          props:{
-            name,
+           //pre render the whole document and send it to the frontend
+            userData,
          },
      };
 

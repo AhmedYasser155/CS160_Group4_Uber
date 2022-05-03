@@ -57,7 +57,7 @@ app.post("/verify", jsonParser, (req, res) => {
 
 
 //get user by id
-app.get("/user/id", jsonParser, async (req, res) => { 
+app.post("/user/id", jsonParser, async (req, res) => { 
 
 
 	const user=await dbo.collection("users").findOne({_id: new ObjectId(req.body.id)})
