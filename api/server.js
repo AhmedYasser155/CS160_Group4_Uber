@@ -3,7 +3,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const axios = require("axios");
-const { EMAIL_ACCESS_KEY,db_url } = require("../config/config.json");
+const { EMAIL_ACCESS_KEY, db_url } = require("../config/config.json");
 var bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
 const { MongoClient } = require("mongodb");
@@ -43,7 +43,7 @@ app.get("/api", (req, res) => {
 
 app.post("/verify", jsonParser, (req, res) => {
 	const email = req.body.email;
-	axios.get("http://apilayer.net/api/check?access_key=" + EMAIL_ACCESS_KEY + "&email=" + email)
+	axios.get("http://apilayer.net/api/check?access_key=" + EMAIL_ACCESS_KEY + "&email=" + email + "&smtp=1&format=1")
 		.then((response) => {
 			if(response.data.format_valid)
 				return res.status(200).send({"message":"Success!"});
