@@ -4,7 +4,9 @@ import "tailwindcss/tailwind.css"
 import tw from "tailwind-styled-components"
 import Map from '../components/Map'
 import Link from 'next/Link'
+import io from 'socket.io-client';
 
+const socket = io('http://localhost:3001');
 
 export default function Home() {
 
