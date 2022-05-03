@@ -5,7 +5,7 @@ import {addRide} from '../APIFunctions/DbFunctions';
 import {useRouter} from 'next/router'
 import Link from "next/Link";
 
-const RideSelector = ({ locationCoordinates }) => {
+const RideSelector = ({ locationCoordinates, schedule }) => {
   const [rideDuration, setRideDuration] = useState(0);
   const [rideDistance, setRideDistance] = useState(0);
   const [cost, setCost] = useState(0);
@@ -61,6 +61,7 @@ const RideSelector = ({ locationCoordinates }) => {
       console.log("Ride id: ", res.responseData.id);
     }
   }
+
   return (
     <Wrapper>
       <TripInfo>
@@ -83,13 +84,21 @@ const RideSelector = ({ locationCoordinates }) => {
           </Car>
         ))}
       </CarList>
-      <Link href={`/Rider/${id}/ride`}>
+      {schedule ? 
+      (<Link href={`/Rider/${id}/rideList`}>
+      <ConfirmButtonContainer>
+        <ConfirmButton>Confirm {service}</ConfirmButton>
+      </ConfirmButtonContainer>
+      </Link>) 
+      : 
+      (<Link href={`/Rider/${id}/ride`}>
       <ConfirmButtonContainer
       onClick = {() => {handleSubmit()}}
       >
         <ConfirmButton>Confirm {service}</ConfirmButton>
       </ConfirmButtonContainer>
-      </Link>
+      </Link>)}
+      
     </Wrapper>
   );
 };
