@@ -71,6 +71,7 @@ export const RiderSignUp = () => {
             const res = await verifyEmail(formValues.email)
             if(res.error) {
                 errors.email = "Email is not valid!"
+                console.log(res.responseData);
             }
         }
         if(!formValues.password){
