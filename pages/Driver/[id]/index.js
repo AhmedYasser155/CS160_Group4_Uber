@@ -4,9 +4,14 @@ import "tailwindcss/tailwind.css"
 import tw from "tailwind-styled-components"
 import Map from '../../../components/Map'
 import Link from 'next/Link'
+import {getUser} from '../../../APIFunctions/DbFunctions'
+import  {useRouter} from 'next/router'
 
 
-export default function Home() {
+export default function Home({name}) {
+
+  const router = useRouter()
+  const id = router.query.id
 
   return (
     <Wrapper>
@@ -14,10 +19,14 @@ export default function Home() {
       <ActionItems>
         <Header>
           <UberLogo src="https://download.logo.wine/logo/Uber/Uber-Logo.wine.png"></UberLogo>
+          <Link href={`/Driver/${id}/driverprofile`}> 
           <Profile>
-            <Name>Name</Name>
+            <Name>
+              {name}
+            </Name>
             <UserImage src="https://png.pngtree.com/png-vector/20190909/ourmid/pngtree-outline-user-icon-png-image_1727916.jpg"/>
           </Profile>
+          </Link>
         </Header>
 {/* This infomation will be retrieved from database */}
         <InforSection>
@@ -34,6 +43,17 @@ export default function Home() {
     </Wrapper>
   )
 }
+export async function getServerSideProps({params})
+{
+     const user = await getUser(params.id);
+    const name = params.id
+     return{
+         props:{
+            name,
+         },
+     };
+
+    }
 
 const Label = tw.div`
     text-2xl font-semibold
@@ -62,7 +82,7 @@ const Profile = tw.div`
   flex items-center
 `
 
-const Name = tw.div`
+const Name = tw.p`
   mr-4 w-20 text-sm
 `
 
