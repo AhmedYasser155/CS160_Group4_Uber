@@ -5,7 +5,7 @@ import { ApiResponse } from './ApiResponse';
 export async function verifyEmail(email) {
 	let status = new ApiResponse();
 	await axios
-		.post(SERVER_URL + "verify", {
+		.post(SERVER_URL + "/verify", {
 			email
 		})
 		.then((response) => {
@@ -13,6 +13,7 @@ export async function verifyEmail(email) {
 			status.statusCode = response.status;
 		})
 		.catch(err => {
+			status.responseData = err;
             status.error = true;
         });
     return status;
