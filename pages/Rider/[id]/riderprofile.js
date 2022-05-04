@@ -1,6 +1,18 @@
 import React from "react"
+import tw from "tailwind-styled-components"
+import "tailwindcss/tailwind.css"
+import { getUser } from '../../../APIFunctions/DbFunctions'
+import { BackHomeButton } from '../../../components/BackHomeButton'
+import "tailwindcss/tailwind.css"
 
-export default function RiderProfile({name}){
+
+export default function RiderProfile({userData}){
+
+    const first = userData.firstName
+    const last = userData.lastName
+    const email = userData.email
+    const phone = userData.phone
+
     return(
         <Wrapper>
             <BackHomeButton/>
@@ -16,26 +28,21 @@ export default function RiderProfile({name}){
 
                 </Icon>
                 <Text>
-                    {name}
+                    {first} {last}
                 </Text>
 
             </NameContainer>
             <ProfileInformation>
                 <ProfileText>
-                    Email: johndoe@gmail.com
+                    Email: {email}
                 </ProfileText>
                 <ProfileText>
-                    Phone Number:(888)-888-8888
+                    Phone Number: {phone}
                 </ProfileText>
             </ProfileInformation>
 
 
         </ProfileContainer>
-
-            <LogoutButton>
-                Log out
-            </LogoutButton>
-
 
         </Wrapper>
     )
@@ -43,13 +50,15 @@ export default function RiderProfile({name}){
 
 export async function getServerSideProps({params})
 {
-
-     //const res = await getUser(params.id);
-     const name = params.id
+    //getting user by id 
+     const user = await getUser(params.id);
+     const userData = user.responseData
+    
+     
      
      return{
          props:{
-            name,
+            userData,
          },
      };
     }

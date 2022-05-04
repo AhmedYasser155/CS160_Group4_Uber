@@ -4,14 +4,17 @@ import "tailwindcss/tailwind.css"
 import tw from "tailwind-styled-components"
 import Map from '../../../components/Map'
 import Link from 'next/Link'
-import {getUser} from '../../../APIFunctions/DbFunctions'
+import { getUser } from '../../../APIFunctions/DbFunctions'
 import  {useRouter} from 'next/router'
+import { useEffect } from 'react'
 
 
-export default function Home({name}) {
+export default function Home({userData}) {
 
   const router = useRouter()
   const id = router.query.id
+  const first = userData.firstName
+  const last = userData.lastName
 
   return (
     <Wrapper>
@@ -22,7 +25,7 @@ export default function Home({name}) {
           <Link href={`/Driver/${id}/driverprofile`}> 
           <Profile>
             <Name>
-              {name}
+              {first} {last}
             </Name>
             <UserImage src="https://png.pngtree.com/png-vector/20190909/ourmid/pngtree-outline-user-icon-png-image_1727916.jpg"/>
           </Profile>
@@ -45,14 +48,17 @@ export default function Home({name}) {
 }
 export async function getServerSideProps({params})
 {
+    //getting user by id 
      const user = await getUser(params.id);
-    const name = params.id
+     const userData = user.responseData
+    
+     
+     
      return{
          props:{
-            name,
+            userData,
          },
      };
-
     }
 
 const Label = tw.div`

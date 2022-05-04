@@ -10,10 +10,12 @@ import  {useRouter} from 'next/router'
 
 export default function DriverProfile({userData}) {
 
-    const router = useRouter()
-    const id = router.query.id
-    console.log(userData);
-    //const name = userData.firstName
+    const first = userData.firstName
+    const last = userData.lastName
+    const email = userData.email
+    const phone = userData.phone
+    const make = userData.car.carMake
+    const model = userData.car.carModel
    
     
     return(
@@ -31,32 +33,28 @@ export default function DriverProfile({userData}) {
 
                 </Icon>
                 <Text>
-                    {name}
+                    {first} {last}
                 </Text>
 
             </NameContainer>
             <ProfileInformation>
                 <ProfileText>
-                    Email: johndoe@gmail.com
+                    Email: {email}
                 </ProfileText>
                 <ProfileText>
-                    Phone Number:(888)-888-8888
+                    Phone Number: {phone}
                 </ProfileText>
                 <ProfileText>
-                    Car Make: Honda
+                    Car Make: {make}
                 </ProfileText>
                 <ProfileText>
-                    Car Model: Accord
+                    Car Model: {model}
                 </ProfileText>
                
             </ProfileInformation>
 
 
         </ProfileContainer>
-
-            <LogoutButton>
-                Log out
-            </LogoutButton>
 
 
         </Wrapper>
