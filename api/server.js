@@ -37,6 +37,14 @@ app.use(cors(corsOptions)) // Use this after the variable declaration
 
 var jsonParser = bodyParser.json();
 
+const http = require('http').Server(app);
+const io = require('socket.io')(http, {
+	cors: {
+		origin: 'http://localhost:3000',
+		methods: ['GET', 'POST'],
+	},
+});
+
 app.get("/api", (req, res) => {
   res.json({ message: "Hello from server!" });
 });
@@ -138,6 +146,13 @@ app.post("/user/deleteUser", jsonParser, async (req, res) => {
 	return null;
 });
 
-app.listen(PORT, () => {
+io.on('connection', (socket) => {
+	console.log('a user connected ' + socket.id);
+	socket.on('disconnect', () => {
+		console.log('user disconnected');
+	})
+})
+
+http.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
