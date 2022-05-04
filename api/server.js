@@ -57,17 +57,17 @@ app.post("/verify", jsonParser, (req, res) => {
 });
 
 
-//get user by id
-app.get("/user/id", jsonParser, async (req, res) => { 
-	await dbo.collection("users").findOne({
-		_id: new ObjectId(req.body.id)
-	})
+app.post("/user/id", jsonParser, async (req, res) => { 
+
+
+	const user=await dbo.collection("users").findOne({_id: new ObjectId(req.body.id)})
 		.then((response) =>{
-			res.status(200).send(response)
-		})
-		.catch((err) => {
-			res.status(400).send({"message":err.errmsg})
-	 	})
+		res.status(200).send(response)
+	})
+	.catch((err) => {
+		res.status(400).send({"message":err.errmsg})
+	 })
+
 });
 
 //add user

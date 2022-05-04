@@ -57,7 +57,7 @@ export async function authenthicateUser(userEmail, userPassword)
 export async function getUser(id) {
 	let status = new ApiResponse();
 	await axios
-		.post(SERVER_URL + "user/id", {
+		.post(SERVER_URL + "/user/id", {
 
 			id
 		})
