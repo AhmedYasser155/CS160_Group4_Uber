@@ -9,7 +9,7 @@ const RideList = () => {
     const id = router.query.id
     return (
         <Wrapper>
-            <BackButton  prevPage={`/Rider/${id}`}/>
+            <BackButton  prevPage={`/Rider/${id}/confirmscheduling`}/>
             <Chat>
                 <h3>Added ride to your schedule</h3>
                 {/* a list of scheduled ride will be fetched from database to displace here */}
