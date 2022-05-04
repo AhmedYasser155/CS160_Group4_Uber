@@ -7,11 +7,13 @@ import "tailwindcss/tailwind.css"
 import  {useRouter} from 'next/router'
 
 
-export default function DriverProfile({name}) {
+
+export default function DriverProfile({userData}) {
 
     const router = useRouter()
     const id = router.query.id
-    console.log(name);
+    console.log(userData);
+    //const name = userData.firstName
    
     
     return(
@@ -64,15 +66,14 @@ export default function DriverProfile({name}) {
 export async function getServerSideProps({params})
 {
     //getting user by id 
-     const res = await getUser(params.id);
-     const name = params.id
-     // this should return the whole document vvvv
-     //const name = res.responseData
+     const user = await getUser(params.id);
+     const userData = user.responseData
+    
      
      
      return{
          props:{
-            name,
+            userData,
          },
      };
     }
