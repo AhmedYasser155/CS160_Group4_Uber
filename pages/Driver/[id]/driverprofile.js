@@ -2,13 +2,16 @@ import {React, useState,useRef } from "react"
 import tw from "tailwind-styled-components"
 import "tailwindcss/tailwind.css"
 import { getUser } from '../../../APIFunctions/DbFunctions'
-import { BackHomeButton } from '../../../components/BackHomeButton'
+import { BackButton } from '../../../components/BackButton'
 import "tailwindcss/tailwind.css"
 import  {useRouter} from 'next/router'
 
 
 
 export default function DriverProfile({userData}) {
+
+    const router = useRouter()
+    const id = router.query.id
 
     const first = userData.firstName
     const last = userData.lastName
@@ -20,7 +23,7 @@ export default function DriverProfile({userData}) {
     
     return(
           <Wrapper>
-            <BackHomeButton/>
+           <BackButton  prevPage={`/Driver/${id}`}/>
 
             <Header> 
                      <UberLogo src="https://download.logo.wine/logo/Uber/Uber-Logo.wine.png"/> 
@@ -29,7 +32,7 @@ export default function DriverProfile({userData}) {
             
             <NameContainer>
                 <Icon>
-                 <svg className="absolute w-18 h-18 text-gray-500 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                 <svg class="absolute w-18 h-18 text-gray-500 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
 
                 </Icon>
                 <Text>
@@ -87,13 +90,13 @@ const Icon = tw.div`
     relative w-20 h-20 overflow-hidden bg-gray-400 rounded-full dark:bg-gray-600
 `
 const Text = tw.p`
-    font-bold text-xl mx-4 my-4
+    font-bold text-2xl mx-4 my-4
 `
 const ProfileInformation = tw.div`
     flex flex-col items-center justify-center my-4
 `
 const ProfileText = tw.p`
-    mx-4 my-4 text-xl
+    mx-4 my-4 text-2xl
 `
 const Wrapper = tw.div`
     flex flex-col h-screen bg-gray-200 p-4

@@ -2,12 +2,15 @@ import React from "react"
 import tw from "tailwind-styled-components"
 import "tailwindcss/tailwind.css"
 import { getUser } from '../../../APIFunctions/DbFunctions'
-import { BackHomeButton } from '../../../components/BackHomeButton'
+import { BackButton } from '../../../components/BackButton'
 import "tailwindcss/tailwind.css"
+import  {useRouter} from 'next/router'
 
 
 export default function RiderProfile({userData}){
 
+    const router = useRouter()
+    const id = router.query.id 
     const first = userData.firstName
     const last = userData.lastName
     const email = userData.email
@@ -15,7 +18,7 @@ export default function RiderProfile({userData}){
 
     return(
         <Wrapper>
-            <BackHomeButton/>
+            <BackButton  prevPage={`/Rider/${id}`}/>
 
             <Header> 
                      <UberLogo src="https://download.logo.wine/logo/Uber/Uber-Logo.wine.png"/> 
@@ -75,13 +78,13 @@ const Icon = tw.div`
     relative w-20 h-20 overflow-hidden bg-gray-400 rounded-full dark:bg-gray-600
 `
 const Text = tw.p`
-    font-bold text-xl mx-4 my-4
+    font-bold text-2xl mx-4 my-4
 `
 const ProfileInformation = tw.div`
     flex flex-col items-center justify-center my-4
 `
 const ProfileText = tw.p`
-    mx-4 my-4 text-xl
+    mx-4 my-4 text-2xl
 `
 const Wrapper = tw.div`
     flex flex-col h-screen bg-gray-200 p-4
