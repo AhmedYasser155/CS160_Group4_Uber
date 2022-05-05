@@ -40,9 +40,6 @@ const Schedule = () => {
     const id = router.query.id
 
     //TODO: get the current coor from the previous page
-
-
-
     useEffect(() => {
         dispatch(RESET_ARR());
         currentCoor.length > 0 ? (fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${currentCoor}.json?` +

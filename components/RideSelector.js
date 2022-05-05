@@ -85,7 +85,7 @@ const RideSelector = ({ locationCoordinates, schedule }) => {
         ))}
       </CarList>
       {schedule ? 
-      (<Link href={`/Rider/${id}/rideList`}>
+      (<Link href={`/Rider/${id}`}>
       <ConfirmButtonContainer>
         <ConfirmButton>Confirm {service}</ConfirmButton>
       </ConfirmButtonContainer>
