@@ -41,6 +41,7 @@ const Search = ({user}) => {
     useEffect(() => {
         dispatch(RESET_ARR());
         console.log(id)
+
         currentCoor.length > 0 ? (fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${currentCoor}.json?` +
         new URLSearchParams({
             access_token: APIinfo.MAPBOX_ACCESS_TOKEN,
@@ -49,7 +50,7 @@ const Search = ({user}) => {
         )
         .then(res => res.json())
         .then(data => {
-            dispatch(ADD_PICKUP((data.features[0].place_name)));
+            pickup?null :dispatch(ADD_PICKUP((data.features[0].place_name)));
         }
          )) : null
         
@@ -155,7 +156,8 @@ const Search = ({user}) => {
 
     Router.push({
         pathname: `/Rider/${id}/picklocation`,
-        query: { box: e.target.id },
+        query: { box: e.target.id,
+        page: 'search'},
     })
     }
     return (

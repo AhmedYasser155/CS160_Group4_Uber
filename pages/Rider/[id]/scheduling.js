@@ -9,6 +9,7 @@ import addMonths from "date-fns/addMonths"
 import InputLocation from '../../../components/InputLocation'
 import APIinfo from "../../../config/config.json"
 import  {useRouter} from 'next/router'
+import Router from 'next/router'
 import { useSelector, useDispatch } from 'react-redux'
 import { ADD_Dropoff1, ADD_PICKUP, ADD_Dropoff2, ADD_Dropoff3, ADD_Dropoff4, ADD_Dropoff5, APPEND_LOCATION ,ADD_CURR_LOCATION, 
     DELETE_Dropoff2, DELETE_Dropoff3, DELETE_Dropoff4, DELETE_Dropoff5, RESET_ARR, DELETE_Dropoff1} from '../../../store/actions'
@@ -42,13 +43,7 @@ const Schedule = () => {
 
 
     useEffect(() => {
-        dispatch(DELETE_Dropoff1());
-        dispatch(DELETE_Dropoff2());
-        dispatch(DELETE_Dropoff3());
-        dispatch(DELETE_Dropoff4());
-        dispatch(DELETE_Dropoff5());
         dispatch(RESET_ARR());
-        console.log(id)
         currentCoor.length > 0 ? (fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${currentCoor}.json?` +
         new URLSearchParams({
             access_token: APIinfo.MAPBOX_ACCESS_TOKEN,
@@ -169,6 +164,13 @@ const Schedule = () => {
     
         return currentDate.getTime() < selectedDate.getTime();
     };
+    const  onClickHandler = (e) => {    
+        Router.push({
+            pathname: `/Rider/${id}/picklocation`,
+            query: { box: e.target.id,
+            page : 'scheduling' },
+        })
+    }
       return (
         <Wrapper>
             <BackButton prevPage={`/Rider/${id}`}/>
@@ -220,14 +222,14 @@ const Schedule = () => {
 
                 <InputBoxes>
 
-                    <InputLocation id='pickupBox' text='Current Location' update={(e) => { dispatch(ADD_PICKUP(e.target.value)) }} />
-                    <InputLocation id='stopBox1'  oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff1(e.target.value)) }} />
+                    <InputLocation id='pickupBox' text={pickup || 'Current Location'} clicked= {onClickHandler} update={(e) => { dispatch(ADD_PICKUP(e.target.value)) }} />
+                    <InputLocation id='stopBox1' text={dropoff1 || 'Add stop'} clicked= {onClickHandler} oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff1(e.target.value)) }} />
                     {/* The locaitons that would be toggled */}
 
-                    {p2 ? (<InputLocation id='stopBox2' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff2(e.target.value)) }} />) : null}
-                    {p3 ? (<InputLocation id='stopBox3' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff3(e.target.value)) }} />) : null}
-                    {p4 ? (<InputLocation id='stopBox4' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff4(e.target.value)) }} />) : null}
-                    {p5 ? (<InputLocation id='stopBox5' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff5(e.target.value)) }} />) : null}
+                    {p2 ? (<InputLocation id='stopBox2' text={dropoff2 || 'Add stop'} clicked= {onClickHandler} oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff2(e.target.value)) }} />) : null}
+                    {p3 ? (<InputLocation id='stopBox3' text={dropoff3 || 'Add stop'} clicked= {onClickHandler} oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff3(e.target.value)) }} />) : null}
+                    {p4 ? (<InputLocation id='stopBox4' text={dropoff4 || 'Add stop'} clicked= {onClickHandler} oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff4(e.target.value)) }} />) : null}
+                    {p5 ? (<InputLocation id='stopBox5' text={dropoff5 || 'Add stop'} clicked= {onClickHandler} oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff5(e.target.value)) }} />) : null}
 
                 </InputBoxes>
 

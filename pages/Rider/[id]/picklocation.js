@@ -18,7 +18,7 @@ const picklocation = () => {
     const dispatch = useDispatch();
     const [location, setLocation] = useState()
     const box = router.query.box
-
+    const page = router.query.page
     useEffect(() => {
         const map = new mapboxgl.Map({
             container: "map",
@@ -67,13 +67,13 @@ const picklocation = () => {
                 break;
         }
         Router.push({
-            pathname: `/Rider/${id}/search`,
+            pathname: `/Rider/${id}/${page}`,
         })
     }
     return (
         <Wrapper >
             <InputContainer>
-                <BackButton prevPage={`/Rider/${id}/search`} />
+                <BackButton prevPage={`/Rider/${id}/${page}`} />
                 <div id="geocoder" className=' h-1/2 w-screen ' ></div>
             </InputContainer>
             <InputContainer2 id="map"></InputContainer2>
