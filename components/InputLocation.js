@@ -7,7 +7,7 @@ import {FaTimes} from 'react-icons/fa'
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiaGFuZy1obyIsImEiOiJjbDA2M3F6bm4xcW05M2RvZHhpeDFsZTVvIn0.Ot8ZrqGcvLYWRLzyXtkUdA';
 
-export const InputLocation = ({oneEnter,text , id , update}) => {
+export const InputLocation = ({clicked,oneEnter,text , id , update}) => {
 
     // const geocoder = new Geocoder({
     //     accessToken: mapboxgl.accessToken,
@@ -23,7 +23,7 @@ export const InputLocation = ({oneEnter,text , id , update}) => {
     /// geocoder.onAdd is not a function ??????/
     //document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
     return (
-     <Input id={id} placeholder={text} onKeyPress = {oneEnter} onChange={update}/>    
+     <Input id={id}   onClick ={clicked} placeholder={text} onKeyPress = {oneEnter} onChange={update}/>    
      
     )
 }

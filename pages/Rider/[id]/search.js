@@ -7,11 +7,14 @@ import { InputLocation } from '../../../components/InputLocation'
 import { FaTimes } from 'react-icons/fa'
 import APIinfo from "../../../config/config.json"
 import  {useRouter} from 'next/router'
+import Router from 'next/router'
 import { useSelector, useDispatch } from 'react-redux'
 import { ADD_Dropoff1, ADD_PICKUP, ADD_Dropoff2, ADD_Dropoff3, ADD_Dropoff4, ADD_Dropoff5, APPEND_LOCATION ,ADD_CURR_LOCATION, 
     DELETE_Dropoff2, DELETE_Dropoff3, DELETE_Dropoff4, DELETE_Dropoff5, RESET_ARR, DELETE_Dropoff1} from '../../../store/actions'
 import { getUser } from '../../../APIFunctions/DbFunctions'
+import { func } from 'prop-types'
 
+//TODO: change the onEnter action to be automatic
 
 const Search = ({user}) => {
     const pickup = useSelector(state => state.pickup);
@@ -27,24 +30,15 @@ const Search = ({user}) => {
     //the following parameters are for showing the dropff boxes
     const [startView, setStartView] = useState(false);
     const [dropoffs, setDropOffs] = useState({ p1: true, p2: false, p3: false, p4: false, p5: false })
-    const p1 = dropoffs.p1;
-    const p2 = dropoffs.p2;
-    const p3 = dropoffs.p3;
-    const p4 = dropoffs.p4;
-    const p5 = dropoffs.p5;
+    const p1 = dropoffs.p1 && !( dropoff2 || dropoff3 || dropoff4 || dropoff5);
+    const p2 = dropoffs.p2 || dropoff2;
+    const p3 = dropoffs.p3 || dropoff3;
+    const p4 = dropoffs.p4 || dropoff4;
+    const p5 = dropoffs.p5 || dropoff5;
     const router = useRouter()
     const id = router.query.id
 
-    //TODO: get the current coor from the previous page
-
-
-
     useEffect(() => {
-        dispatch(DELETE_Dropoff1());
-        dispatch(DELETE_Dropoff2());
-        dispatch(DELETE_Dropoff3());
-        dispatch(DELETE_Dropoff4());
-        dispatch(DELETE_Dropoff5());
         dispatch(RESET_ARR());
         console.log(id)
         currentCoor.length > 0 ? (fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${currentCoor}.json?` +
@@ -155,7 +149,15 @@ const Search = ({user}) => {
         dropoff4 ? dispatch(APPEND_LOCATION(dropoff4)) : null;
         dropoff5 ? dispatch(APPEND_LOCATION(dropoff5)) : null;
     }
+   const  onClickHandler = (e) => {
+    // console.log(e.target.id)
+    // window.location.assign(`/Rider/${id}/picklocation?box=${e.target.id}`)
 
+    Router.push({
+        pathname: `/Rider/${id}/picklocation`,
+        query: { box: e.target.id },
+    })
+    }
     return (
         <Wrapper>
             {/* FIXME: back button should take link as props */}
@@ -179,15 +181,15 @@ const Search = ({user}) => {
                 </FromToIcon>
 
                 <InputBoxes>
-
-                    <InputLocation id='pickupBox' text='Current Location' update={(e) => { dispatch(ADD_PICKUP(e.target.value)) }} />
-                    <InputLocation id='stopBox1'  oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff1(e.target.value)) }} />
+                    
+                     <InputLocation id='pickupBox' text={pickup || 'Current Location'} clicked= {onClickHandler} update={(e) => { dispatch(ADD_PICKUP(e.target.value)) }} />
+                    <InputLocation id='stopBox1' text={dropoff1 || 'Add stop'} clicked= {onClickHandler} oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff1(e.target.value)) }} />
                     {/* The locaitons that would be toggled */}
 
-                    {p2 ? (<InputLocation id='stopBox2' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff2(e.target.value)) }} />) : null}
-                    {p3 ? (<InputLocation id='stopBox3' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff3(e.target.value)) }} />) : null}
-                    {p4 ? (<InputLocation id='stopBox4' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff4(e.target.value)) }} />) : null}
-                    {p5 ? (<InputLocation id='stopBox5' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff5(e.target.value)) }} />) : null}
+                    {p2 ? (<InputLocation id='stopBox2' text={dropoff2 || 'Add stop'} clicked= {onClickHandler} oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff2(e.target.value)) }} />) : null}
+                    {p3 ? (<InputLocation id='stopBox3' text={dropoff4 || 'Add stop'} clicked= {onClickHandler} oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff3(e.target.value)) }} />) : null}
+                    {p4 ? (<InputLocation id='stopBox4' text={dropoff5 || 'Add stop'} clicked= {onClickHandler}  oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff4(e.target.value)) }} />) : null}
+                    {p5 ? (<InputLocation id='stopBox5' text={dropoff6 || 'Add stop'}clicked= {onClickHandler}  oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff5(e.target.value)) }} />) : null}
 
                 </InputBoxes>
 

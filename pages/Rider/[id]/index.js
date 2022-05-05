@@ -22,6 +22,7 @@ export default function Home({userData}) {
   console.log(userData)
   //if you want to use a particular field in the front end you need to create a new var/const and choose a field   --- LIKE BELOW 
   const name = userData.firstName
+  
 useEffect(() => {
   navigator.geolocation.getCurrentPosition((position) => {
     dispatch((ADD_CURR_LOCATION([position.coords.longitude, position.coords.latitude])));
