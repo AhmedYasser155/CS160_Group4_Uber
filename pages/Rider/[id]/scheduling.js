@@ -30,11 +30,12 @@ const Schedule = () => {
     //the following parameters are for showing the dropff boxes
     const [startView, setStartView] = useState(false);
     const [dropoffs, setDropOffs] = useState({ p1: true, p2: false, p3: false, p4: false, p5: false })
-    const p1 = dropoffs.p1;
-    const p2 = dropoffs.p2;
-    const p3 = dropoffs.p3;
-    const p4 = dropoffs.p4;
-    const p5 = dropoffs.p5;
+   // const [dropoffs, setDropOffs] = useState({p1,p2,p3,p4,p5});
+    const p1 = dropoffs.p1 && !( dropoff1 || dropoff2 || dropoff3 || dropoff4 || dropoff5);
+    const p2 = dropoffs.p2 || dropoff1;
+    const p3 = dropoffs.p2 || dropoff2;
+    const p4 = dropoffs.p3 || dropoff3;
+    const p5 = dropoffs.p4 || dropoff4;
     const router = useRouter()
     const id = router.query.id
 
@@ -52,7 +53,7 @@ const Schedule = () => {
         )
         .then(res => res.json())
         .then(data => {
-            dispatch(ADD_PICKUP((data.features[0].place_name)));
+            pickup?null :dispatch(ADD_PICKUP((data.features[0].place_name)));
         }
          )) : null
         
@@ -164,7 +165,8 @@ const Schedule = () => {
     
         return currentDate.getTime() < selectedDate.getTime();
     };
-    const  onClickHandler = (e) => {    
+    const  onClickHandler = (e) => {   
+
         Router.push({
             pathname: `/Rider/${id}/picklocation`,
             query: { box: e.target.id,
@@ -258,10 +260,6 @@ const Schedule = () => {
                 </Link>) : <ConfirmContainer>
                     Confirm Location
                 </ConfirmContainer>}
-
-
-
-            
 
         </Wrapper>
         

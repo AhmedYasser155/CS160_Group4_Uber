@@ -30,11 +30,11 @@ const Search = ({user}) => {
     //the following parameters are for showing the dropff boxes
     const [startView, setStartView] = useState(false);
     const [dropoffs, setDropOffs] = useState({ p1: true, p2: false, p3: false, p4: false, p5: false })
-    const p1 = dropoffs.p1 && !( dropoff2 || dropoff3 || dropoff4 || dropoff5);
-    const p2 = dropoffs.p2 || dropoff2;
-    const p3 = dropoffs.p3 || dropoff3;
-    const p4 = dropoffs.p4 || dropoff4;
-    const p5 = dropoffs.p5 || dropoff5;
+    const p1 = dropoffs.p1 && !( dropoff1 || dropoff2 || dropoff3 || dropoff4 || dropoff5);
+    const p2 = dropoffs.p2 || dropoff1;
+    const p3 = dropoffs.p2 || dropoff2;
+    const p4 = dropoffs.p3 || dropoff3;
+    const p5 = dropoffs.p4 || dropoff4;
     const router = useRouter()
     const id = router.query.id
 
