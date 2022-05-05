@@ -82,10 +82,10 @@ export const DriverSignUp = () => {
             errors.email = "Email is required!"
         }
         else {
-            const res = await verifyEmail(formValues.email)
-            if(res.error) {
-                errors.email = "Email is not valid!"
-            }
+            // const res = await verifyEmail(formValues.email)
+            // if(res.error) {
+            //     errors.email = "Email is not valid!"
+            // }
         }
         if(!formValues.password){
             errors.password = "Password is required!"

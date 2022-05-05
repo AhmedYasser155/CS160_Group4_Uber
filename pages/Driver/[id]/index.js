@@ -5,20 +5,33 @@ import tw from "tailwind-styled-components"
 import Map from '../../../components/Map'
 import Link from 'next/Link'
 import { io } from 'socket.io-client';
+import {getUser} from '../../../APIFunctions/DbFunctions'
+import  {useRouter} from 'next/router'
+import { useEffect } from 'react'
 
 const socket = io("http://localhost:3001");
 
-export default function Home() {
+export default function Home({userData}) {
+
+  const router = useRouter()
+  const id = router.query.id
+  const first = userData.firstName
+  const last = userData.lastName
+
   return (
     <Wrapper>
       <Map/>
       <ActionItems>
         <Header>
           <UberLogo src="https://download.logo.wine/logo/Uber/Uber-Logo.wine.png"></UberLogo>
+          <Link href={`/Driver/${id}/driverprofile`}> 
           <Profile>
-            <Name>Name</Name>
+            <Name>
+              {first} {last}
+            </Name>
             <UserImage src="https://png.pngtree.com/png-vector/20190909/ourmid/pngtree-outline-user-icon-png-image_1727916.jpg"/>
           </Profile>
+          </Link>
         </Header>
 {/* This infomation will be retrieved from database */}
         <InforSection>
@@ -35,6 +48,20 @@ export default function Home() {
     </Wrapper>
   )
 }
+export async function getServerSideProps({params})
+{
+    //getting user by id 
+     const user = await getUser(params.id);
+     const userData = user.responseData
+    
+     
+     
+     return{
+         props:{
+            userData,
+         },
+     };
+    }
 
 const Label = tw.div`
     text-2xl font-semibold
@@ -63,7 +90,7 @@ const Profile = tw.div`
   flex items-center
 `
 
-const Name = tw.div`
+const Name = tw.p`
   mr-4 w-20 text-sm
 `
 
