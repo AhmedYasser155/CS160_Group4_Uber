@@ -4,8 +4,12 @@ import "tailwindcss/tailwind.css"
 import tw from "tailwind-styled-components"
 import Map from '../../../components/Map'
 import Link from 'next/Link'
+<<<<<<< HEAD
 import { io } from 'socket.io-client';
 import {getUser} from '../../../APIFunctions/DbFunctions'
+=======
+import { getUser } from '../../../APIFunctions/DbFunctions'
+>>>>>>> c7b678232e1f35078785b98f664c09163ac5c7fb
 import  {useRouter} from 'next/router'
 import { useEffect } from 'react'
 
