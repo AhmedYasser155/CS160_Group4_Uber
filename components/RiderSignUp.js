@@ -68,11 +68,18 @@ export const RiderSignUp = () => {
             errors.email = "Email is required!"
         }
         else {
+<<<<<<< HEAD
             const res = await verifyEmail(formValues.email)
             if(res.error) {
                 errors.email = "Email is not valid!"
                 console.log(res.responseData);
             }
+=======
+            // const res = await verifyEmail(formValues.email)
+            // if(res.error) {
+            //     errors.email = "Email is not valid!"
+            // }
+>>>>>>> 6f0e94d2... implemented rider and driver profile frontend
         }
         if(!formValues.password){
             errors.password = "Password is required!"
