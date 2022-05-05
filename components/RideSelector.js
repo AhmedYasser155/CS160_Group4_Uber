@@ -39,6 +39,7 @@ const RideSelector = ({ locationCoordinates, schedule }) => {
   },);
 
   function setData(ser, cost) {
+    console.log(e)
     setCost(cost);
     setService(ser);
   }
@@ -138,7 +139,7 @@ const CarList = tw.div`
 `;
 
 const Car = tw.div`
-    bg-white flex p-4 items-center hover:scale-105 hover:bg-gray-100 active:bg-gray-100 
+    bg-white flex p-4 items-center hover:scale-105 hover:bg-gray-100 active:bg-gray-100 Y
 `;
 
 const CarImg = tw.img`
