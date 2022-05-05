@@ -138,14 +138,14 @@ const CarList = tw.div`
 `;
 
 const Car = tw.div`
-    flex p-4 items-center hover:bg-gray-400 active:bg-gray-400
+    bg-white flex p-4 items-center hover:scale-105 hover:bg-gray-100 active:bg-gray-100 
 `;
 
 const CarImg = tw.img`
     h-14 mr-4
 `;
 const ConfirmButtonContainer = tw.div`
-    border-t-2
+    border-t-2 hover:scale-105
 `
 
 const ConfirmButton = tw.div`
