@@ -93,6 +93,28 @@ app.post("/user/addUser", jsonParser, async (req, res) => {
 		})
 });
 
+// add ride
+app.post("/ride/addRide", jsonParser, async (req, res) => {
+	const newRide = await dbo.collection("rides").insertOne(req.body.data)
+	.then(result => {
+		res.status(200).send({id:result.insertedId})
+	})
+	.catch((err) => {
+		res.status(400).send({err:err.errmsg})
+	})
+})
+
+// add ride
+app.post("/ride/addRide", jsonParser, async (req, res) => {
+	const newRide = await dbo.collection("rides").insertOne(req.body.data)
+	.then(result => {
+		res.status(200).send({id:result.insertedId})
+	})
+	.catch((err) => {
+		res.status(400).send({err:err.errmsg})
+	})
+})
+
 //authenticate user 
 app.post("/auth", jsonParser, async(req,res)=> {
 	const user = await dbo.collection("users").findOne({ email: req.body.userEmail });

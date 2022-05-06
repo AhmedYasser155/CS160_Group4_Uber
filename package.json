@@ -12,6 +12,7 @@
     "server": "node api/server.js"
   },
   "dependencies": {
+    "@mapbox/mapbox-gl-geocoder": "^5.0.0",
     "@material-tailwind/react": "0.3.4",
     "autoprefixer": "^10.4.2",
     "axios": "^0.26.1",

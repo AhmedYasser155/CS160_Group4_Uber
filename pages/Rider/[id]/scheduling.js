@@ -1,30 +1,61 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import tw from "tailwind-styled-components"
-import { BackHomeButton } from '../../../components/BackHomeButton'
+import { BackButton } from '../../../components/BackButton'
 import Link from 'next/Link'
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
-import setHours from "date-fns/setHours";
-import setMinutes from "date-fns/setMinutes";
 import addMonths from "date-fns/addMonths"
 import InputLocation from '../../../components/InputLocation'
+import APIinfo from "../../../config/config.json"
+import  {useRouter} from 'next/router'
+import Router from 'next/router'
+import { useSelector, useDispatch } from 'react-redux'
+import { ADD_Dropoff1, ADD_PICKUP, ADD_Dropoff2, ADD_Dropoff3, ADD_Dropoff4, ADD_Dropoff5, APPEND_LOCATION ,ADD_CURR_LOCATION, 
+    DELETE_Dropoff2, DELETE_Dropoff3, DELETE_Dropoff4, DELETE_Dropoff5, RESET_ARR, DELETE_Dropoff1} from '../../../store/actions'
+import { getUser } from '../../../APIFunctions/DbFunctions'
 
 const Schedule = () => {
 
-    const [pickup, setPickup] = useState()
-    const [dropoff, setDropoff1] = useState()
-    const [dropoff2, setDropoff2] = useState()
-    const [dropoff3, setDropoff3] = useState()
-    const [dropoff4, setDropoff4] = useState()
-    const [dropoff5, setDropoff5] = useState()
+    const pickup = useSelector(state => state.pickup);
+    const dropoff1 = useSelector(state => state.dropoff1);
+    const dropoff2 = useSelector(state => state.dropoff2);
+    const dropoff3 = useSelector(state => state.dropoff3);
+    const dropoff4 = useSelector(state => state.dropoff4);
+    const dropoff5 = useSelector(state => state.dropoff5);
+    const currentCoor = useSelector(state => state.currLocation);
+    const dispatch = useDispatch();
+
+    const [dropoffArr, setDropoffArr] = useState([]) // the first element is the pickup location and follwing are dropoff locations
+    //the following parameters are for showing the dropff boxes
     const [startView, setStartView] = useState(false);
     const [dropoffs, setDropOffs] = useState({ p1: true, p2: false, p3: false, p4: false, p5: false })
-    const p1 = dropoffs.p1;
-    const p2 = dropoffs.p2;
-    const p3 = dropoffs.p3;
-    const p4 = dropoffs.p4;
-    const p5 = dropoffs.p5;
+   // const [dropoffs, setDropOffs] = useState({p1,p2,p3,p4,p5});
+    const p1 = dropoffs.p1 && !( dropoff1 || dropoff2 || dropoff3 || dropoff4 || dropoff5);
+    const p2 = dropoffs.p2 || dropoff1;
+    const p3 = dropoffs.p2 || dropoff2;
+    const p4 = dropoffs.p3 || dropoff3;
+    const p5 = dropoffs.p4 || dropoff4;
+    const router = useRouter()
+    const id = router.query.id
+
+    //TODO: get the current coor from the previous page
+    useEffect(() => {
+        dispatch(RESET_ARR());
+        currentCoor.length > 0 ? (fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${currentCoor}.json?` +
+        new URLSearchParams({
+            access_token: APIinfo.MAPBOX_ACCESS_TOKEN,
+            limit: 1
+        })
+        )
+        .then(res => res.json())
+        .then(data => {
+            pickup?null :dispatch(ADD_PICKUP((data.features[0].place_name)));
+        }
+         )) : null
+        
+    }, [])
+
 
     const addStop = (e) => {
         setStartView(true);
@@ -38,6 +69,7 @@ const Schedule = () => {
     const deleteStop = (e) => {
         switch (e.target.id) {
             case 'delete2':
+                dispatch(DELETE_Dropoff2());
                 setDropOffs(prevDropoffs => {
                     return {
                         //TODO: try to handle removing p2 before the other boxes
@@ -46,6 +78,7 @@ const Schedule = () => {
                 })
                 break;
             case 'delete3':
+                dispatch(DELETE_Dropoff3());
                 setDropOffs(prevDropoffs => {
                     return {
                         ...prevDropoffs, p3: false
@@ -53,6 +86,7 @@ const Schedule = () => {
                 })
                 break;
             case 'delete4':
+                dispatch(DELETE_Dropoff4());
                 setDropOffs(prevDropoffs => {
                     return {
                         ...prevDropoffs, p4: false
@@ -60,6 +94,7 @@ const Schedule = () => {
                 })
                 break;
             case 'delete5':
+                dispatch(DELETE_Dropoff5());
                 setDropOffs(prevDropoffs => {
                     return {
                         ...prevDropoffs, p5: false
@@ -72,15 +107,10 @@ const Schedule = () => {
     function addLocationBox(key, id) {
 
         if (key === 'Enter') {
-            // if p1 = true  || (it is p5 a)
-            //      confirm button
-            // else 
-            //      switch case 
-            //console.log("I am enter with id" , id);
-            if (p1 === true || p5 === true) {
-                console.log("p1 or p5 are true");
-                //confirm button
 
+            if (p1 === true || p5 === true) {
+                // console.log("p1 or p5 are true");
+                //confirm button
             }
             else {
                 switch (id) {
@@ -112,6 +142,16 @@ const Schedule = () => {
         }
     }
 
+    function updateLocationArr() {
+             
+        pickup ? dispatch(APPEND_LOCATION(pickup)) : null;
+        dropoff1 ? dispatch(APPEND_LOCATION(dropoff1)) : null;
+        dropoff2 ? dispatch(APPEND_LOCATION(dropoff2)) : null;
+        dropoff3 ? dispatch(APPEND_LOCATION(dropoff3)) : null;
+        dropoff4 ? dispatch(APPEND_LOCATION(dropoff4)) : null;
+        dropoff5 ? dispatch(APPEND_LOCATION(dropoff5)) : null;
+    }
+
     const [startDate, setStartDate] = useState(
         null
       );
@@ -122,9 +162,17 @@ const Schedule = () => {
     
         return currentDate.getTime() < selectedDate.getTime();
     };
+    const  onClickHandler = (e) => {   
+
+        Router.push({
+            pathname: `/Rider/${id}/picklocation`,
+            query: { box: e.target.id,
+            page : 'scheduling' },
+        })
+    }
       return (
         <Wrapper>
-            <BackHomeButton/>
+            <BackButton prevPage={`/Rider/${id}`}/>
             <Header> 
                 <UberLogo src="https://download.logo.wine/logo/Uber/Uber-Logo.wine.png"/> 
             </Header>
@@ -173,14 +221,14 @@ const Schedule = () => {
 
                 <InputBoxes>
 
-                    <InputLocation id='pickupBox' text='Pickup Location' update={(e) => { setPickup(e.target.value) }} />
-                    <InputLocation id='stopBox1' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff1(e.target.value) }} />
+                    <InputLocation id='pickupBox' text={pickup || 'Current Location'} clicked= {onClickHandler} update={(e) => { dispatch(ADD_PICKUP(e.target.value)) }} />
+                    <InputLocation id='stopBox1' text={dropoff1 || 'Add stop'} clicked= {onClickHandler} oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff1(e.target.value)) }} />
                     {/* The locaitons that would be toggled */}
 
-                    {p2 ? (<InputLocation id='stopBox2' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }}  update={(e) => { setDropoff2(e.target.value) }} />) : null}
-                    {p3 ? (<InputLocation id='stopBox3' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }}  update={(e) => { setDropoff3(e.target.value) }} />) : null}
-                    {p4 ? (<InputLocation id='stopBox4' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }}  update={(e) => { setDropoff4(e.target.value) }} />) : null}
-                    {p5 ? (<InputLocation id='stopBox5' oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { setDropoff5(e.target.value) }} />) : null}
+                    {p2 ? (<InputLocation id='stopBox2' text={dropoff2 || 'Add stop'} clicked= {onClickHandler} oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff2(e.target.value)) }} />) : null}
+                    {p3 ? (<InputLocation id='stopBox3' text={dropoff3 || 'Add stop'} clicked= {onClickHandler} oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff3(e.target.value)) }} />) : null}
+                    {p4 ? (<InputLocation id='stopBox4' text={dropoff4 || 'Add stop'} clicked= {onClickHandler} oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff4(e.target.value)) }} />) : null}
+                    {p5 ? (<InputLocation id='stopBox5' text={dropoff5 || 'Add stop'} clicked= {onClickHandler} oneEnter={(e) => { addLocationBox(e.key, e.target.id) }} update={(e) => { dispatch(ADD_Dropoff5(e.target.value)) }} />) : null}
 
                 </InputBoxes>
 
@@ -200,27 +248,15 @@ const Schedule = () => {
                 Saved Places
             </SavePlace>
 
-            {/* FIXME: check  the following before confirm { (pickup && (p1||p2||p3||p4||p5))?( */}
-            {((startDate) && pickup && (dropoff || dropoff2 || dropoff3 || dropoff4 || dropoff5)) ?
-                (<Link href={{
-                    pathname: "/confirmscheduling",
-                    query: {
-                        pickup: pickup,
-                        dropoff: dropoff,
-                        dropoff2: dropoff2,
-                        dropoff3: dropoff3,
-                        dropoff4: dropoff4,
-                        dropoff5: dropoff5
-                    }
-                }}>
-                    <ConfirmContainer>
-                        Confirm Location and Set Pickup
+            
+            {((startDate) && pickup && (dropoff1 || dropoff2 || dropoff3 || dropoff4 || dropoff5)) ?
+                (<Link href={`/Rider/${id}/confirmscheduling`}>
+                    <ConfirmContainer onClick={() => updateLocationArr()}>
+                        Confirm Location
                     </ConfirmContainer>
                 </Link>) : <ConfirmContainer>
-                    Confirm Location and Set Pickup
+                    Confirm Location
                 </ConfirmContainer>}
-
-            
 
         </Wrapper>
         
@@ -303,5 +339,3 @@ const ConfirmContainer = tw.div`
     bg-black text-white text-center mt-2 mx-4 p-4 text-2xl cursor-pointer transform
     hover:scale-105 transition text-xl
 `
-
-
