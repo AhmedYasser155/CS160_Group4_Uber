@@ -3,15 +3,13 @@ import { useEffect, useState } from 'react'
 import tw from "tailwind-styled-components"
 import Link from 'next/Link'
 import { BackButton } from '../components/BackButton'
-import mapboxgl from '!mapbox-gl'
-import Geocoder from "react-map-gl-geocoder";
-
+import mapboxgl from 'mapbox-gl'
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 mapboxgl.accessToken = "pk.eyJ1IjoiaGFuZy1obyIsImEiOiJjbDA2M3F6bm4xcW05M2RvZHhpeDFsZTVvIn0.Ot8ZrqGcvLYWRLzyXtkUdA";
 
 const picklocation = ({ locationsList }) => {
     const [location, setLocation] = useState()
-
-
     useEffect(() => {
         const map = new mapboxgl.Map({
             container: "map",
@@ -19,28 +17,31 @@ const picklocation = ({ locationsList }) => {
             center: [-99.29011, 39.39172],
             zoom: 9,
         })
-        const geocoder = new Geocoder({
+        const geocoder = new MapboxGeocoder({
             accessToken: mapboxgl.accessToken,
-            mapboxgl: mapboxgl
+            placeholder: 'Search for a location',
+            mapboxgl: mapboxgl,
+            getItemValue: (e) => {
+                seletctLocation(e)
+                }
+
         })
-        //console.log(geocoder);
-        map.addControl(geocoder);
-        
-       // geocoder.onAdd(map);
+        document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
         const nav = new mapboxgl.NavigationControl()
         map.addControl(nav)
-    }, [])
+        geocoder.on('result', (event) => {
+            setLocation(event.result.place_name)
+        })
+
+    }, [  ])
+    const seletctLocation = (e) => {
+    setLocation(e.place_name)
+    }
     return (
         <Wrapper >
-
             <InputContainer>
                 <BackButton prevPage={"/search"} />
-                <Input
-                    placeholder="Pick location"
-                    value={location}
-                    onChange={(e) => { setLocation(e.target.value) }}
-                />
-
+                <div id="geocoder" className=' h-1/2 w-screen ' ></div>
             </InputContainer>
             <InputContainer2 id="map"></InputContainer2>
 
@@ -54,12 +55,11 @@ const Wrapper = tw.div`
     flex flex-col h-screen bg-white-200 p-4
 `
 const InputContainer = tw.div`
-    bg-white  items-center px-4 mb-2
+    bg-white  items-center px-4 mb-2 h-1/6
 `
 const InputContainer2 = tw.div`
-    bg-white flex-auto h-4/5
+    bg-white flex-auto h-screen
 `
-const Input = tw.input`
-    h-10 bg-gray-200 my-2 rounded-2 p-2 outline-none border-none w-full flex flex-row justify-between
-`
+
+
 
