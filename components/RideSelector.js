@@ -61,7 +61,6 @@ const RideSelector = ({ locationCoordinates, schedule }) => {
       console.log("Ride id: ", res.responseData.id);
     }
   }
-
   return (
     <Wrapper>
       <TripInfo>
