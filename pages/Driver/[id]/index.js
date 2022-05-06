@@ -17,6 +17,28 @@ export default function Home({userData}) {
   const id = router.query.id
   const first = userData.firstName
   const last = userData.lastName
+  var toggledOn = true
+
+  socket.emit('add-driver', {
+    id:id,
+    data:userData
+  });
+
+  function handleToggle() {
+    if(toggledOn) {
+      socket.emit('remove-driver', {
+        id:id
+      });
+      toggledOn = false
+    }
+    else {
+      socket.emit('add-driver', {
+        id:id,
+        data:userData
+      });
+      toggledOn = true;
+    }
+  }
 
   return (
     <Wrapper>

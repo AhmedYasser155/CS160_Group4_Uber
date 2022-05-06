@@ -11,6 +11,11 @@ var ObjectId = require('mongodb').ObjectId;
 
 var dbo;
 
+this.state = {
+	dict: {},
+	socketMap: {}
+};
+
 
 // Connects server to monogdb database
 MongoClient.connect(db_url, function(err, db) {
@@ -148,9 +153,32 @@ app.post("/user/deleteUser", jsonParser, async (req, res) => {
 
 io.on('connection', (socket) => {
 	console.log('a user connected ' + socket.id);
+
+	socket.on('add-driver', (passed) => {
+		console.log("ADDED: " + socket.id + " " + passed.id);
+		this.state.dict[passed.id] = passed.data;
+		this.state.socketMap[socket.id] = passed.id;
+		console.log(this.state.dict);
+	});
+
+	socket.on('remove-driver', (id) => {
+		for(var key in this.state.socketMap) {
+			if(this.state.socketMap[key] == id)
+				delete this.state.socketMap[key];
+		}
+		delete this.state.dict[id];
+	})
+
 	socket.on('disconnect', () => {
 		console.log('user disconnected');
-	})
+		for(var key in this.state.socketMap) {
+			if(key == socket.id) {
+				var id = this.state.socketMap[key];
+				delete this.state.socketMap[key];
+				delete this.state.dict[id];
+			}
+		}
+	});
 })
 
 http.listen(PORT, () => {
