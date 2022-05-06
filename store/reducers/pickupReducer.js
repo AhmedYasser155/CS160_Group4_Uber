@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 const pickupReducer = (state = "", action) => {
-=======
-const pickupReducer = (state ='', action) => {
->>>>>>> c616523f... Empty current location bug fixed
   
     switch (action.type) {
         case 'ADD_PICKUP':

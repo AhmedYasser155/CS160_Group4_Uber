@@ -37,7 +37,6 @@ const Search = ({user}) => {
 
     //TODO: get the current coor from the previous page
 
-<<<<<<< HEAD:pages/Rider/[id]/search.js
 
 
     useEffect(() => {
@@ -60,22 +59,6 @@ const Search = ({user}) => {
         }
          )) : null
         
-=======
-    useEffect(() => {
-currentCoor.length>0 ? (
-        fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${currentCoor}.json?` +
-            new URLSearchParams({
-                access_token: APIinfo.MAPBOX_ACCESS_TOKEN,
-                limit: 1
-            })
-        )
-            .then(res => res.json())
-            .then(data => {
-                dispatch(ADD_PICKUP((data.features[0].place_name)));
-            }
-        )
-) : null;
->>>>>>> c616523f... Empty current location bug fixed:pages/search.js
     }, [])
 
     const addStop = (e) => {
