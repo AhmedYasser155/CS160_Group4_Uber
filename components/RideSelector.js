@@ -144,7 +144,6 @@ const Car = tw.div`
 const CarImg = tw.img`
     h-14 mr-4
 `;
-
 const ConfirmButtonContainer = tw.div`
     border-t-2
 `
