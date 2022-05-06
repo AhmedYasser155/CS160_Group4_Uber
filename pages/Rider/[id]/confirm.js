@@ -50,11 +50,6 @@ const Confirm = () => {
                     schedule={false}
                 />
 
-                <ConfirmButtonContainer>
-                    <ConfirmButton>Confirm</ConfirmButton>
-                </ConfirmButtonContainer>
-
-
             </RideContainer>
         </Wrapper>
     )
@@ -70,11 +65,3 @@ const Wrapper = tw.div`
 const RideContainer = tw.div`
     flex-1 flex-col flex h-1/5
 `
-
-const ConfirmButtonContainer = tw.div`
-    border-t-2
-`
-
-const ConfirmButton = tw.div`
-    bg-black text-white my-4 mx-4 py-4 text-center text-xl
-` 
