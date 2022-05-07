@@ -5,7 +5,7 @@ import {addRide} from '../APIFunctions/DbFunctions';
 import {useRouter} from 'next/router'
 import Link from "next/Link";
 
-const RideSelector = ({ locationCoordinates, schedule }) => {
+const RideSelector = ({ locationCoordinates, schedule, bestDriver }) => {
   const [rideDuration, setRideDuration] = useState(0);
   const [rideDistance, setRideDistance] = useState(0);
   const [cost, setCost] = useState(0);
