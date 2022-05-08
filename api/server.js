@@ -174,25 +174,32 @@ app.post("/user/deleteUser", jsonParser, async (req, res) => {
 });
 
 // LOL IN THE WORKS
-function findBestDriver(start) {
-	const bestDriver = {
-		firstName:"temp",
-		lastName:"driver",
-		email:"tempdriver@yahoo.com",
-		phone:1234567890,
-		license: 1234567890,
-		password:"verysecurepassword",
-		onlineStatus:true,
-		rideid:"N/A",
-		driverLocation:"123 Kenward Street, San Jose, California",
-		userType:1,
-		car:{
-		   carModel:"Camry",
-		   carMake: "Toyota",
-		   licensePlate:"1a2b3c4" 
+function findBestDriver(start, drivers) {
+	if(Object.keys(drivers).length === 0) {
+		console.log("dict is empty!");
+		const bestDriver = {
+			firstName:"temp",
+			lastName:"driver",
+			email:"tempdriver@yahoo.com",
+			phone:1234567890,
+			license: 1234567890,
+			password:"verysecurepassword",
+			onlineStatus:true,
+			rideid:"N/A",
+			driverLocation:"123 Kenward Street, San Jose, California",
+			userType:1,
+			car:{
+				carModel:"Camry",
+				carMake: "Toyota",
+				licensePlate:"1a2b3c4" 
+			}
 		}
+		return bestDriver;
 	}
-	return bestDriver;
+	else {
+		console.log("There are drivers!");
+		return Object.values(drivers)[0];
+	}
 }
 
 io.on('connection', (socket) => {
@@ -205,17 +212,9 @@ io.on('connection', (socket) => {
 		console.log(this.state.dict);
 	});
 
-	socket.on('remove-driver', (id) => {
-		for(var key in this.state.socketMap) {
-			if(this.state.socketMap[key] == id)
-				delete this.state.socketMap[key];
-		}
-		delete this.state.dict[id];
-	});
-
 	socket.on('find-best-driver', (start) => {
-		var driver = findBestDriver(start);
-		io.to(socket.id).emit('receive-best-driver', driver);
+		var driver = findBestDriver(start, this.state.dict);
+		io.sockets.emit('receive-best-driver', driver);
 	})
 
 	socket.on('disconnect', () => {

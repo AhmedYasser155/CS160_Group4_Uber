@@ -13,7 +13,7 @@ const RideList = () => {
             <Chat>
                 <h3>Added ride to your schedule</h3>
                 {/* a list of scheduled ride will be fetched from database to displace here */}
-                <h4>Your Schedule: (rider's list of rides will be displaced here)</h4>
+                <h4>Your Schedule: (list of rides will be displaced here)</h4>
             </Chat>
 
         </Wrapper>
