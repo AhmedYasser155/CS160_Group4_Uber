@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev2": "export PORT=3002 & next dev",
     "build": "next build",
     "start": "run-script-os",
     "start:win32": "explorer http://localhost:3000 & next start",

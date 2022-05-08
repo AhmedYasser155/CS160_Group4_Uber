@@ -12,7 +12,7 @@ import { ADD_Dropoff1,ADD_PICKUP, ADD_Dropoff2, ADD_Dropoff3, ADD_Dropoff4, ADD_
 
 mapboxgl.accessToken = "pk.eyJ1IjoiaGFuZy1obyIsImEiOiJjbDA2M3F6bm4xcW05M2RvZHhpeDFsZTVvIn0.Ot8ZrqGcvLYWRLzyXtkUdA";
 
-const picklocation = () => {
+const Picklocation = () => {
     const router = useRouter()
     const id = router.query.id
     const dispatch = useDispatch();
@@ -82,7 +82,7 @@ const picklocation = () => {
     )
 
 }
-export default picklocation;
+export default Picklocation;
 
 const Wrapper = tw.div`
     flex flex-col h-screen bg-white-200 p-4

@@ -4,16 +4,24 @@ import { carList } from "../data/carList";
 import {addRide} from '../APIFunctions/DbFunctions';
 import {useRouter} from 'next/router'
 import Link from "next/Link";
+import { io } from 'socket.io-client';
 
-const RideSelector = ({ locationCoordinates, schedule, bestDriver }) => {
+const RideSelector = ({ locationCoordinates, schedule, pickup }) => {
   const [rideDuration, setRideDuration] = useState(0);
   const [rideDistance, setRideDistance] = useState(0);
   const [cost, setCost] = useState(0);
   const [service, setService] = useState("");
   const [rideID, setRideID] = useState("");
+  const [bestDriver, setBestDriver] = useState({});
+  const [newCarList, setNewCarList] = useState([]);
 
   const router = useRouter();
   const id = router.query.id;
+  const socket = io("http://localhost:3001", {'multiplex': false});
+
+  socket.on('receive-best-driver', (driver) => {
+    setBestDriver(driver);
+  });
 
   const showServices = () => {
     let locationURL = "";
@@ -35,8 +43,26 @@ const RideSelector = ({ locationCoordinates, schedule, bestDriver }) => {
   }
 
   useEffect(() => {
+    socket.emit('find-best-driver', pickup);
     showServices()
-  },);
+  },[]);
+
+  useEffect(() => {
+    if(Object.keys(bestDriver).length !== 0) {
+      let bestCar = {
+        imgURL: 'https://i.ibb.co/cyvcpfF/uberx.png',
+        service: 'UberX  👤3',
+        description: 'Driver: ' + bestDriver.firstName + ' ' + bestDriver.lastName 
+        + '\nCar: ' + bestDriver.car.carMake + ' ' + bestDriver.car.carModel,
+        multiplier: 1
+      }
+      setNewCarList([bestCar, ...carList]);
+    }
+    else {
+      setNewCarList(carList);
+    }
+    socket.off('receive-best-driver');
+  }, [bestDriver])
 
   function setData(ser, cost) {
     setCost(cost);
@@ -70,7 +96,7 @@ const RideSelector = ({ locationCoordinates, schedule, bestDriver }) => {
       </TripInfo>
       <Title>Choose a ride</Title>
       <CarList>
-        {carList.map((car, index) => (
+        {newCarList.map((car, index) => (
           <Car 
             key={index}
             onClick = {() => setData(car.service, (rideDuration/60 * car.multiplier).toFixed(2))}

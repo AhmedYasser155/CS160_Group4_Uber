@@ -6,7 +6,6 @@ import {useRouter} from 'next/router'
 import RideSelector from '../../../components/RideSelector'
 import { BackButton } from '../../../components/BackButton'
 import { MAPBOX_ACCESS_TOKEN } from "../../../config/config.json"
-import { io } from 'socket.io-client';
 
 import { useSelector , useDispatch } from 'react-redux'
 
@@ -16,14 +15,6 @@ const Confirm = () => {
     const id = router.query.id
     const locationsArr = useSelector(state=> state.locationArr); //to access the locations to be printed on the map
     const pickup = useSelector(state => state.pickup);
-    console.log(pickup);
-    const socket = io("http://localhost:3001");
-    var bestDriver = null;
-    socket.emit('find-best-driver', pickup);
-    socket.on('receive-best-driver', (driver) => {
-		bestDriver = driver;
-        console.log(bestDriver);
-	})
 
     const [locationCoor, setLocationCoor] = useState([])
     const [index, setIndex] = useState(0);
@@ -58,7 +49,7 @@ const Confirm = () => {
                 <RideSelector
                     locationCoordinates={locationCoor}
                     schedule={false}
-                    bestDriver={bestDriver}
+                    pickup={pickup}
                 />
 
             </RideContainer>

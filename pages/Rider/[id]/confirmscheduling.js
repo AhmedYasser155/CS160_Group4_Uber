@@ -13,6 +13,7 @@ const Confirm = () => {
     const router = useRouter()
     const id = router.query.id
     const locationsArr = useSelector(state=> state.locationArr); //to access the locations to be printed on the map
+    const pickup = useSelector(state => state.pickup);
 
     const [locationCoor, setLocationCoor] = useState([])
     const [index, setIndex] = useState(0);
@@ -47,6 +48,7 @@ const Confirm = () => {
                 <RideSelector
                     locationCoordinates={locationCoor}
                     schedule={true}
+                    pickup={pickup}
                 />
 
             </RideContainer>
