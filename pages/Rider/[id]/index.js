@@ -21,7 +21,8 @@ export default function Home({userData}) {
   //prints the whole document
   console.log(userData)
   //if you want to use a particular field in the front end you need to create a new var/const and choose a field   --- LIKE BELOW 
-  const name = userData.firstName
+  const first = userData.firstName
+  const last = userData.lastName
   //const name ='test'
   
 useEffect(() => {
@@ -38,7 +39,7 @@ useEffect(() => {
           <UberLogo src="https://download.logo.wine/logo/Uber/Uber-Logo.wine.png"></UberLogo>
           <Link href={`/Rider/${id}/riderprofile`}> 
           <Profile>
-            <Name>{name}</Name>
+            <Name>{first} {last}</Name>
             <UserImage src="https://png.pngtree.com/png-vector/20190909/ourmid/pngtree-outline-user-icon-png-image_1727916.jpg"/>
           </Profile>
           </Link>

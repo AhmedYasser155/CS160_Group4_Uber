@@ -30,6 +30,17 @@ export const DriverSignUp = () => {
     async function postData() {
         const salt = await bcrypt.genSalt(10)
 
+        const exLocs = [
+            "Stanford University, 1501 S California Ave, Stanford, California 94305, United States",
+            "San Jose State University, 1 Washington Sq, San Jose, California 95112, United States",
+            "Fremont High School, 1279 Sunnyvale Saratoga Rd, Sunnyvale, California 94087, United States",
+            "American High School, 36300 Fremont Blvd, Fremont, California 94536, United States",
+            "Meet Fresh, 19449 Stevens Creek Blvd Ste 100, Cupertino, California 95014, United States",
+            "Sizzle Spot - San Jose, 740 Story Rd, San Jose, California 95122, United States",
+            "Santa Clara University, 500 El Camino Real, Santa Clara, California 95050, United States",
+            "Civic Center, San Jose, California 95113, United States"
+        ];
+
         const userData = {
             firstName:userFirstNameInputRef.current.value,
             lastName:userLastNameInputRef.current.value,
@@ -39,7 +50,7 @@ export const DriverSignUp = () => {
             password:userPasswordInputRef.current.value,
             onlineStatus:false,
             rideid:"N/A",
-            driverLocation:"N/A",
+            driverLocation:exLocs[Math.floor(Math.random() * exLocs.length)],
             userType:1,
             car:{
                carModel:userModelInputRef.current.value,
