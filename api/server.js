@@ -212,14 +212,6 @@ io.on('connection', (socket) => {
 		console.log(this.state.dict);
 	});
 
-	socket.on('remove-driver', (id) => {
-		for(var key in this.state.socketMap) {
-			if(this.state.socketMap[key] == id)
-				delete this.state.socketMap[key];
-		}
-		delete this.state.dict[id];
-	});
-
 	socket.on('find-best-driver', (start) => {
 		var driver = findBestDriver(start, this.state.dict);
 		io.sockets.emit('receive-best-driver', driver);
