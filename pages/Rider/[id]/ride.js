@@ -16,9 +16,6 @@ const Ride = () => {
            <Chat>
                 <Text>Your ride has been confirmed! Your driver will arrive shortly.</Text>
             </Chat>
-            <Link href={`/Rider/${id}/confirm`}>
-            <Cancel>Cancel Ride</Cancel>
-            </Link>
             <Link href={`/Rider/${id}`}>
             <Home> Home </Home>
             </Link>
