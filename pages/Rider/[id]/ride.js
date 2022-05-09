@@ -5,10 +5,10 @@ import {useRouter} from 'next/router'
 import { BackButton } from '../../../components/BackButton'
 import {getUser, getRide} from '../../../APIFunctions/DbFunctions'
 
-export default function Ride({riderData, driverData, params}){
+export default function Ride({riderData, driverData, userRideid}){
     const router = useRouter()
     const {id} = router.query
-    console.log(params)
+    console.log(userRideid)
     console.log("Hello", riderData, driverData)
 
     const driver = {
@@ -67,10 +67,10 @@ export default function Ride({riderData, driverData, params}){
     )
 }
 
-export async function getServerSideProps({params}) {
+export async function getServerSideProps({query}) {
     // hardcode ride id for testing
     // rideID is not in params, need to get rideID to make line 59 work
-    console.log(params.rideID)
+    const userRideid = query.rideID
     // const ride = await getRide(params.rideID);
     const ride = await getRide('62715ac260aca5cd2af00041');
     const rideInfo = ride.responseData;
@@ -85,7 +85,7 @@ export async function getServerSideProps({params}) {
         props:{
            riderData,
            driverData,
-           params
+           userRideid
         },
     };
 }
