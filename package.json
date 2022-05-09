@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev2": "next dev -p 3002",
     "build": "next build",
     "start": "run-script-os",
     "start:win32": "explorer http://localhost:3000 & next start",
