@@ -13,6 +13,8 @@ const RideSelector = ({ locationCoordinates, schedule, pickup }) => {
   const [service, setService] = useState("");
   const [rideID, setRideID] = useState("");
   const [isSubmit, setSubmit] = useState(false);
+  const [bestDriver, setBestDriver] = useState({});
+  const [newCarList, setNewCarList] = useState([]);
 
   const router = useRouter();
   const id = router.query.id;
