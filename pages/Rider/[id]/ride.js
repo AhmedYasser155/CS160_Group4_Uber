@@ -4,9 +4,24 @@ import Link from 'next/Link'
 import {useRouter} from 'next/router'
 import { BackButton } from '../../../components/BackButton'
 
-const Ride = () => {
+const Ride = ({bestDriver, cost}) => {
+
     const router = useRouter()
-    const id = router.query.id
+    const id = router.query.id;
+
+    async function performPayment() {
+        const user = await getUser(id);
+        if(user) {
+            const res = await updateUser(id, {"balance":user.responseData.balance - cost});
+            if(!res.error)
+                console.log(res.responseData);
+            else
+                console.log("CANNOT UPDATE USER");
+        }
+        else
+            console.log("USER DOES NOT EXIST!");
+    }
+
     return (
         <Wrapper>
             <BackButton  prevPage={`/Rider/${id}/confirm`}/>
