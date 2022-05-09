@@ -15,6 +15,7 @@ export default function RiderProfile({userData}){
     const last = userData.lastName
     const email = userData.email
     const phone = userData.phone
+    const balance = userData.accountBalance
 
     return(
         <Wrapper>
@@ -41,6 +42,9 @@ export default function RiderProfile({userData}){
                 </ProfileText>
                 <ProfileText>
                     Phone Number: {phone}
+                </ProfileText>
+                <ProfileText>
+                    Balance: ${balance}
                 </ProfileText>
             </ProfileInformation>
 

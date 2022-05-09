@@ -3,9 +3,10 @@ import tw from "tailwind-styled-components"
 import Link from 'next/Link'
 import {useRouter} from 'next/router'
 import { BackButton } from '../../../components/BackButton'
+
 import {getUser, getRide} from '../../../APIFunctions/DbFunctions'
 
-const Ride = ({userData}) => {
+export default function Ride({userData}){
     const router = useRouter()
     const {id, rideID} = router.query
 
@@ -14,6 +15,7 @@ const Ride = ({userData}) => {
     const make = userData.car.carMake
     const model = userData.car.carModel
     const licensePlate = userData.car.licensePlate
+    const balance = userData.accountBalance
 
     return (
         
@@ -23,6 +25,7 @@ const Ride = ({userData}) => {
 
            <Chat>
                 <Text>Your ride has been confirmed! Your driver will arrive shortly.</Text>
+                <Text>Your remaining balance is ${balance}</Text>
                 {userData ? 
                 (<>
                 <Text>Driver: {first + " " + last}</Text>
@@ -38,27 +41,26 @@ const Ride = ({userData}) => {
             </Link>
 
            </ConfirmContainer>
-           
-            
-
         </Wrapper>
     )
 }
 // console.log(rideID)
-export async function getServerSideProps() {
-    // const ride = await getRide(rideID);
-    const ride = await getRide('62715ac260aca5cd2af00041');
+export async function getServerSideProps({params}) {
+    // hardcode ride id for testing
+    const ride = await getRide(params.rideID);
+    // const ride = await getRide('62715ac260aca5cd2af00041');
     const rideInfo = ride.responseData;
 
+    //getting user by id 
     //  const user = await getUser(id);
      const user = await getUser(rideInfo.driver);
      const userData = user.responseData
      return{
-         props:{
-            userData,
-         },
-     };
-    }
+        props:{
+           userData,
+        },
+    };
+}
 export default Ride;
 
 const Wrapper = tw.div`
