@@ -71,8 +71,8 @@ export async function getServerSideProps({query}) {
     // hardcode ride id for testing
     // rideID is not in params, need to get rideID to make line 59 work
     const userRideid = query.rideID
-    // const ride = await getRide(params.rideID);
-    const ride = await getRide('62715ac260aca5cd2af00041');
+    const ride = await getRide(userRideid);
+    //const ride = await getRide('62715ac260aca5cd2af00041');
     const rideInfo = ride.responseData;
 
     //  const user = await getUser(id);
