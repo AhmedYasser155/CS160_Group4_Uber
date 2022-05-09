@@ -1,19 +1,25 @@
-import {React, useState, useEffect } from "react";
+import { React, useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
 import { carList } from "../data/carList";
-import {addRide} from '../APIFunctions/DbFunctions';
-import {useRouter} from 'next/router'
+import { addRide, addScheduled } from '../APIFunctions/DbFunctions';
+import { useRouter } from 'next/router'
 import Link from "next/Link";
+import { useSelector} from 'react-redux'
 
-const RideSelector = ({ locationCoordinates, schedule }) => {
+const RideSelector = ({ locationCoordinates, schedule, locations }) => {
   const [rideDuration, setRideDuration] = useState(0);
   const [rideDistance, setRideDistance] = useState(0);
   const [cost, setCost] = useState(0);
   const [service, setService] = useState("");
   const [rideID, setRideID] = useState("");
 
+
+
   const router = useRouter();
   const id = router.query.id;
+  const scheduled = schedule
+  const date = router.query.date;
+  console.log(locations)
 
   const showServices = () => {
     let locationURL = "";
@@ -36,7 +42,7 @@ const RideSelector = ({ locationCoordinates, schedule }) => {
 
   useEffect(() => {
     showServices()
-  },);
+  });
 
   function setData(ser, cost) {
     setCost(cost);
@@ -44,61 +50,84 @@ const RideSelector = ({ locationCoordinates, schedule }) => {
   }
 
   async function handleSubmit() {
-    const ride = {
-      customer:id,
-      driver:null,
-      location:locationCoordinates,
-      distance:(rideDistance/1750).toFixed(1),
-      time:Math.round(rideDuration/70),
-      cost,
-      pickup: new Date()
+    if (scheduled) {
+      const scheduledRide = {
+        customer: id,
+        driver: null,
+        location: locationCoordinates,
+        locationName: locations,
+        distance: (rideDistance / 1750).toFixed(1),
+        time: Math.round(rideDuration / 70),
+        cost,
+        date: date,
+        pickup: new Date()
+      }
+      const res = await addScheduled(scheduledRide);
+      if (res.error) {
+        console.log(res.error);
+      } else {
+        setRideID(res.responseData.id);
+        console.log("Ride id: ", res.responseData.id);
+      }
     }
-    const res = await addRide(ride);
-    if (res.error) {
-      console.log(res.error);
-    } else {
-      setRideID(res.responseData.id);
-      console.log("Ride id: ", res.responseData.id);
+    else {
+      const ride = {
+        customer: id,
+        driver: null,
+        location: locationCoordinates,
+        distance: (rideDistance / 1750).toFixed(1),
+        time: Math.round(rideDuration / 70),
+        cost,
+        pickup: new Date()
+      }
+      const res = await addRide(ride);
+      if (res.error) {
+        console.log(res.error);
+      } else {
+        setRideID(res.responseData.id);
+        console.log("Ride id: ", res.responseData.id);
+      }
     }
   }
 
   return (
     <Wrapper>
       <TripInfo>
-        <InfoItem>Trip distance {(rideDistance/1750).toFixed(1)} Miles</InfoItem>
-        <InfoItem>Trip duration {Math.round(rideDuration/70)} Mins</InfoItem>
+        <InfoItem>Trip distance {(rideDistance / 1750).toFixed(1)} Miles</InfoItem>
+        <InfoItem>Trip duration {Math.round(rideDuration / 70)} Mins</InfoItem>
       </TripInfo>
       <Title>Choose a ride</Title>
       <CarList>
         {carList.map((car, index) => (
-          <Car 
+          <Car
             key={index}
-            onClick = {() => setData(car.service, (rideDuration/60 * car.multiplier).toFixed(2))}
+            onClick={() => setData(car.service, (rideDuration / 60 * car.multiplier).toFixed(2))}
           >
             <CarImg src={car.imgURL} />
             <CarDetails>
               <Service>{car.service}</Service>
               <InfoItem>{car.description}</InfoItem>
             </CarDetails>
-            <Price>{"$" + (rideDuration/60 * car.multiplier).toFixed(2)}</Price>
+            <Price>{"$" + (rideDuration / 60 * car.multiplier).toFixed(2)}</Price>
           </Car>
         ))}
       </CarList>
-      {schedule ? 
-      (<Link href={`/Rider/${id}`}>
-      <ConfirmButtonContainer>
-        <ConfirmButton>Confirm {service}</ConfirmButton>
-      </ConfirmButtonContainer>
-      </Link>) 
-      : 
-      (<Link href={`/Rider/${id}/ride`}>
-      <ConfirmButtonContainer
-      onClick = {() => {handleSubmit()}}
-      >
-        <ConfirmButton>Confirm {service}</ConfirmButton>
-      </ConfirmButtonContainer>
-      </Link>)}
-      
+      {schedule ?
+        (<Link href={`/Rider/${id}`}>
+          <ConfirmButtonContainer
+          onClick={() => { handleSubmit() }}>
+            <ConfirmButton>Confirm {service}</ConfirmButton>
+          </ConfirmButtonContainer>
+        </Link>)
+        :
+        (<Link href={`/Rider/${id}/ride`}>
+          <ConfirmButtonContainer
+            onClick={() => { handleSubmit() }}
+          >
+            <ConfirmButton>Confirm {service}</ConfirmButton>
+          </ConfirmButtonContainer>
+        </Link>)}
+
     </Wrapper>
   );
 };

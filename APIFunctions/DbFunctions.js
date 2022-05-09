@@ -35,6 +35,55 @@ export async function addRide(data)
     return status;
 }
 
+export async function addScheduled(data)
+{
+	let status = new ApiResponse();
+	await axios
+		.post(SERVER_URL + "/scheduled/addRide", {
+			data
+		})
+		.then((response) => {
+			status.responseData = response.data;
+			status.statusCode = response.status;
+		})
+		.catch(err => {
+            status.error = true;
+        });
+    return status;
+}
+
+export async function getScheduled(id) {
+	let status = new ApiResponse();
+	await axios
+		.post(SERVER_URL + "/scheduled/id", {
+			id
+		})
+		.then((response) => {
+			status.responseData = response.data;
+			status.statusCode = response.status;
+		})
+		.catch(err => {
+            status.error = true;
+        });
+    return status;
+}
+
+export async function deleteScheduled(id) {
+	let status = new ApiResponse();
+	await axios
+		.post(SERVER_URL + "/scheduled/delete", {
+			id
+		})
+		.then((response) => {
+			status.responseData = response.data;
+			status.statusCode = response.status;
+		})
+		.catch(err => {
+            status.error = true;
+        });
+    return status;
+}
+
 export async function authenthicateUser(userEmail, userPassword)
 {
 	let status = new ApiResponse();

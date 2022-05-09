@@ -2,7 +2,7 @@ import React from 'react'
 import tw from "tailwind-styled-components"
 import Map from "../../../components/Map"
 import { useEffect, useState } from 'react'
-import {useRouter} from 'next/router'
+import {useRouter, Router} from 'next/router'
 import RideSelector from '../../../components/RideSelector'
 import { BackButton } from '../../../components/BackButton'
 import { MAPBOX_ACCESS_TOKEN } from "../../../config/config.json"
@@ -12,6 +12,7 @@ const Confirm = () => {
  
     const router = useRouter()
     const id = router.query.id
+
     const locationsArr = useSelector(state=> state.locationArr); //to access the locations to be printed on the map
 
     const [locationCoor, setLocationCoor] = useState([])
@@ -47,6 +48,7 @@ const Confirm = () => {
                 <RideSelector
                     locationCoordinates={locationCoor}
                     schedule={true}
+                    locations={locationsArr}
                 />
 
             </RideContainer>

@@ -13,7 +13,6 @@ import Router from 'next/router'
 import { useSelector, useDispatch } from 'react-redux'
 import { ADD_Dropoff1, ADD_PICKUP, ADD_Dropoff2, ADD_Dropoff3, ADD_Dropoff4, ADD_Dropoff5, APPEND_LOCATION ,ADD_CURR_LOCATION, 
     DELETE_Dropoff2, DELETE_Dropoff3, DELETE_Dropoff4, DELETE_Dropoff5, RESET_ARR, DELETE_Dropoff1} from '../../../store/actions'
-import { getUser } from '../../../APIFunctions/DbFunctions'
 
 const Schedule = () => {
 
@@ -150,6 +149,10 @@ const Schedule = () => {
         dropoff3 ? dispatch(APPEND_LOCATION(dropoff3)) : null;
         dropoff4 ? dispatch(APPEND_LOCATION(dropoff4)) : null;
         dropoff5 ? dispatch(APPEND_LOCATION(dropoff5)) : null;
+        Router.push({
+            pathname: `/Rider/${id}/confirmscheduling`,
+            query: { date: JSON.stringify(startDate) }
+        })
     }
 
     const [startDate, setStartDate] = useState(
@@ -167,8 +170,9 @@ const Schedule = () => {
         Router.push({
             pathname: `/Rider/${id}/picklocation`,
             query: { box: e.target.id,
-            page : 'scheduling' },
-        })
+            page : 'scheduling',
+            }
+        },  `/Rider/${id}/picklocation`)
     }
       return (
         <Wrapper>

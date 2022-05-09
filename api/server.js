@@ -109,9 +109,9 @@ app.post("/ride/addRide", jsonParser, async (req, res) => {
 	})
 })
 
-// add ride
-app.post("/ride/addRide", jsonParser, async (req, res) => {
-	const newRide = await dbo.collection("rides").insertOne(req.body.data)
+// add scheduled ride
+app.post("/scheduled/addRide", jsonParser, async (req, res) => {
+	const newScheduled = await dbo.collection("scheduledRides").insertOne(req.body.data)
 	.then(result => {
 		res.status(200).send({id:result.insertedId})
 	})
@@ -119,6 +119,32 @@ app.post("/ride/addRide", jsonParser, async (req, res) => {
 		res.status(400).send({err:err.errmsg})
 	})
 })
+
+// get scheduled ride information by id
+app.post("/scheduled/id", jsonParser, async (req, res) => { 
+	const scheduled=await dbo.collection("scheduledRides").find({'customer': new ObjectId(req.body.id)})
+		.then((response) =>{
+		res.status(200).send(response)
+	})
+	.catch((err) => {
+		res.status(400).send({"message":err.errmsg})
+	 })
+
+});
+
+// deleting scheduled ride
+app.post("/scheduled/delete", jsonParser, async (req, res) => {
+	await dbo.collection("scheduledRides").deleteOne({
+			_id: req.body.id,
+	  	})
+		.then((response) => {
+			return res.status(200).send({"message":"Success!"});
+		})
+		.catch((err) => {
+			return res.status(400).send({"message":"Error when deleting scheduled ride in database!"});
+		});
+	return null;
+});
 
 //authenticate user 
 app.post("/auth", jsonParser, async(req,res)=> {

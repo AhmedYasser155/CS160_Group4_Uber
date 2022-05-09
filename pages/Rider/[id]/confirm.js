@@ -11,8 +11,7 @@ import { useSelector , useDispatch } from 'react-redux'
 
 
 const Confirm = () => {
-    const router = useRouter()
-    const id = router.query.id
+ 
     const locationsArr = useSelector(state=> state.locationArr); //to access the locations to be printed on the map
 
     const [locationCoor, setLocationCoor] = useState([])
@@ -37,9 +36,10 @@ const Confirm = () => {
     if (locationCoor.length < locationsArr.length) {
         return null
     } 
+
     return (
         <Wrapper>
-            <BackButton  prevPage={`/Rider/${id}/search`}/>
+            <BackButton  prevPage={"/search"}/>
             <Map
                 locationCoordinates={locationCoor}
             />
@@ -49,6 +49,10 @@ const Confirm = () => {
                     locationCoordinates={locationCoor}
                     schedule={false}
                 />
+
+                <ConfirmButtonContainer>
+                    <ConfirmButton>Confirm </ConfirmButton>
+                </ConfirmButtonContainer>
 
             </RideContainer>
         </Wrapper>
@@ -64,4 +68,12 @@ const Wrapper = tw.div`
 
 const RideContainer = tw.div`
     flex-1 flex-col flex h-1/5
+`
+
+const ConfirmButtonContainer = tw.div`
+    border-t-2
+`
+
+const ConfirmButton = tw.div`
+    bg-black text-white my-4 mx-4 py-4 text-center text-xl
 `
