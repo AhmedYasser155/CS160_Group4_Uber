@@ -1,8 +1,8 @@
-import {React, useState, useEffect } from "react";
+import { React, useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
 import { carList } from "../data/carList";
-import {addRide} from '../APIFunctions/DbFunctions';
-import {useRouter} from 'next/router'
+import { addRide } from "../APIFunctions/DbFunctions";
+import { useRouter } from "next/router";
 import Link from "next/Link";
 import { io } from 'socket.io-client';
 
@@ -12,8 +12,7 @@ const RideSelector = ({ locationCoordinates, schedule, pickup }) => {
   const [cost, setCost] = useState(0);
   const [service, setService] = useState("");
   const [rideID, setRideID] = useState("");
-  const [bestDriver, setBestDriver] = useState({});
-  const [newCarList, setNewCarList] = useState([]);
+  const [isSubmit, setSubmit] = useState(false);
 
   const router = useRouter();
   const id = router.query.id;
@@ -40,7 +39,7 @@ const RideSelector = ({ locationCoordinates, schedule, pickup }) => {
         setRideDistance(data.routes[0].distance);
       })
       .catch((e) => console.log(e));
-  }
+  };
 
   useEffect(() => {
     socket.emit('find-best-driver', pickup);
@@ -70,61 +69,89 @@ const RideSelector = ({ locationCoordinates, schedule, pickup }) => {
   }
 
   async function handleSubmit() {
-    const ride = {
-      customer:id,
-      driver:null,
-      location:locationCoordinates,
-      distance:(rideDistance/1750).toFixed(1),
-      time:Math.round(rideDuration/70),
-      cost,
-      pickup: new Date()
-    }
-    const res = await addRide(ride);
-    if (res.error) {
-      console.log(res.error);
-    } else {
-      setRideID(res.responseData.id);
-      console.log("Ride id: ", res.responseData.id);
+    if (!isSubmit) {
+      const ride = {
+        customer: id,
+        driver: null,
+        location: locationCoordinates,
+        distance: (rideDistance / 1750).toFixed(1),
+        time: Math.round(rideDuration / 70),
+        cost,
+        pickup: new Date(),
+      };
+      const res = await addRide(ride);
+      if (res.error) {
+        console.log(res.error);
+      } else {
+        setRideID(res.responseData.id);
+        setSubmit(true);
+      }
     }
   }
 
   return (
     <Wrapper>
       <TripInfo>
-        <InfoItem>Trip distance {(rideDistance/1750).toFixed(1)} Miles</InfoItem>
-        <InfoItem>Trip duration {Math.round(rideDuration/70)} Mins</InfoItem>
+        <InfoItem>
+          Trip distance {(rideDistance / 1750).toFixed(1)} Miles
+        </InfoItem>
+        <InfoItem>Trip duration {Math.round(rideDuration / 70)} Mins</InfoItem>
       </TripInfo>
-      <Title>Choose a ride</Title>
-      <CarList>
+      
+      {isSubmit ? (<></>) : (
+        <>
+        <Title>Choose a ride</Title>
+        <CarList>
         {newCarList.map((car, index) => (
-          <Car 
+          <Car
             key={index}
-            onClick = {() => setData(car.service, (rideDuration/60 * car.multiplier).toFixed(2))}
+            onClick={() =>
+              setData(
+                car.service,
+                ((rideDuration / 60) * car.multiplier).toFixed(2)
+              )
+            }
           >
             <CarImg src={car.imgURL} />
             <CarDetails>
               <Service>{car.service}</Service>
               <InfoItem>{car.description}</InfoItem>
             </CarDetails>
-            <Price>{"$" + (rideDuration/60 * car.multiplier).toFixed(2)}</Price>
+            <Price>
+              {"$" + ((rideDuration / 60) * car.multiplier).toFixed(2)}
+            </Price>
           </Car>
         ))}
       </CarList>
-      {schedule ? 
-      (<Link href={`/Rider/${id}`}>
-      <ConfirmButtonContainer>
-        <ConfirmButton>Confirm {service}</ConfirmButton>
-      </ConfirmButtonContainer>
-      </Link>) 
-      : 
-      (<Link href={`/Rider/${id}/ride`}>
-      <ConfirmButtonContainer
-      onClick = {() => {handleSubmit()}}
-      >
-        <ConfirmButton>Confirm {service}</ConfirmButton>
-      </ConfirmButtonContainer>
-      </Link>)}
+      </>
+      )}
       
+      {schedule ? (
+        <Link href={`/Rider/${id}`}>
+          <ConfirmButtonContainer>
+            <ConfirmButton>Confirm {service}</ConfirmButton>
+          </ConfirmButtonContainer>
+        </Link>
+      ) : (
+        <ConfirmButtonContainer
+          onClick={() => {
+            handleSubmit();
+          }}
+        >
+          {isSubmit ? (
+            <Link
+              href={{
+                pathname: `/Rider/${id}/ride`,
+                query: { rideID },
+              }}
+            >
+              <ConfirmButton>Confirm {service}</ConfirmButton>
+            </Link>
+          ) : (
+            <ConfirmButton>Order {service}</ConfirmButton>
+          )}
+        </ConfirmButtonContainer>
+      )}
     </Wrapper>
   );
 };
@@ -133,11 +160,11 @@ export default RideSelector;
 
 const TripInfo = tw.div`
   flex text-center
-  `
+  `;
 
 const InfoItem = tw.div`
   text-xs flex-1
-`
+`;
 
 const CarDetails = tw.div`
     flex-1
@@ -172,8 +199,8 @@ const CarImg = tw.img`
 `;
 const ConfirmButtonContainer = tw.div`
     border-t-2 hover:scale-105
-`
+`;
 
 const ConfirmButton = tw.div`
     bg-black text-white my-4 mx-4 py-4 text-center text-xl cursor-pointer
-`
+`;

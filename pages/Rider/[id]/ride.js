@@ -3,16 +3,23 @@ import tw from "tailwind-styled-components"
 import Link from 'next/Link'
 import {useRouter} from 'next/router'
 import { BackButton } from '../../../components/BackButton'
+import {getUser, getRide} from '../../../APIFunctions/DbFunctions'
 
-const Ride = ({bestDriver, cost}) => {
-
+const Ride = ({userData}) => {
     const router = useRouter()
-    const id = router.query.id;
+    const {id, rideID} = router.query
+
+    const first = userData.firstName
+    const last = userData.lastName
+    const make = userData.car.carMake
+    const model = userData.car.carModel
+    const licensePlate = userData.car.licensePlate
 
     async function performPayment() {
         const user = await getUser(id);
+        const ride = await getRide(rideID);
         if(user) {
-            const res = await updateUser(id, {"balance":user.responseData.balance - cost});
+            const res = await updateUser(id, {"balance":user.responseData.balance - ride.responseData.cost});
             if(!res.error)
                 console.log(res.responseData);
             else
@@ -30,6 +37,15 @@ const Ride = ({bestDriver, cost}) => {
 
            <Chat>
                 <Text>Your ride has been confirmed! Your driver will arrive shortly.</Text>
+                {userData ? 
+                (<>
+                <Text>Driver: {first + " " + last}</Text>
+                <Text>Please look for {make + " " + model}</Text>
+                <Text>License Plate: {licensePlate}</Text>
+                </>) 
+                : 
+                (<></>)}
+                
             </Chat>
             <Link href={`/Rider/${id}`}>
             <Home> Home </Home>
@@ -42,7 +58,21 @@ const Ride = ({bestDriver, cost}) => {
         </Wrapper>
     )
 }
+// console.log(rideID)
+export async function getServerSideProps() {
+    // const ride = await getRide(rideID);
+    const ride = await getRide('62715ac260aca5cd2af00041');
+    const rideInfo = ride.responseData;
 
+    //  const user = await getUser(id);
+     const user = await getUser(rideInfo.driver);
+     const userData = user.responseData
+     return{
+         props:{
+            userData,
+         },
+     };
+    }
 export default Ride;
 
 const Wrapper = tw.div`

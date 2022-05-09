@@ -40,7 +40,7 @@ const Search = ({user}) => {
 
     useEffect(() => {
         dispatch(RESET_ARR());
-        console.log(id)
+        // console.log(id)
 
         currentCoor.length > 0 ? (fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${currentCoor}.json?` +
         new URLSearchParams({

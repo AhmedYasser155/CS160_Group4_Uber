@@ -83,6 +83,17 @@ app.post("/user/id", jsonParser, async (req, res) => {
 
 });
 
+// get ride
+app.post("/ride/id", jsonParser, async (req, res) => {
+	const ride = await dbo.collection("rides").findOne({_id: new ObjectId(req.body.id)})
+	.then((response) => {
+		res.status(200).send(response)
+	})
+	.catch((err) => {
+		res.status(400).send({"message": err.errmsg})
+	})
+});
+
 //add user
 app.post("/user/addUser", jsonParser, async (req, res) => { 
 	dbo.collection("users").createIndex( { "phone": 1 }, { "unique": true, "sparse":true } )
@@ -109,16 +120,6 @@ app.post("/ride/addRide", jsonParser, async (req, res) => {
 	})
 })
 
-// add ride
-app.post("/ride/addRide", jsonParser, async (req, res) => {
-	const newRide = await dbo.collection("rides").insertOne(req.body.data)
-	.then(result => {
-		res.status(200).send({id:result.insertedId})
-	})
-	.catch((err) => {
-		res.status(400).send({err:err.errmsg})
-	})
-})
 
 //authenticate user 
 app.post("/auth", jsonParser, async(req,res)=> {

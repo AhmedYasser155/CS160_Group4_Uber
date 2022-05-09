@@ -71,6 +71,18 @@ export async function getUser(id) {
     return status;
 }
 
+export async function getRide(id) {
+	let status = new ApiResponse();
+	await axios
+		.post(SERVER_URL + "/ride/id", {id})
+		.then((response) => {
+			status.responseData = response.data;
+			status.statusCode = response.status;
+		})
+		.catch(err => {status.error = true});
+	return status;
+}
+
 export async function updateUser(id, data) {
 	let status = new ApiResponse();
 	await axios
