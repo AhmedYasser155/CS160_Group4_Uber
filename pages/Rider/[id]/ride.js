@@ -60,9 +60,6 @@ export default function Ride({riderData, driverData, userRideid}){
             </Link>
 
            </ConfirmContainer>
-           
-            
-
         </Wrapper>
     )
 }
@@ -75,6 +72,7 @@ export async function getServerSideProps({query}) {
     //const ride = await getRide('62715ac260aca5cd2af00041');
     const rideInfo = ride.responseData;
 
+    //getting user by id 
     //  const user = await getUser(id);
      const driver = await getUser(rideInfo.driver);
      const driverData = driver.responseData;
