@@ -3,10 +3,14 @@ import tw from "tailwind-styled-components"
 import Link from 'next/Link'
 import {useRouter} from 'next/router'
 import { BackButton } from '../../../components/BackButton'
+import { getUser } from '../../../APIFunctions/DbFunctions'
 
-const Ride = () => {
+export default function Ride({userData}){
+
     const router = useRouter()
     const id = router.query.id
+    const balance = userData.accountBalance
+
     return (
         
         <Wrapper>
@@ -15,6 +19,7 @@ const Ride = () => {
 
            <Chat>
                 <Text>Your ride has been confirmed! Your driver will arrive shortly.</Text>
+                <Text>Your remaining balance is ${balance}</Text>
             </Chat>
             <Link href={`/Rider/${id}`}>
             <Home> Home </Home>
@@ -28,7 +33,20 @@ const Ride = () => {
     )
 }
 
-export default Ride;
+export async function getServerSideProps({params})
+{
+    //getting user by id 
+     const user = await getUser(params.id);
+     const userData = user.responseData
+    
+     
+     
+     return{
+         props:{
+            userData,
+         },
+     };
+}
 
 const Wrapper = tw.div`
     flex flex-col h-screen bg-gray-200 p-4
