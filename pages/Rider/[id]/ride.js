@@ -14,12 +14,12 @@ const Ride = ({userData}) => {
     const make = userData.car.carMake
     const model = userData.car.carModel
     const licensePlate = userData.car.licensePlate
+    const balance = userData.accountBalance
 
     async function performPayment() {
-        const user = await getUser(id);
         const ride = await getRide(rideID);
         if(user) {
-            const res = await updateUser(id, {"balance":user.responseData.balance - ride.responseData.cost});
+            const res = await updateUser(id, {"balance":balance - ride.responseData.cost});
             if(!res.error)
                 console.log(res.responseData);
             else
@@ -46,6 +46,7 @@ const Ride = ({userData}) => {
                 : 
                 (<></>)}
                 
+                <Text>Your remaining balance is ${balance}</Text>
             </Chat>
             <Link href={`/Rider/${id}`}>
             <Home> Home </Home>
