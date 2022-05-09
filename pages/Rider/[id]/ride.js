@@ -1,4 +1,4 @@
-import React from 'react'
+import {React, useState} from 'react'
 import tw from "tailwind-styled-components"
 import Link from 'next/Link'
 import {useRouter} from 'next/router'
@@ -6,16 +6,23 @@ import { BackButton } from '../../../components/BackButton'
 
 import {getUser, getRide} from '../../../APIFunctions/DbFunctions'
 
-export default function Ride({userData}){
+export default function Ride({riderData, driverData}){
     const router = useRouter()
-    const {id, rideID} = router.query
+    const {id} = router.query
+    
+    console.log("Hello", riderData, driverData)
 
-    const first = userData.firstName
-    const last = userData.lastName
-    const make = userData.car.carMake
-    const model = userData.car.carModel
-    const licensePlate = userData.car.licensePlate
-    const balance = userData.accountBalance
+    const driver = {
+        name: "",
+        car: "",
+        licensePlate: ""
+    }
+    if (driverData) {
+        driver.name = driverData.firstName + " " + driverData.lastName;
+        driver.car = driverData.car.carMake + " " + driverData.car.carModel;
+        driver.licensePlate = driverData.car.licensePlate
+    }
+    const balance = riderData.accountBalance
 
     return (
         
@@ -26,11 +33,11 @@ export default function Ride({userData}){
            <Chat>
                 <Text>Your ride has been confirmed! Your driver will arrive shortly.</Text>
                 <Text>Your remaining balance is ${balance}</Text>
-                {userData ? 
+                {driverData ? 
                 (<>
-                <Text>Driver: {first + " " + last}</Text>
-                <Text>Please look for {make + " " + model}</Text>
-                <Text>License Plate: {licensePlate}</Text>
+                <Text>Your Driver: {driver.name}</Text>
+                <Text>Please look out for a {driver.car}</Text>
+                <Text>License Plate: {driver.licensePlate}</Text>
                 </>) 
                 : 
                 (<></>)}
@@ -44,24 +51,28 @@ export default function Ride({userData}){
         </Wrapper>
     )
 }
-// console.log(rideID)
+
 export async function getServerSideProps({params}) {
     // hardcode ride id for testing
+    console.log(params.rideID)
     const ride = await getRide(params.rideID);
     // const ride = await getRide('62715ac260aca5cd2af00041');
     const rideInfo = ride.responseData;
 
     //getting user by id 
     //  const user = await getUser(id);
-     const user = await getUser(rideInfo.driver);
-     const userData = user.responseData
+     const driver = await getUser(rideInfo.driver);
+     const driverData = driver.responseData;
+
+     const rider = await getUser(rideInfo.customer);
+     const riderData = rider.responseData;
      return{
         props:{
-           userData,
+           riderData,
+           driverData
         },
     };
 }
-export default Ride;
 
 const Wrapper = tw.div`
     flex flex-col h-screen bg-gray-200 p-4
