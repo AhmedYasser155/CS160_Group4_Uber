@@ -4,10 +4,11 @@ import Link from 'next/Link'
 
 export const Footer = () => {
     const style = {
+        marginTop: "10%",
         backgroundColor: "#F8F8F8",
         borderTop: "1px solid #E7E7E7",
         textAlign: "center",
-        position: "absolute",
+        position: "fixed",
         left: "0",
         bottom: "0",
         height: "7%",
