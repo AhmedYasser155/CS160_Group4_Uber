@@ -143,16 +143,14 @@ app.post("/auth", jsonParser, async(req,res)=> {
 
 
 app.post("/user/updateUser", jsonParser, async (req, res) => {
-	await dbo.collection("users").findOneAndUpdate({
+	await dbo.collection("users").updateOne({
 		_id: req.body.id
 		},
-		req.body.data, 
 		{
-			new: true,
-			runValidators: true,
+			$set:req.body.data
 		})
 		.then((response) => {
-			return res.status(200).send({"message":"Success!"});
+			return res.status(200).send({"message":response});
 		})
 		.catch((err) => {
 			return res.status(400).send({"message":"Error when updating user to database!"});

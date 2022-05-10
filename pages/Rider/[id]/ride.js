@@ -27,8 +27,8 @@ export default function Ride({riderData, driverData, userRideid}){
         async function performPayment() {
             const ride = await getRide(userRideid);
             console.log(riderData.accountBalance + " " + ride.responseData.cost);
-            if(ride) {
-                const res = await updateUser(id, {$set:{"Account Balance":riderData.accountBalance - ride.responseData.cost}});
+            if(ride && ride.responseData.cost < riderData.accountBalance) {
+                const res = await updateUser(id, {$set:{"accountBalance":riderData.accountBalance - ride.responseData.cost}});
                 if(!res.error) {
                     console.log(res.responseData);
                     setBalance(riderData.accountBalance - ride.responseData.cost);
@@ -37,7 +37,7 @@ export default function Ride({riderData, driverData, userRideid}){
                     console.log("CANNOT UPDATE USER");
             }
             else
-                console.log("RIDE DOES NOT EXIST!");
+                console.log("RIDE COSTS TOO MUCH");
         }
 
         performPayment();
