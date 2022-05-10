@@ -231,7 +231,7 @@ io.on('connection', (socket) => {
 
 	socket.on('driver-response', (passed) => {
 		var socketId = null;
-		delete this.state.dict[driverId];
+		delete this.state.dict[passed.driverId];
 		for(var riderId in this.state.riderMap) {
 			if(riderId = passed.riderId) {
 				socketId = this.state.riderMap[riderId];
