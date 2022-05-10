@@ -61,7 +61,7 @@ const Map = ({ locationCoordinates }) => {
   // This useEffect for drawing path line
   useEffect(() => {
     if (coordinates.length !== 0) {
-      console.log(coordinates);
+      // console.log(coordinates);
       // Zoom out on map
       mainMap.fitBounds(
         [
