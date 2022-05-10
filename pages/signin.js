@@ -5,6 +5,7 @@ import tw from "tailwind-styled-components"
 import { BackHomeButton } from '../components/BackHomeButton'
 import Link from 'next/Link'
 import { authenthicateUser } from '../APIFunctions/DbFunctions'
+import {Footer} from '../components/Footer'
 
 const SignIn = () => {
 
@@ -124,7 +125,7 @@ const SignIn = () => {
 
          
             </Form>
-
+            <Footer/>
         </Wrapper>
     )
 

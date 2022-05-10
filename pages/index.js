@@ -1,6 +1,7 @@
 import React from 'react'
 import tw from "tailwind-styled-components"
 import Link from 'next/link'
+import {Footer} from '../components/Footer'
 
 const Login = () => {
     
@@ -21,7 +22,7 @@ const Login = () => {
 
             </ActionButtons>
             
-            
+            <Footer/>
 
         </Wrapper>
     )

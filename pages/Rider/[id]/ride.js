@@ -4,6 +4,8 @@ import Link from 'next/Link'
 import {useRouter} from 'next/router'
 import { BackButton } from '../../../components/BackButton'
 import {getUser, getRide, updateUser} from '../../../APIFunctions/DbFunctions'
+import {Footer} from '../../../components/Footer'
+
 
 export default function Ride({riderData, driverData, userRideid}){
     const router = useRouter()
@@ -67,6 +69,7 @@ export default function Ride({riderData, driverData, userRideid}){
             </Link>
 
            </ConfirmContainer>
+           <Footer/>
         </Wrapper>
     )
 }

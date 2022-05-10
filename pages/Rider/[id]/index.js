@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux'
 import { ADD_CURR_LOCATION } from '../../../store/actions'
 import  {useRouter} from 'next/router'
 import {getUser} from '../../../APIFunctions/DbFunctions'
+import {Footer} from '../../../components/Footer'
 
 
 // home takes the pre rendered user docuemnt as a parameter
@@ -66,6 +67,7 @@ useEffect(() => {
         </InputButton>
         </Link>
       </ActionItems>
+      <Footer/>
     </Wrapper>
   )
 }

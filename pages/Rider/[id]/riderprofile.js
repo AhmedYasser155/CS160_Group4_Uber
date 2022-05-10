@@ -5,6 +5,7 @@ import { getUser } from '../../../APIFunctions/DbFunctions'
 import { BackButton } from '../../../components/BackButton'
 import "tailwindcss/tailwind.css"
 import  {useRouter} from 'next/router'
+import {Footer} from '../../../components/Footer'
 
 
 export default function RiderProfile({userData}){
@@ -50,7 +51,7 @@ export default function RiderProfile({userData}){
 
 
         </ProfileContainer>
-
+        <Footer/>
         </Wrapper>
     )
 }

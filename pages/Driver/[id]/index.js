@@ -7,6 +7,7 @@ import Link from 'next/Link'
 import { io } from 'socket.io-client';
 import {getUser} from '../../../APIFunctions/DbFunctions'
 import  {useRouter} from 'next/router'
+import {Footer} from '../../../components/Footer'
 
 const socket = io("http://localhost:3001");
 
@@ -49,6 +50,7 @@ export default function Home({userData}) {
                 </Info>
         </InforSection>
       </ActionItems>
+      <Footer/>
     </Wrapper>
   )
 }
