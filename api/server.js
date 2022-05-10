@@ -143,7 +143,7 @@ app.post("/auth", jsonParser, async(req,res)=> {
 
 
 app.post("/user/updateUser", jsonParser, async (req, res) => {
-	await dbo.collection("users").findByIdAndUpdate({
+	await dbo.collection("users").findOneAndUpdate({
 		_id: req.body.id
 		},
 		req.body.data, 

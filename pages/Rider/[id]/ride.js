@@ -1,15 +1,16 @@
-import {React, useState} from 'react'
+import {React, useEffect, useState} from 'react'
 import tw from "tailwind-styled-components"
 import Link from 'next/Link'
 import {useRouter} from 'next/router'
 import { BackButton } from '../../../components/BackButton'
-import {getUser, getRide} from '../../../APIFunctions/DbFunctions'
+import {getUser, getRide, updateUser} from '../../../APIFunctions/DbFunctions'
 
 export default function Ride({riderData, driverData, userRideid}){
     const router = useRouter()
     const {id} = router.query
     console.log(userRideid)
     console.log("Hello", riderData, driverData)
+    const [balance, setBalance] = useState(0);
 
     const driver = {
         name: "",
@@ -21,20 +22,26 @@ export default function Ride({riderData, driverData, userRideid}){
         driver.car = driverData.car.carMake + " " + driverData.car.carModel;
         driver.licensePlate = driverData.car.licensePlate
     }
-    const balance = riderData.accountBalance
 
-    async function performPayment() {
-        const ride = await getRide(rideID);
-        if(user) {
-            const res = await updateUser(id, {"balance":balance - ride.responseData.cost});
-            if(!res.error)
-                console.log(res.responseData);
+    useEffect(() => {
+        async function performPayment() {
+            const ride = await getRide(userRideid);
+            console.log(riderData.accountBalance + " " + ride.responseData.cost);
+            if(ride) {
+                const res = await updateUser(id, {$set:{"Account Balance":riderData.accountBalance - ride.responseData.cost}});
+                if(!res.error) {
+                    console.log(res.responseData);
+                    setBalance(riderData.accountBalance - ride.responseData.cost);
+                }
+                else
+                    console.log("CANNOT UPDATE USER");
+            }
             else
-                console.log("CANNOT UPDATE USER");
+                console.log("RIDE DOES NOT EXIST!");
         }
-        else
-            console.log("USER DOES NOT EXIST!");
-    }
+
+        performPayment();
+    }, [])
 
     return (
         

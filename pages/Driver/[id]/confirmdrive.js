@@ -14,7 +14,7 @@ const Ride = () => {
            <ConfirmContainer>
 
            <Chat>
-                <Text>Thank you for accepting the ride! Please head to your rider's pick up location.</Text>
+                <Text>Thank you for accepting the ride! Please head to your riders pick up location.</Text>
             </Chat>
             <Link href={`/Driver/${id}`}>
             <Home> Home </Home>
