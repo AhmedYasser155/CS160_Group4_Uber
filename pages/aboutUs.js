@@ -7,7 +7,8 @@ const AboutUs = () => {
   return (
     <Wrapper>
         <BackButton prevPage={"/"}></BackButton>
-        <Header>Our Team Member</Header>
+        <Header>Our Team Members</Header>
+    <GridContainer>
       <Row>
       
         <ItemContainer>
@@ -22,8 +23,6 @@ const AboutUs = () => {
             <ImageItem src="https://avatars.githubusercontent.com/u/55907833?v=4"></ImageItem>
             Hang
         </ItemContainer>
-      </Row>
-      <Row>
       <ItemContainer>
             <ImageItem src="https://avatars.githubusercontent.com/u/40414974?v=4"></ImageItem>
             Andrew
@@ -38,19 +37,23 @@ const AboutUs = () => {
         </ItemContainer>
 
       </Row>
+      </GridContainer>
       <Footer/>
     </Wrapper>
   );
 };
 
 export default AboutUs;
+const GridContainer = tw.div`
+     flex-none
 
+`
 const Wrapper = tw.div`
-    flex flex-col h-screen p-4 
+    flex-3 flex-col h-screen p-4 
 `;
 
 const Row = tw.div`
-    flex flex-row flex-1
+    container grid grid-cols-3 gap-2 mx-auto scale-75
 `;
 
 const ItemContainer = tw.div`
@@ -60,5 +63,5 @@ const ImageItem = tw.img`
     h-30 w-auto
 `
 const Header = tw.div`
-    text-2xl text-center font-bold mb-5
+    text-2xl text-center font-bold
 `

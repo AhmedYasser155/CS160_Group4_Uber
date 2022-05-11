@@ -8,7 +8,8 @@ const Login = () => {
     return (
         <Wrapper>
             <UberLogo src="https://download.logo.wine/logo/Uber/Uber-Logo.wine.png"/>
-            <HeadImage src="https://i.ibb.co/CsV9RYZ/login-image.png"/>
+                <HeadImage src="https://i.ibb.co/CsV9RYZ/login-image.png"/>
+            
             <Title>Sign up or sign in to access your account</Title>
 
             <ActionButtons>
@@ -29,7 +30,6 @@ const Login = () => {
 }
 
 export default Login
-
 const Wrapper = tw.div`
     flex flex-col h-screen bg-gray-200 p-4
 `
@@ -38,11 +38,11 @@ const ActionButtons = tw.div`
 `
 
 const SignUpButton = tw.button`
-    bg-black text-white text-center py-4 mt-8 ml-4 self-center w-full rounded-lg
+    bg-black text-white text-center py-4 ml-4 self-center w-full rounded-lg
 `
 
 const SignInButton = tw.button`
-    bg-black text-white text-center py-4 mt-8 mr-4 self-center w-full rounded-lg
+    bg-black text-white text-center py-4 mr-4 self-center w-full rounded-lg
 `
 
 const UberLogo = tw.img`
@@ -50,7 +50,9 @@ const UberLogo = tw.img`
 `
 
 const Title = tw.div`
-    text-5xl pt-4 text-gray-500
+    text-3xl pt-2 text-gray-500
 `
 
-const HeadImage = tw.img``
+const HeadImage = tw.img`
+    mx-60
+`
