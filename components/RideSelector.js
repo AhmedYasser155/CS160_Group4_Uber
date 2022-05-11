@@ -1,7 +1,7 @@
 import { React, useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
 import { carList } from "../data/carList";
-import { addRide } from "../APIFunctions/DbFunctions";
+import { addRide, getUser } from "../APIFunctions/DbFunctions";
 import { useRouter } from "next/router";
 import Link from "next/Link";
 import { io } from 'socket.io-client';
@@ -23,6 +23,11 @@ const RideSelector = ({ locationCoordinates, schedule, pickup }) => {
 
   socket.on('receive-best-driver', (driver) => {
     setBestDriver(driver);
+  });
+
+  socket.on('driver-to-rider', (passed) => {
+    setDriverNotified(true);
+    socket.off('driver-to-rider');
   });
 
   const showServices = () => {
@@ -90,6 +95,16 @@ const RideSelector = ({ locationCoordinates, schedule, pickup }) => {
         setSubmit(true);
       }
     }
+
+    const riderData = await getUser(id);
+    socket.emit('ask-driver', {riderData:riderData, driverData:bestDriver, pickup:pickup});
+  }
+
+  async function handleConfirm() {
+    router.push({
+      pathname: `/Rider/${id}/ride`,
+      query: { rideID },
+    })
   }
 
   return (
@@ -142,14 +157,11 @@ const RideSelector = ({ locationCoordinates, schedule, pickup }) => {
           }}
         >
           {isSubmit ? (
-            <Link
-              href={{
-                pathname: `/Rider/${id}/ride`,
-                query: { rideID },
-              }}
-            >
-              <ConfirmButton>Confirm {service}</ConfirmButton>
-            </Link>
+            driverNotified ? (
+              <ConfirmButton onClick={handleConfirm}>Confirm {service}</ConfirmButton>
+            ) : (
+              <Title>Waiting for Driver Response...</Title>
+            )
           ) : (
             <ConfirmButton>Order {service}</ConfirmButton>
           )}

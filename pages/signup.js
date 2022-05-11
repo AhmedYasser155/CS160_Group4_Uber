@@ -63,7 +63,6 @@ const SignUp = () => {
 
    
             </ActionItems>
-            <Footer/>
         </Wrapper>
     )
 }

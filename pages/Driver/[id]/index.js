@@ -6,7 +6,7 @@ import Map from '../../../components/Map'
 import Link from 'next/Link'
 import { io } from 'socket.io-client';
 import {getUser} from '../../../APIFunctions/DbFunctions'
-import  {useRouter} from 'next/router'
+import  {useRouter, useState} from 'next/router'
 import {Footer} from '../../../components/Footer'
 import {Popup} from '../../../components/Popup.js';
 
