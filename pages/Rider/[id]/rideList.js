@@ -3,6 +3,7 @@ import tw from "tailwind-styled-components"
 import Link from 'next/Link'
 import {useRouter} from 'next/router'
 import { BackButton } from '../../../components/BackButton'
+import {Footer} from '../../../components/Footer'
 
 const RideList = () => {
     const router = useRouter()
@@ -15,7 +16,7 @@ const RideList = () => {
                 {/* a list of scheduled ride will be fetched from database to displace here */}
                 <h4>Your Schedule: (list of rides will be displaced here)</h4>
             </Chat>
-
+            <Footer/>
         </Wrapper>
     )
 }

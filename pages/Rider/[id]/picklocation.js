@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import  Router  from 'next/router'
 import { useDispatch } from 'react-redux'
 import { ADD_Dropoff1,ADD_PICKUP, ADD_Dropoff2, ADD_Dropoff3, ADD_Dropoff4, ADD_Dropoff5} from '../../../store/actions'
+import {Footer} from '../../../components/Footer'
 
 mapboxgl.accessToken = "pk.eyJ1IjoiaGFuZy1obyIsImEiOiJjbDA2M3F6bm4xcW05M2RvZHhpeDFsZTVvIn0.Ot8ZrqGcvLYWRLzyXtkUdA";
 
@@ -77,7 +78,7 @@ const Picklocation = () => {
                 <div id="geocoder" className=' h-1/2 w-screen ' ></div>
             </InputContainer>
             <InputContainer2 id="map"></InputContainer2>
-
+            <Footer/>
         </Wrapper>
     )
 

@@ -4,6 +4,7 @@ import tw from "tailwind-styled-components"
 import { BackHomeButton } from '../components/BackHomeButton'
 import { DriverSignUp } from '../components/DriverSignUp'
 import { RiderSignUp } from '../components/RiderSignUp'
+import {Footer} from '../components/Footer'
 
 const SignUp = () => {
     
@@ -62,7 +63,7 @@ const SignUp = () => {
 
    
             </ActionItems>
-
+            <Footer/>
         </Wrapper>
     )
 }

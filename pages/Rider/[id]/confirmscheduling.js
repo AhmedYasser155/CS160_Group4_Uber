@@ -7,6 +7,7 @@ import RideSelector from '../../../components/RideSelector'
 import { BackButton } from '../../../components/BackButton'
 import { MAPBOX_ACCESS_TOKEN } from "../../../config/config.json"
 import { useSelector , useDispatch } from 'react-redux'
+import {Footer} from '../../../components/Footer'
 
 const Confirm = () => {
  
@@ -52,6 +53,7 @@ const Confirm = () => {
                 />
 
             </RideContainer>
+            <Footer/>
         </Wrapper>
     )
 }

@@ -6,6 +6,7 @@ import {useRouter} from 'next/router'
 import RideSelector from '../../../components/RideSelector'
 import { BackButton } from '../../../components/BackButton'
 import { MAPBOX_ACCESS_TOKEN } from "../../../config/config.json"
+import {Footer} from '../../../components/Footer'
 
 import { useSelector , useDispatch } from 'react-redux'
 

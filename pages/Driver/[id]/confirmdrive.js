@@ -3,6 +3,7 @@ import tw from "tailwind-styled-components"
 import Link from 'next/Link'
 import {useRouter} from 'next/router'
 import { BackButton } from '../../../components/BackButton'
+import {Footer} from '../../../components/Footer'
 
 const Ride = () => {
     const router = useRouter()
@@ -22,7 +23,7 @@ const Ride = () => {
 
            </ConfirmContainer>
            
-            
+            <Footer/>
 
         </Wrapper>
     )

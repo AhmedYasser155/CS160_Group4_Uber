@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { ADD_Dropoff1, ADD_PICKUP, ADD_Dropoff2, ADD_Dropoff3, ADD_Dropoff4, ADD_Dropoff5, APPEND_LOCATION ,ADD_CURR_LOCATION, 
     DELETE_Dropoff2, DELETE_Dropoff3, DELETE_Dropoff4, DELETE_Dropoff5, RESET_ARR, DELETE_Dropoff1} from '../../../store/actions'
 import { getUser } from '../../../APIFunctions/DbFunctions'
+import {Footer} from '../../../components/Footer'
 
 const Schedule = () => {
 
@@ -258,6 +259,7 @@ const Schedule = () => {
                     Confirm Location
                 </ConfirmContainer>}
 
+                <Footer/>
         </Wrapper>
         
       )
