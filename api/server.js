@@ -148,7 +148,7 @@ app.post("/user/updateUser", jsonParser, async (req, res) => {
 		_id: new ObjectId(req.body.id)
 		},
 		{
-			$set: req.body
+			$set: req.body.data
 		})
 		.then((response) => {
 			return res.status(200).send({"message":response});
