@@ -53,7 +53,7 @@ const Confirm = () => {
                 />
 
             </RideContainer>
-            <Footer/>
+            <Footer page={router.asPath} />
         </Wrapper>
     )
 }

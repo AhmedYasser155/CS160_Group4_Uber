@@ -125,7 +125,7 @@ const SignIn = () => {
 
          
             </Form>
-            <Footer/>
+            <Footer page={router.asPath} />
         </Wrapper>
     )
 

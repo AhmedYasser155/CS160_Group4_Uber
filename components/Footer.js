@@ -2,7 +2,7 @@ import React from 'react'
 import tw from "tailwind-styled-components"
 import Link from 'next/Link'
 
-export const Footer = () => {
+export const Footer = (props) => {
     const style = {
         marginTop: "3%",
         backgroundColor: "#F8F8F8",
@@ -18,7 +18,10 @@ export const Footer = () => {
 
     return (
         <footer style={style}>
-            <Link href="/aboutUs">
+            <Link href={{
+                pathname:"/aboutUs",
+                query: {prevPage: props.page},
+            }}>
                 <div>About Us</div>
             </Link>
             <p>&copy; {year} Uber Clone</p>

@@ -27,7 +27,6 @@ const RideSelector = ({ locationCoordinates, schedule, pickup }) => {
 
   socket.on('driver-to-rider', async (passed) => {
     socket.off('driver-to-rider');
-    console.log("rideID: " + rideID);
     const res = await updateRide(rideID, {"id":rideID, "driver":bestDriver._id});
     setDriverNotified(true);
   });
@@ -93,7 +92,6 @@ const RideSelector = ({ locationCoordinates, schedule, pickup }) => {
       if (res.error) {
         console.log(res.error);
       } else {
-        console.log(res.responseData);
         setRideID(res.responseData.id);
         setSubmit(true);
       }
@@ -101,9 +99,7 @@ const RideSelector = ({ locationCoordinates, schedule, pickup }) => {
   }
 
   useEffect(async () => {
-    console.log(rideID);
     const user = await getUser(id);
-    console.log("pickup: " + pickup);
     socket.emit('ask-driver', {riderData:user.responseData, driverData:bestDriver, pickup:pickup});
   }, [rideID]);
 

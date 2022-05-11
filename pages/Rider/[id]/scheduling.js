@@ -259,7 +259,7 @@ const Schedule = () => {
                     Confirm Location
                 </ConfirmContainer>}
 
-                <Footer/>
+                <Footer page={router.asPath} />
         </Wrapper>
         
       )

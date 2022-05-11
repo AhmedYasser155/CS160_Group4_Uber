@@ -16,7 +16,7 @@ const RideList = () => {
                 {/* a list of scheduled ride will be fetched from database to displace here */}
                 <h4>Your Schedule: (list of rides will be displaced here)</h4>
             </Chat>
-            <Footer/>
+            <Footer page={router.asPath} />
         </Wrapper>
     )
 }

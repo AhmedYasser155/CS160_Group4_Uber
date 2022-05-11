@@ -2,9 +2,10 @@ import React from 'react'
 import tw from "tailwind-styled-components"
 import Link from 'next/link'
 import {Footer} from '../components/Footer'
+import {Router, useRouter} from 'next/router';
 
 const Login = () => {
-    
+    const router = useRouter();
     return (
         <Wrapper>
             <UberLogo src="https://download.logo.wine/logo/Uber/Uber-Logo.wine.png"/>
@@ -23,7 +24,7 @@ const Login = () => {
 
             </ActionButtons>
             
-            <Footer/>
+            <Footer page={"/"} />
 
         </Wrapper>
     )

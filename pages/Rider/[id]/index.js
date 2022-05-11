@@ -67,7 +67,7 @@ useEffect(() => {
         </InputButton>
         </Link>
       </ActionItems>
-      <Footer/>
+      <Footer page={router.asPath} />
     </Wrapper>
   )
 }
