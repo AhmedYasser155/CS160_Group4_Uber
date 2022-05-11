@@ -32,6 +32,7 @@ export default function Home({userData}) {
   socket.on('to-driver', (passed) => {
     console.log(passed.riderData);
     setRiderData(passed.riderData);
+    console.log("pickup:" + passed.pickup)
     setPickup(passed.pickup);
     setButtonPopup(true);
   });
@@ -39,7 +40,7 @@ export default function Home({userData}) {
   async function confirm() {
     console.log("CONFIRM");
     setButtonPopup(false);
-    const res = await updateUser(id, {"driverLocation":pickup});
+    const res = await updateUser(id, {"id":id,"driverLocation":pickup});
     socket.emit('driver-response', {driverId:id, riderId:riderData._id, confirm:true})
     router.push(`/Driver/${id}/confirmdrive`)
   }

@@ -112,12 +112,12 @@ app.post("/user/addUser", jsonParser, async (req, res) => {
 
 // add ride
 app.post("/ride/addRide", jsonParser, async (req, res) => {
-	const newRide = await dbo.collection("rides").insertOne(req.body.data)
+	await dbo.collection("rides").insertOne(req.body.data)
 	.then(result => {
-		res.status(200).send({id:result.insertedId})
+		res.status(200).send({"id":result.insertedId})
 	})
 	.catch((err) => {
-		res.status(400).send({err:err.errmsg})
+		res.status(400).send({"message":err.errmsg})
 	})
 })
 
@@ -159,6 +159,21 @@ app.post("/user/updateUser", jsonParser, async (req, res) => {
 	return null;
 });
 
+app.post("/user/updateRide", jsonParser, async (req, res) => {
+	await dbo.collection("rides").updateOne({
+		_id: new ObjectId(req.body.id)
+		},
+		{
+			$set: req.body.data
+		})
+		.then((response) => {
+			return res.status(200).send({"message":response});
+		})
+		.catch((err) => {
+			return res.status(400).send({"message":"Error when updating ride to database!"});
+		});
+	return null;
+});
 
 app.post("/user/deleteUser", jsonParser, async (req, res) => {
 	await dbo.collection("users").deleteOne({
