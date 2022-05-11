@@ -38,7 +38,7 @@ const AboutUs = ({prevPage}) => {
         </ItemContainer>
      </Row>
     </GridContainer>
-      <Footer page={router.pathname} />
+      <Footer page={router.asPath} />
     </Wrapper>
   );
 };

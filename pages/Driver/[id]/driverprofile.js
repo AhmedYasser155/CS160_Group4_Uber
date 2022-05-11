@@ -59,7 +59,7 @@ export default function DriverProfile({userData}) {
 
         </ProfileContainer>
 
-        <Footer page={router.pathname} />
+        <Footer page={router.asPath} />
         </Wrapper>
        
     )

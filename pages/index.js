@@ -24,7 +24,7 @@ const Login = () => {
 
             </ActionButtons>
             
-            <Footer page={router.pathname} />
+            <Footer page={"/"} />
 
         </Wrapper>
     )
