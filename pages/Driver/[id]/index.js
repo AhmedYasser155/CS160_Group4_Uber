@@ -5,8 +5,9 @@ import tw from "tailwind-styled-components"
 import Map from '../../../components/Map'
 import Link from 'next/Link'
 import { io } from 'socket.io-client';
-import {getUser} from '../../../APIFunctions/DbFunctions'
-import  {useRouter, useState} from 'next/router'
+import {getUser, updateUser} from '../../../APIFunctions/DbFunctions'
+import  {useRouter} from 'next/router'
+import {React, useState} from 'react';
 import {Footer} from '../../../components/Footer'
 import {Popup} from '../../../components/Popup.js';
 
@@ -29,12 +30,14 @@ export default function Home({userData}) {
   });
 
   socket.on('to-driver', (passed) => {
+    console.log(passed.riderData);
     setRiderData(passed.riderData);
     setPickup(passed.pickup);
     setButtonPopup(true);
   });
 
   async function confirm() {
+    console.log("CONFIRM");
     setButtonPopup(false);
     const res = await updateUser(id, {"driverLocation":pickup});
     socket.emit('driver-response', {driverId:id, riderId:riderData._id, confirm:true})
@@ -42,6 +45,7 @@ export default function Home({userData}) {
   }
 
   function decline() {
+    console.log("DECINE");
     setRiderData({});
     setPickup("");
     socket.emit('driver-response', {driverId:id, riderId:riderData._id, confirm:false})

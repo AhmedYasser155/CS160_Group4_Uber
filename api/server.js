@@ -220,8 +220,10 @@ io.on('connection', (socket) => {
 	socket.on('ask-driver', (passed) => {
 		this.state.riderMap[passed.riderData._id] = socket.id;
 		for(var id in this.state.socketMap) {
-			if(this.state.socketMap[id] == passed.driverData._id)
+			if(this.state.socketMap[id] == passed.driverData._id) {
+				console.log("LESGOs");
 				io.to(id).emit('to-driver', {riderData:passed.riderData, pickup:passed.pickup});
+			}
 		}
 	});
 

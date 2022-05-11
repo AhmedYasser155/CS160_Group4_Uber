@@ -4,6 +4,7 @@ import Link from 'next/Link'
 import {useRouter} from 'next/router'
 import { BackButton } from '../../../components/BackButton'
 import {Footer} from '../../../components/Footer'
+import {getUser} from '../../../APIFunctions/DbFunctions';
 
 const Ride = ({driverData}) => {
     const router = useRouter()
@@ -29,17 +30,16 @@ const Ride = ({driverData}) => {
     )
 }
 
-export async function getServerSideProps()
+export async function getServerSideProps({params})
 {
+    const res = await getUser(params.id);
+    const driverData = res.responseData
 
-     const res = await getUser(router.query.id);
-     const driver = res.responseData
-
-     return{
-         props:{
-            driver,
-         },
-     };
+    return{
+        props:{
+            driverData,
+        },
+    };
 }
 
 export default Ride;

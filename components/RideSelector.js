@@ -28,6 +28,10 @@ const RideSelector = ({ locationCoordinates, schedule, pickup }) => {
   socket.on('driver-to-rider', (passed) => {
     setDriverNotified(true);
     socket.off('driver-to-rider');
+    router.push({
+      pathname: `/Rider/${id}/ride`,
+      query: { rideID },
+    });
   });
 
   const showServices = () => {
@@ -96,8 +100,8 @@ const RideSelector = ({ locationCoordinates, schedule, pickup }) => {
       }
     }
 
-    const riderData = await getUser(id);
-    socket.emit('ask-driver', {riderData:riderData, driverData:bestDriver, pickup:pickup});
+    const res = await getUser(id);
+    socket.emit('ask-driver', {riderData:res.responseData, driverData:bestDriver, pickup:pickup});
   }
 
   async function handleConfirm() {
@@ -163,7 +167,7 @@ const RideSelector = ({ locationCoordinates, schedule, pickup }) => {
               <Title>Waiting for Driver Response...</Title>
             )
           ) : (
-            <ConfirmButton>Order {service}</ConfirmButton>
+            <ConfirmButton onClick={handleConfirm}>Order {service}</ConfirmButton>
           )}
         </ConfirmButtonContainer>
       )}
