@@ -10,7 +10,6 @@ const AboutUs = () => {
         <Header>Our Team Members</Header>
     <GridContainer>
       <Row>
-      
         <ItemContainer>
             <ImageItem src="https://avatars.githubusercontent.com/u/75222161?v=4"></ImageItem>
             Ahmed
@@ -35,9 +34,8 @@ const AboutUs = () => {
             <ImageItem src="https://avatars.githubusercontent.com/u/80725182?v=4"></ImageItem>
             Luc
         </ItemContainer>
-
-      </Row>
-      </GridContainer>
+     </Row>
+    </GridContainer>
       <Footer/>
     </Wrapper>
   );
