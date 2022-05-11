@@ -13,7 +13,8 @@ var dbo;
 
 this.state = {
 	dict: {},
-	socketMap: {}
+	socketMap: {},
+	riderMap: {}
 };
 
 
@@ -214,7 +215,30 @@ io.on('connection', (socket) => {
 	socket.on('find-best-driver', (start) => {
 		var driver = findBestDriver(start, this.state.dict);
 		io.sockets.emit('receive-best-driver', driver);
-	})
+	});
+
+	socket.on('ask-driver', (passed) => {
+		this.state.riderMap[passed.riderData._id] = socket.id;
+		for(var id in this.state.socketMap) {
+			if(this.state.socketMap[id] == passed.driverData._id)
+				io.to(id).emit('to-driver', {riderData:passed.riderData, pickup:passed.pickup});
+		}
+	});
+
+	socket.on('driver-response', (passed) => {
+		var socketId = null;
+		delete this.state.dict[driverId];
+		for(var riderId in this.state.riderMap) {
+			if(riderId = passed.riderId) {
+				socketId = this.state.riderMap[riderId];
+				delete this.state.riderMap[riderId];
+			}
+		}
+		if(socketId)
+			io.to(socketId).emit('driver-to-rider', {confirm:passed.confirm});
+		else
+			io.to(socketId).emit('driver-to-rider', {message:"Driver is gone!"});
+	});
 
 	socket.on('disconnect', () => {
 		console.log('user disconnected');
