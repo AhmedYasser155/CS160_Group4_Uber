@@ -24,7 +24,7 @@ const Ride = ({driverData}) => {
 
            </ConfirmContainer>
            
-            <Footer/>
+            <Footer page={router.pathname} />
 
         </Wrapper>
     )

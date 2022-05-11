@@ -221,7 +221,7 @@ const Search = ({user}) => {
                     Confirm Location
                 </ConfirmContainer>}
 
-                <Footer/>
+                <Footer page={router.pathname} />
         </Wrapper>
     )
 }

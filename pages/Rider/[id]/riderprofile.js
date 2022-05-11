@@ -51,7 +51,7 @@ export default function RiderProfile({userData}){
 
 
         </ProfileContainer>
-        <Footer/>
+        <Footer page={router.pathname} />
         </Wrapper>
     )
 }

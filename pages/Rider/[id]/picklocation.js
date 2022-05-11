@@ -78,7 +78,7 @@ const Picklocation = () => {
                 <div id="geocoder" className=' h-1/2 w-screen ' ></div>
             </InputContainer>
             <InputContainer2 id="map"></InputContainer2>
-            <Footer/>
+            <Footer page={router.pathname} />
         </Wrapper>
     )
 

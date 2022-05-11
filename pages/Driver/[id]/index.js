@@ -79,7 +79,7 @@ export default function Home({userData}) {
           <Text>{riderData.firstName} {riderData.lastName} requests a ride from you to {pickup}!</Text>
         </Popup>
       </ActionItems>
-      <Footer/>
+      <Footer page={router.pathname} />
     </Wrapper>
   )
 }

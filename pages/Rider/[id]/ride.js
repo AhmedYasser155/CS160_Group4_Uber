@@ -65,7 +65,7 @@ export default function Ride({riderData, driverData, userRideid}){
             </Link>
 
            </ConfirmContainer>
-           <Footer/>
+           <Footer page={router.pathname} />
         </Wrapper>
     )
 }

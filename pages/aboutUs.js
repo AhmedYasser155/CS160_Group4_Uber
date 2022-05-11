@@ -1,12 +1,14 @@
 import React from "react";
+import { Router,useRouter } from "next/router"
 import tw from "tailwind-styled-components";
 import { BackButton } from "../components/BackButton";
 import {Footer} from '../components/Footer'
 
-const AboutUs = () => {
+const AboutUs = ({prevPage}) => {
+    const router = useRouter();
   return (
     <Wrapper>
-        <BackButton prevPage={"/"}></BackButton>
+        <BackButton prevPage={prevPage}></BackButton>
         <Header>Our Team Members</Header>
     <GridContainer>
       <Row>
@@ -36,10 +38,19 @@ const AboutUs = () => {
         </ItemContainer>
      </Row>
     </GridContainer>
-      <Footer/>
+      <Footer page={router.pathname} />
     </Wrapper>
   );
 };
+
+export async function getServerSideProps({query}) {
+    const prevPage = query.prevPage
+    return{
+        props:{
+           prevPage
+        },
+    };
+}
 
 export default AboutUs;
 const GridContainer = tw.div`
