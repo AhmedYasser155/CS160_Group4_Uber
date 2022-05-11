@@ -144,10 +144,10 @@ app.post("/auth", jsonParser, async(req,res)=> {
 
 app.post("/user/updateUser", jsonParser, async (req, res) => {
 	await dbo.collection("users").updateOne({
-		_id: req.body.id
+		_id: new ObjectId(req.body.id)
 		},
 		{
-			$set:req.body.data
+			$set: req.body
 		})
 		.then((response) => {
 			return res.status(200).send({"message":response});
