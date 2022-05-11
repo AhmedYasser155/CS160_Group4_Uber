@@ -34,7 +34,6 @@ export async function getServerSideProps({params})
 {
     const res = await getUser(params.id);
     const driverData = res.responseData
-    console.log(driverData);
     return{
         props:{
             driverData,

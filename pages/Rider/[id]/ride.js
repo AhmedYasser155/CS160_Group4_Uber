@@ -10,8 +10,6 @@ import {Footer} from '../../../components/Footer'
 export default function Ride({riderData, driverData, userRideid}){
     const router = useRouter()
     const {id} = router.query
-    console.log(userRideid)
-    console.log("Hello", riderData, driverData)
     const [balance, setBalance] = useState(0);
 
     const driver = {
@@ -28,11 +26,9 @@ export default function Ride({riderData, driverData, userRideid}){
     useEffect(() => {
         async function performPayment() {
             const ride = await getRide(userRideid);
-            console.log(riderData.accountBalance + " " + ride.responseData.cost);
             if(ride && ride.responseData.cost < riderData.accountBalance) {
                 const res = await updateUser(id, {"id":id, "accountBalance":riderData.accountBalance - ride.responseData.cost});
                 if(!res.error) {
-                    console.log(res.responseData);
                     setBalance(riderData.accountBalance - ride.responseData.cost);
                 }
                 else

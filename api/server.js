@@ -191,7 +191,6 @@ app.post("/user/deleteUser", jsonParser, async (req, res) => {
 // LOL IN THE WORKS
 function findBestDriver(start, drivers) {
 	if(Object.keys(drivers).length === 0) {
-		console.log("dict is empty!");
 		const bestDriver = {
 			firstName:"temp",
 			lastName:"driver",
@@ -212,7 +211,6 @@ function findBestDriver(start, drivers) {
 		return bestDriver;
 	}
 	else {
-		console.log("There are drivers!");
 		return Object.values(drivers)[0];
 	}
 }
@@ -221,10 +219,8 @@ io.on('connection', (socket) => {
 	console.log('a user connected ' + socket.id);
 
 	socket.on('add-driver', (passed) => {
-		console.log("ADDED: " + socket.id + " " + passed.id);
 		this.state.dict[passed.id] = passed.data;
 		this.state.socketMap[socket.id] = passed.id;
-		console.log(this.state.dict);
 	});
 
 	socket.on('find-best-driver', (start) => {
@@ -236,7 +232,6 @@ io.on('connection', (socket) => {
 		this.state.riderMap[passed.riderData._id] = socket.id;
 		for(var id in this.state.socketMap) {
 			if(this.state.socketMap[id] == passed.driverData._id) {
-				console.log("LESGOs");
 				io.to(id).emit('to-driver', {riderData:passed.riderData, pickup:passed.pickup});
 			}
 		}
