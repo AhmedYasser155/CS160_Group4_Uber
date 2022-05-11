@@ -30,7 +30,7 @@ export default function Ride({riderData, driverData, userRideid}){
             const ride = await getRide(userRideid);
             console.log(riderData.accountBalance + " " + ride.responseData.cost);
             if(ride && ride.responseData.cost < riderData.accountBalance) {
-                const res = await updateUser(id, {$set:{"accountBalance":riderData.accountBalance - ride.responseData.cost}});
+                const res = await updateUser(id, {"id":id, "accountBalance":riderData.accountBalance - ride.responseData.cost});
                 if(!res.error) {
                     console.log(res.responseData);
                     setBalance(riderData.accountBalance - ride.responseData.cost);

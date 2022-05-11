@@ -4,8 +4,9 @@ import Link from 'next/Link'
 import {useRouter} from 'next/router'
 import { BackButton } from '../../../components/BackButton'
 import {Footer} from '../../../components/Footer'
+import {getUser} from '../../../APIFunctions/DbFunctions';
 
-const Ride = () => {
+const Ride = ({driverData}) => {
     const router = useRouter()
     const id = router.query.id
     return (
@@ -15,7 +16,7 @@ const Ride = () => {
            <ConfirmContainer>
 
            <Chat>
-                <Text>Thank you for accepting the ride! Please head to your riders pick up location.</Text>
+                <Text>Thank you for accepting the ride! Please head to your riders pick up location at {driverData.driverLocation}.</Text>
             </Chat>
             <Link href={`/Driver/${id}`}>
             <Home> Home </Home>
@@ -27,6 +28,18 @@ const Ride = () => {
 
         </Wrapper>
     )
+}
+
+export async function getServerSideProps({params})
+{
+    const res = await getUser(params.id);
+    const driverData = res.responseData
+    console.log(driverData);
+    return{
+        props:{
+            driverData,
+        },
+    };
 }
 
 export default Ride;

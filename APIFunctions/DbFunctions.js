@@ -100,6 +100,23 @@ export async function updateUser(id, data) {
     return status;
 }
 
+export async function updateRide(id, data) {
+	let status = new ApiResponse();
+	await axios
+		.post(SERVER_URL + "/user/updateRide", {
+			id,
+			data
+		})
+		.then((response) => {
+			status.responseData = response.data;
+			status.statusCode = response.status;
+		})
+		.catch(err => {
+            status.error = true;
+        });
+    return status;
+}
+
 export async function deleteUser(id) {
 	let status = new ApiResponse();
 	await axios

@@ -1,7 +1,7 @@
 import { React, useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
 import { carList } from "../data/carList";
-import { addRide } from "../APIFunctions/DbFunctions";
+import { addRide, getUser, updateRide } from "../APIFunctions/DbFunctions";
 import { useRouter } from "next/router";
 import Link from "next/Link";
 import { io } from 'socket.io-client';
@@ -15,6 +15,7 @@ const RideSelector = ({ locationCoordinates, schedule, pickup }) => {
   const [isSubmit, setSubmit] = useState(false);
   const [bestDriver, setBestDriver] = useState({});
   const [newCarList, setNewCarList] = useState([]);
+  const [driverNotified, setDriverNotified] = useState(false);
 
   const router = useRouter();
   const id = router.query.id;
@@ -22,6 +23,13 @@ const RideSelector = ({ locationCoordinates, schedule, pickup }) => {
 
   socket.on('receive-best-driver', (driver) => {
     setBestDriver(driver);
+  });
+
+  socket.on('driver-to-rider', async (passed) => {
+    socket.off('driver-to-rider');
+    console.log("rideID: " + rideID);
+    const res = await updateRide(rideID, {"id":rideID, "driver":bestDriver._id});
+    setDriverNotified(true);
   });
 
   const showServices = () => {
@@ -85,11 +93,28 @@ const RideSelector = ({ locationCoordinates, schedule, pickup }) => {
       if (res.error) {
         console.log(res.error);
       } else {
+        console.log(res.responseData);
         setRideID(res.responseData.id);
         setSubmit(true);
       }
     }
   }
+
+  useEffect(async () => {
+    console.log(rideID);
+    const user = await getUser(id);
+    console.log("pickup: " + pickup);
+    socket.emit('ask-driver', {riderData:user.responseData, driverData:bestDriver, pickup:pickup});
+  }, [rideID]);
+
+  useEffect(() => {
+    if(driverNotified) {
+      router.push({
+        pathname: `/Rider/${id}/ride`,
+        query: { rideID },
+      });
+    }
+  }, [driverNotified]);
 
   return (
     <Wrapper>
@@ -141,14 +166,16 @@ const RideSelector = ({ locationCoordinates, schedule, pickup }) => {
           }}
         >
           {isSubmit ? (
-            <Link
-              href={{
+            driverNotified ? (
+              <Link href={{
                 pathname: `/Rider/${id}/ride`,
                 query: { rideID },
-              }}
-            >
-              <ConfirmButton>Confirm {service}</ConfirmButton>
-            </Link>
+              }}>
+                <ConfirmButton>Confirm {service}</ConfirmButton>
+              </Link>
+            ) : (
+              <Title>Waiting for Driver Response...</Title>
+            )
           ) : (
             <ConfirmButton>Order {service}</ConfirmButton>
           )}

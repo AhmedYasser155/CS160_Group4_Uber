@@ -13,7 +13,8 @@ var dbo;
 
 this.state = {
 	dict: {},
-	socketMap: {}
+	socketMap: {},
+	riderMap: {}
 };
 
 
@@ -111,12 +112,12 @@ app.post("/user/addUser", jsonParser, async (req, res) => {
 
 // add ride
 app.post("/ride/addRide", jsonParser, async (req, res) => {
-	const newRide = await dbo.collection("rides").insertOne(req.body.data)
+	await dbo.collection("rides").insertOne(req.body.data)
 	.then(result => {
-		res.status(200).send({id:result.insertedId})
+		res.status(200).send({"id":result.insertedId})
 	})
 	.catch((err) => {
-		res.status(400).send({err:err.errmsg})
+		res.status(400).send({"message":err.errmsg})
 	})
 })
 
@@ -147,7 +148,7 @@ app.post("/user/updateUser", jsonParser, async (req, res) => {
 		_id: new ObjectId(req.body.id)
 		},
 		{
-			$set: req.body
+			$set: req.body.data
 		})
 		.then((response) => {
 			return res.status(200).send({"message":response});
@@ -158,6 +159,21 @@ app.post("/user/updateUser", jsonParser, async (req, res) => {
 	return null;
 });
 
+app.post("/user/updateRide", jsonParser, async (req, res) => {
+	await dbo.collection("rides").updateOne({
+		_id: new ObjectId(req.body.id)
+		},
+		{
+			$set: req.body.data
+		})
+		.then((response) => {
+			return res.status(200).send({"message":response});
+		})
+		.catch((err) => {
+			return res.status(400).send({"message":"Error when updating ride to database!"});
+		});
+	return null;
+});
 
 app.post("/user/deleteUser", jsonParser, async (req, res) => {
 	await dbo.collection("users").deleteOne({
@@ -214,7 +230,32 @@ io.on('connection', (socket) => {
 	socket.on('find-best-driver', (start) => {
 		var driver = findBestDriver(start, this.state.dict);
 		io.sockets.emit('receive-best-driver', driver);
-	})
+	});
+
+	socket.on('ask-driver', (passed) => {
+		this.state.riderMap[passed.riderData._id] = socket.id;
+		for(var id in this.state.socketMap) {
+			if(this.state.socketMap[id] == passed.driverData._id) {
+				console.log("LESGOs");
+				io.to(id).emit('to-driver', {riderData:passed.riderData, pickup:passed.pickup});
+			}
+		}
+	});
+
+	socket.on('driver-response', (passed) => {
+		var socketId = null;
+		delete this.state.dict[passed.driverId];
+		for(var riderId in this.state.riderMap) {
+			if(riderId = passed.riderId) {
+				socketId = this.state.riderMap[riderId];
+				delete this.state.riderMap[riderId];
+			}
+		}
+		if(socketId)
+			io.to(socketId).emit('driver-to-rider', {confirm:passed.confirm});
+		else
+			io.to(socketId).emit('driver-to-rider', {message:"Driver is gone!"});
+	});
 
 	socket.on('disconnect', () => {
 		console.log('user disconnected');
