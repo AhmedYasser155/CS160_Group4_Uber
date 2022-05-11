@@ -8,6 +8,7 @@ import { io } from 'socket.io-client';
 import {getUser} from '../../../APIFunctions/DbFunctions'
 import  {useRouter} from 'next/router'
 import {Footer} from '../../../components/Footer'
+import {Popup} from '../../../components/Popup.js';
 
 const socket = io("http://localhost:3001");
 
@@ -18,10 +19,34 @@ export default function Home({userData}) {
   const first = userData.firstName
   const last = userData.lastName
 
+  const [buttonPopup, setButtonPopup] = useState(false);
+  const [riderData, setRiderData] = useState({});
+  const [pickup, setPickup] = useState("");
+
   socket.emit('add-driver', {
     id:id,
     data:userData
   });
+
+  socket.on('to-driver', (passed) => {
+    setRiderData(passed.riderData);
+    setPickup(passed.pickup);
+    setButtonPopup(true);
+  });
+
+  async function confirm() {
+    setButtonPopup(false);
+    const res = await updateUser(id, {$set:{"driverLocation":pickup}});
+    socket.emit('driver-response', {driverId:id, riderId:riderData._id, confirm:true})
+    router.push(`/Driver/${id}/confirmdrive`)
+  }
+
+  function decline() {
+    setRiderData({});
+    setPickup("");
+    socket.emit('driver-response', {driverId:id, riderId:riderData._id, confirm:false})
+    setButtonPopup(false);
+  }
 
   return (
     <Wrapper>
@@ -49,6 +74,9 @@ export default function Home({userData}) {
                <p>Rating</p> 
                 </Info>
         </InforSection>
+        <Popup trigger={buttonPopup} confirm={confirm} decline={decline}>
+          <Text>{riderData.firstName} {riderData.lastName} requests a ride from you to {pickup}!</Text>
+        </Popup>
       </ActionItems>
       <Footer/>
     </Wrapper>
@@ -118,4 +146,8 @@ const ActionImg = tw.img`
 
 const InputButton = tw.div`
   h-20 bg-gray-200 text-2xl p-4 flex items-center mt-8
+`
+
+const Text = tw.h3`
+
 `
