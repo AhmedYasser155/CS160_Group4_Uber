@@ -34,6 +34,7 @@ useEffect(() => {
 }, [])
   return (
     <Wrapper>
+      <MapWrapper>
       <Map/>
       <ActionItems>
         <Header>
@@ -68,6 +69,7 @@ useEffect(() => {
         </Link>
       </ActionItems>
       <Footer/>
+      </MapWrapper>
     </Wrapper>
   )
 }
@@ -91,7 +93,9 @@ export async function getServerSideProps({params})
 const Wrapper = tw.div`
   flex flex-col h-screen
 `
-
+const MapWrapper = tw.div`
+flex-1 flex-col
+`
 const ActionItems = tw.div`
   flex-1 p-4
 `

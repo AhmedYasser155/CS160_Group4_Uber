@@ -1,29 +1,29 @@
 import React from 'react'
 import tw from "tailwind-styled-components"
 import Link from 'next/link'
-import {Footer} from '../components/Footer'
+import { Footer } from '../components/Footer'
 
 const Login = () => {
-    
+
     return (
         <Wrapper>
-            <UberLogo src="https://download.logo.wine/logo/Uber/Uber-Logo.wine.png"/>
-                <HeadImage src="https://i.ibb.co/CsV9RYZ/login-image.png"/>
-            
+            <UberLogo src="https://download.logo.wine/logo/Uber/Uber-Logo.wine.png" />
+            <HeadImage src="https://i.ibb.co/CsV9RYZ/login-image.png" />
+
             <Title>Sign up or sign in to access your account</Title>
 
             <ActionButtons>
-            <Link href = "/signin" passHref>
-            <SignInButton>Sign in</SignInButton>
-            </Link>
+                <Link href="/signin" passHref>
+                    <SignInButton>Sign in</SignInButton>
+                </Link>
 
-            <Link href = "/signup" passHref>
-            <SignUpButton>Sign up</SignUpButton>
-            </Link>
+                <Link href="/signup" passHref>
+                    <SignUpButton>Sign up</SignUpButton>
+                </Link>
 
             </ActionButtons>
-            
-            <Footer/>
+
+            <Footer />
 
         </Wrapper>
     )

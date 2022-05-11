@@ -154,7 +154,7 @@ const RideSelector = ({ locationCoordinates, schedule, pickup }) => {
       )}
       
       {schedule ? (
-        <Link href={`/Rider/${id}`}>
+        <Link href={`/Rider/${id}/staticscheduling`}>
           <ConfirmButtonContainer>
             <ConfirmButton>Confirm {service}</ConfirmButton>
           </ConfirmButtonContainer>
