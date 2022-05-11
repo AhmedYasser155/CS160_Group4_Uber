@@ -54,7 +54,6 @@ const Confirm = () => {
                 />
 
             </RideContainer>
-        <Footer/>
         </Wrapper>
     )
 }
