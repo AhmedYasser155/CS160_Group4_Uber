@@ -36,7 +36,7 @@ export default function Home({userData}) {
 
   async function confirm() {
     setButtonPopup(false);
-    const res = await updateUser(id, {$set:{"driverLocation":pickup}});
+    const res = await updateUser(id, {"driverLocation":pickup});
     socket.emit('driver-response', {driverId:id, riderId:riderData._id, confirm:true})
     router.push(`/Driver/${id}/confirmdrive`)
   }
