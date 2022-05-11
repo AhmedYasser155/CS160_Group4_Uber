@@ -55,5 +55,5 @@ const Title = tw.div`
 `
 
 const HeadImage = tw.img`
-    mx-60
+    
 `

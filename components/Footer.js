@@ -10,7 +10,7 @@ export const Footer = (props) => {
         textAlign: "center",
         left: "0",
         bottom: "0",
-        height: "3%",
+        height: "7%",
         width: "100%"
       };
 
