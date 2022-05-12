@@ -45,7 +45,7 @@ export default function RiderProfile({userData}){
                     Phone Number: {phone}
                 </ProfileText>
                 <ProfileText>
-                    Balance: ${balance}
+                    Balance: ${balance.toFixed(2)}
                 </ProfileText>
             </ProfileInformation>
 

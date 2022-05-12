@@ -49,7 +49,7 @@ export default function Ride({riderData, driverData, userRideid}){
 
            <Chat>
                 <Text>Your ride has been confirmed! Your driver will arrive shortly.</Text>
-                <Text>Your remaining balance is ${balance}</Text>
+                <Text>Your remaining balance is ${balance.toFixed(2)}</Text>
                 {driverData ? 
                 (<>
                 <Text>Your Driver: {driver.name}</Text>
