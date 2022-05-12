@@ -18,7 +18,7 @@ export const Popup = (props) => {
 export default Popup
 
 const PopupContainer = tw.div`
-fixed top-0 left-0 w-full h-screen flex justify-center items-center bg-black
+fixed top-0 left-0 w-full h-screen flex justify-center items-center bg-white
 `
 
 const PopupButton = tw.button`
